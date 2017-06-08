@@ -1,0 +1,101 @@
+//group 'com.github.kuangcp'
+//version '1.0-SNAPSHOT'
+
+allprojects {
+    apply plugin: 'java'
+    group 'com.github.kuangcp'
+    version = '1.0'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+subprojects {
+    ext {
+//        slf4jVersion = '1.7.7'
+        springVersion = '4.3.8.RELEASE'
+        hibernateVersion = '4.3.1.Final'
+    }
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+    repositories {
+        mavenCentral()
+    }
+    configurations {
+        //compile.exclude module: 'commons-logging'
+        all*.exclude module: 'commons-logging'
+    }
+    dependencies {
+        compile(
+                 'redis.clients:jedis:2.9.0',
+                 'org.slf4j:slf4j-api:1.7.25',
+                 'ch.qos.logback:logback-core:1.1.11',
+                 'ch.qos.logback:logback-classic:1.1.11',
+
+//                "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
+//                "org.slf4j:slf4j-log4j12:${slf4jVersion}",
+                "org.springframework:spring-context:$springVersion",
+//                "org.springframework:spring-orm:$springVersion",
+//                "org.springframework:spring-tx:$springVersion",
+//                "org.springframework.data:spring-data-jpa:1.5.2.RELEASE",
+//                "org.hibernate:hibernate-entitymanager:$hibernateVersion",
+//                "c3p0:c3p0:0.9.1.2",
+                "mysql:mysql-connector-java:5.1.35",
+//                "commons-fileupload:commons-fileupload:1.3.1",
+                "com.fasterxml.jackson.core:jackson-databind:2.3.1"
+        )
+        testCompile(
+                "org.springframework:spring-test:$springVersion",
+                "junit:junit:4.12"
+        )
+    }
+}
+project(':redis_core') {
+
+}
+project(':redis_web') {
+    apply plugin: "war"
+    dependencies {
+        compile project(":redis_core")
+        compile(
+                'org.springframework.boot:spring-boot-starter-thymeleaf',
+                'org.springframework.boot:spring-boot-starter-web'
+        )
+        testCompile(
+                'org.springframework.boot:spring-boot-starter-test'
+        )
+//        providedCompile(
+//                "javax.servlet:javax.servlet-api:3.1.0",
+//                "javax.servlet.jsp:jsp-api:2.2.1-b03",
+//                "javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:1.2.1"
+//        )
+    }
+    processResources{
+        /* 从'$projectDir/src/main/java'目录下复制文件到'WEB-INF/classes'目录下覆盖原有同名文件*/
+        from("$projectDir/src/main/java")
+    }
+
+    /*自定义任务用于将当前子项目的java类打成jar包,此jar包不包含resources下的文件*/
+    def jarArchiveName="${project.name}-${version}.jar"
+    task jarWithoutResources(type: Jar) {
+        from sourceSets.main.output.classesDir
+        archiveName jarArchiveName
+    }
+
+    /*重写war任务:*/
+    war {
+        dependsOn jarWithoutResources
+        /* classpath排除sourceSets.main.output.classesDir目录,加入jarWithoutResources打出来的jar包 */
+        classpath = classpath.minus(files(sourceSets.main.output.classesDir)).plus(files("$buildDir/$libsDirName/$jarArchiveName"))
+    }
+    /*打印编译运行类路径*/
+    task jarPath << {
+        println configurations.compile.asPath
+    }
+}
+
+/*从子项目拷贝War任务生成的压缩包到根项目的build/explodedDist目录*/
+task explodedDist(type: Copy) {
+    into "$buildDir/explodedDist"
+    subprojects {
+        from tasks.withType(War)
+    }
+}
+
