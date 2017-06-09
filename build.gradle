@@ -23,6 +23,9 @@ subprojects {
         all*.exclude module: 'commons-logging'
     }
     dependencies {
+//        providedCompile(
+//                'org.projectlombok:lombok:1.16.10'
+//        )
         compile(
                  'redis.clients:jedis:2.9.0',
                  'org.slf4j:slf4j-api:1.7.25',
@@ -86,9 +89,9 @@ project(':redis_web') {
         classpath = classpath.minus(files(sourceSets.main.output.classesDir)).plus(files("$buildDir/$libsDirName/$jarArchiveName"))
     }
     /*打印编译运行类路径*/
-    task jarPath << {
-        println configurations.compile.asPath
-    }
+//    task jarPath << {
+//        println configurations.compile.asPath
+//    }
 }
 
 /*从子项目拷贝War任务生成的压缩包到根项目的build/explodedDist目录*/

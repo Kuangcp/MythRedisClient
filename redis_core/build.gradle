@@ -2,13 +2,34 @@ group 'com.github.kuangcp'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: "info.robotbrain.lombok"
 
 sourceCompatibility = 1.8
-
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "info.robotbrain.gradle.lombok:lombok-gradle:1.1"
+    }
+}
 repositories {
     mavenCentral()
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compile 'redis.clients:jedis:2.9.0'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'ch.qos.logback:logback-core:1.1.11'
+    compile 'ch.qos.logback:logback-classic:1.1.11'
+    // 单独运行需要，整合时去掉
+    compile 'org.springframework:spring-core:4.3.8.RELEASE'
+    compile 'org.springframework:spring-context:4.3.8.RELEASE'
+    compile 'org.springframework:spring-beans:4.3.8.RELEASE'
+
+//    compile 'org.projectlombok:lombok:1.16.10'
 }
