@@ -1,12 +1,17 @@
 package com.redis.config;
 
+import java.io.File;
+
 /**
  * Created by https://github.com/kuangcp on 17-6-9  下午7:44
  * 配置文件的一般配置属性
  */
-public class ConfigFile {
+public class Configs {
 
-
+    // 配置文件目录
+    public static final String propertyFile = System.getProperty("user.home") + File.separatorChar +".MythRedisClient.properties";
+    // 起始id
+    public static final int START_ID=1000;
     public static final String MAX_ACTIVE = "maxActive";
     public static final String MAX_IDLE = "maxIdle";
     public static final String MAX_WAIT_MILLIS = "maxWaitMills";

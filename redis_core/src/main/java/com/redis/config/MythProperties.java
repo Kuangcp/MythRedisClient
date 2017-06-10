@@ -15,7 +15,13 @@ public class MythProperties extends Properties{
     public String getString(String key){
         String result = null;
         try {
-            result = new String(this.getProperty(key).getBytes("iso8859-1"), "utf-8");
+            String temp = this.getProperty(key);
+            if(temp!=null){
+                result = new String(temp.getBytes("iso8859-1"), "utf-8");
+            }else{
+                // 如果没有这个key就返回null
+                return null;
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

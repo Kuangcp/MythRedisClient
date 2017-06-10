@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.Properties;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-9  下午7:07
@@ -23,6 +22,7 @@ public class PropertyFile {
     public static MythProperties getProperties(String propertyFile) throws IOException {
         MythProperties props = new MythProperties();
         File file = new File(propertyFile);
+//        System.out.println(propertyFile);
         if(!file.exists())
             if(file.createNewFile()){
                 logger.info("Create RedisConfigFile Success");
@@ -43,20 +43,35 @@ public class PropertyFile {
 
     // 写入key
     public static void save(String propertyFile, String key, String value) throws IOException {
-        Properties props = getProperties(propertyFile);
+//        System.out.println(propertyFile);
+        MythProperties props = getProperties(propertyFile);
         OutputStream fos = new FileOutputStream(propertyFile);
         props.setProperty(key, value);
-
         props.store(fos, "Update '" + key + "' value");
 
     }
     // 删除key
     public static void delete(String propertyFile, String key) throws IOException {
-        Properties props = getProperties(propertyFile);
+        MythProperties props = getProperties(propertyFile);
         OutputStream fos = new FileOutputStream(propertyFile);
         props.remove(key);
 
         props.store(fos, "Delete '" + key + "' value");
 
+    }
+
+    public static int getMaxId(String propertyFile) throws IOException{
+        MythProperties props = getProperties(propertyFile);
+//        OutputStream fos = new FileOutputStream(propertyFile);
+        String maxId = props.getString("maxId");
+        if(maxId==null){
+            save(propertyFile,"maxId",Configs.START_ID+"");
+            // 修改后重新加载文件
+            props = getProperties(propertyFile);
+            maxId = props.getString("maxId");
+
+        }
+//        if(maxId==null) return 0;
+        return Integer.parseInt(maxId);
     }
 }
