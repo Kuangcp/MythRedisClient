@@ -67,7 +67,7 @@ public class RedisPools{
 
     /**
      * 在多线程环境同步初始化
-     * @TODO 关于这个加锁的问题要考虑
+     * @TODO 关于这个加锁的问题要考虑，目前还没有合适的场景
      */
     public synchronized void poolInit() {
         if (jedisPool == null) {
@@ -118,9 +118,9 @@ public class RedisPools{
     // 获取连接池状态信息
     public Map<String,Integer> getStatus(){
         Map<String,Integer> status = new HashMap<>();
-        status.put("NumActive",jedisPool.getNumActive());
-        status.put("NumIdle",jedisPool.getNumIdle());
-        status.put("NumWaiters",jedisPool.getNumWaiters());
+        status.put("NumActive",jedisPool.getNumActive());//活跃的连接数
+        status.put("NumIdle",jedisPool.getNumIdle());//闲置的连接数
+        status.put("NumWaiters",jedisPool.getNumWaiters());//等待的连接数
         return status;
     }
 

@@ -86,8 +86,9 @@ public class PoolManagementTest {
             System.out.println(key+"<->"+map.get(key));
         }
 
-//        pool.destroyPool();
+//        pool.destroyPool(); 貌似没有卵用
     }
+    // 测试多个连接池，并将管理类以及所有连接池挂在后台
     @Test
     public void getPools() throws Exception {
         RedisPools redisPool1 = management.getRedisPool("1014");
@@ -154,6 +155,16 @@ public class PoolManagementTest {
     public void deletePool() throws Exception {
         management.deleteRedisPool("1012");
 //        management.clearAllPools();
+    }
+
+    // 测试从已有连接池中直接返回，这里的map又起作用了
+    @Test
+    public void testUsingId() throws Exception {
+        RedisPools redisPool1 = management.getRedisPool("1020");
+        System.out.println(redisPool1);
+        redisPool1.destroyPool();
+        redisPool1 = management.getRedisPool();
+        System.out.println(redisPool1);
     }
 
     // 单纯的使用，就正常

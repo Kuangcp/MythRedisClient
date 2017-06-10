@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-9  下午7:07
@@ -59,7 +61,7 @@ public class PropertyFile {
         props.store(fos, "Delete '" + key + "' value");
 
     }
-
+    // 获得最大的id，如果最开始没有就要新增
     public static int getMaxId(String propertyFile) throws IOException{
         MythProperties props = getProperties(propertyFile);
 //        OutputStream fos = new FileOutputStream(propertyFile);
@@ -73,5 +75,20 @@ public class PropertyFile {
         }
 //        if(maxId==null) return 0;
         return Integer.parseInt(maxId);
+    }
+    // 为了展示面板的数据显示 ,列出配置文件所有连接
+    public static Map<String,RedisPoolProperty> getAllPoolConfig(String propertyFile) throws IOException {
+        Map<String,RedisPoolProperty> map = new HashMap<>();
+        int maxId = getMaxId(propertyFile);
+        MythProperties properties = getProperties(propertyFile);
+
+        for(int i=Configs.START_ID;i<=maxId;i++){
+            String poolId = properties.getString(i+Configs.SEPARATE+Configs.POOL_ID);
+            if(poolId==null) continue;
+            RedisPoolProperty property = new RedisPoolProperty();
+            property.initByIdFromFile(poolId);
+            map.put(poolId,property);
+        }
+        return map;
     }
 }

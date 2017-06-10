@@ -22,6 +22,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RedisPoolProperty {
+    private static Logger logger= LoggerFactory.getLogger(RedisPoolProperty.class);
     // 10个属性,修改记得修改下面的方法，使用反射最省事
     private int maxActive;//最大连接数
     private int maxIdle;//最大闲置数,超过的就会被回收掉
@@ -33,8 +34,6 @@ public class RedisPoolProperty {
     private String name;
     private String poolId;
     private String password="";//设定默认值为空字符串而不是null，因为后面的机制是要把null转String的
-
-    private static Logger logger= LoggerFactory.getLogger(RedisPoolProperty.class);
 
     /**
      * 前提是对象已经初始化好
@@ -56,7 +55,6 @@ public class RedisPoolProperty {
     }
 
     /**
-     *
      * @return 返回属性对象的所有属性名
      */
     public static List<String> getPropertyList(){

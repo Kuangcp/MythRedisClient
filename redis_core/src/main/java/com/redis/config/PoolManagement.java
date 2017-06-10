@@ -20,10 +20,23 @@ public class PoolManagement {
     private static Logger logger= LoggerFactory.getLogger(PoolManagement.class);
     String propertyFile = Configs.propertyFile;
     MythProperties configFile = null;
+    private String currentPoolId;
     // 获取指定id的连接池，断言id是存在的 TODO 这个得到的Bean会不会影响到依赖于他的bean
 
+    // 为了方便操作方引用连接池
+    public RedisPools getRedisPool() throws Exception {
+        if(currentPoolId!=null) {
+            System.out.println("直接返回当前连接池");
+            return getRedisPool(currentPoolId);
+        }else{
+            String error = "当前没有活跃的连接池，请指定id进行连接";
+            logger.error(error);
+            throw  new Exception(error);
+        }
+    }
 //    @Bean
     public RedisPools getRedisPool(String poolId)throws Exception{
+        currentPoolId = poolId;
         RedisPools pool = null;
         System.out.println("获取的id"+poolId);
         for (String name: pools.keySet()) {
@@ -81,8 +94,6 @@ public class PoolManagement {
      * @throws Exception
      */
     public String  createRedisPool(RedisPoolProperty property) throws Exception{
-        // TODO 完成创建,貌似完成了
-
         int maxId = PropertyFile.getMaxId(propertyFile);
         maxId++;
         property.setPoolId(maxId+"");
@@ -102,7 +113,6 @@ public class PoolManagement {
      * @return id 或 null
      */
     public String deleteRedisPool(String poolId)throws Exception{
-        // TODO 完成删除
         try {
             configFile = PropertyFile.getProperties(propertyFile);
             String exist = configFile.getString(poolId + Configs.SEPARATE + Configs.POOL_ID);
@@ -118,17 +128,6 @@ public class PoolManagement {
         }
         return poolId;
     }
-    // TODO 销毁连接池
-    public boolean destroyRedisPool(String poolId) throws Exception {
-        if(pools.containsKey(poolId)) {
-            boolean flag = pools.get(poolId).destroyPool();
-            pools.remove(poolId);
-            return flag;
-        }else {
-            return false;
-        }
-    }
-
     /**
      * 删除所有配置
      * @return
@@ -149,4 +148,17 @@ public class PoolManagement {
         }
         return true;
     }
+
+    // TODO 销毁连接池,似乎没有起作用
+    public boolean destroyRedisPool(String poolId) throws Exception {
+        if(pools.containsKey(poolId)) {
+            boolean flag = pools.get(poolId).destroyPool();
+            pools.remove(poolId);
+            return flag;
+        }else {
+            return false;
+        }
+    }
+
+
 }
