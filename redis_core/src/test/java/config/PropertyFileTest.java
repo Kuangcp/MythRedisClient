@@ -26,4 +26,15 @@ public class PropertyFileTest {
             System.out.println();
         }
     }
+
+    @Test
+    public void testMaxId(){
+        try {
+            int maxId = PropertyFile.getMaxId(Configs.propertyFile);
+//            String name = pr.getString("mak");
+            System.out.println(maxId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

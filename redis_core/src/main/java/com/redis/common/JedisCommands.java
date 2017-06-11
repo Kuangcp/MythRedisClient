@@ -1,6 +1,17 @@
+package com.redis.common;
+
+import redis.clients.jedis.Client;
+import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.SortingParams;
+import redis.clients.jedis.Tuple;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Common interface for sharded and non-sharded Jedis
+ * 用来查阅的API
  */
 public interface JedisCommands {
 
@@ -75,16 +86,16 @@ public interface JedisCommands {
     Long expire(String key, int seconds);
 
     /**
-     * 机制同{@link expire}一样，只是时间单位改为毫秒。
+     * 机制同 expire 一样，只是时间单位改为毫秒。
      *
      * @param key
      * @param milliseconds
-     * @return 返回值同 {@link expire}一样。
+     * @return 返回值同 @link expire一样。
      */
     Long pexpire(String key, long milliseconds);
 
     /**
-     * 与{@link expire}不一样，expireAt设置的时间不是能存活多久，而是固定的UNIX时间（从1970年开始算起），单位为秒。
+     * 与@link expire不一样，expireAt设置的时间不是能存活多久，而是固定的UNIX时间（从1970年开始算起），单位为秒。
      *
      * @param key
      * @param unixTime
@@ -93,7 +104,7 @@ public interface JedisCommands {
     Long expireAt(String key, long unixTime);
 
     /**
-     * 同{@link expireAt}机制相同，但单位为毫秒。
+     * 同@link expireAt机制相同，但单位为毫秒。
      *
      * @param key
      * @param millisecondsTimestamp
@@ -173,8 +184,8 @@ public interface JedisCommands {
     String getSet(String key, String value);
 
     /**
-     * 参考 {@link set(String key, String value, String nxxx, String expx, long
-     * time)}
+     * 参考 @link set(String key, String value, String nxxx, String expx, long
+     * time)
      *
      * @param key
      * @param value
@@ -183,8 +194,8 @@ public interface JedisCommands {
     Long setnx(String key, String value);
 
     /**
-     * 参考 {@link set(String key, String value, String nxxx, String expx, long
-     * time)}
+     * 参考 @link set(String key, String value, String nxxx, String expx, long
+     * time)
      *
      * @param key
      * @param seconds
@@ -738,9 +749,9 @@ public interface JedisCommands {
      *
      * 对集合，有序集合，或者列表的value进行排序。默认情况下排序只对数字排序，双精度浮点数。
      *
-     * @see #sort(String, String)
+     * #sort(String, String)
      * @see #sort(String, SortingParams)
-     * @see #sort(String, SortingParams, String)
+     * #sort(String, SortingParams, String)
      * @param key
      * @return 假设集合或列表包含的是数字元素，那么返回的将会是从小到大排列的一个列表。
      */
@@ -816,7 +827,7 @@ public interface JedisCommands {
      * </pre>
      *
      * @see #sort(String)
-     * @see #sort(String, SortingParams, String)
+     * #sort(String, SortingParams, String)
      * @param key
      * @param sortingParameters
      * @return a list of sorted elements.
@@ -1119,8 +1130,8 @@ public interface JedisCommands {
 
     /**
      * BLPOP 是阻塞式列表的弹出原语。 它是命令 LPOP 的阻塞版本，这是因为当给定列表内没有任何元素可供弹出的时候， 连接将被 BLPOP
-     * 命令阻塞。 当给定多个 key 参数时，按参数 key 的先后顺序依次检查各个列表，弹出第一个非空列表的头元素。 {@link http
-     * ://www.redis.cn/commands/blpop.html}
+     * 命令阻塞。 当给定多个 key 参数时，按参数 key 的先后顺序依次检查各个列表，弹出第一个非空列表的头元素。
+     * @link http://www.redis.cn/commands/blpop.html
      *
      * @param timeout
      * @param key
@@ -1139,8 +1150,8 @@ public interface JedisCommands {
      * 该命令会按照给出的 key 顺序查看 list，并在找到的第一个非空 list 的尾部弹出一个元素。
      *
      * 请在 BLPOP 文档 中查看该命令的准确语义，因为 BRPOP 和 BLPOP
-     * 基本是完全一样的，除了它们一个是从尾部弹出元素，而另一个是从头部弹出元素。 {@link http
-     * ://www.redis.cn/commands/brpop.html}
+     * 基本是完全一样的，除了它们一个是从尾部弹出元素，而另一个是从头部弹出元素。
+     * @link http://www.redis.cn/commands/brpop.html
      *
      *
      * @param timeout
