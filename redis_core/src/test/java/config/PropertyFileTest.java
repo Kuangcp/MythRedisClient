@@ -1,6 +1,5 @@
 package config;
 
-import com.redis.config.Configs;
 import com.redis.config.PropertyFile;
 import com.redis.config.RedisPoolProperty;
 import org.junit.Test;
@@ -15,7 +14,7 @@ public class PropertyFileTest {
     // 展示配置文件的数据
     @Test
     public void testList() throws IOException {
-        Map<String,RedisPoolProperty> map = PropertyFile.getAllPoolConfig(Configs.propertyFile);
+        Map<String,RedisPoolProperty> map = PropertyFile.getAllPoolConfig();
         for(String key:map.keySet()){
             System.out.println(key);
             RedisPoolProperty property = map.get(key);
@@ -30,7 +29,7 @@ public class PropertyFileTest {
     @Test
     public void testMaxId(){
         try {
-            int maxId = PropertyFile.getMaxId(Configs.propertyFile);
+            int maxId = PropertyFile.getMaxId();
 //            String name = pr.getString("mak");
             System.out.println(maxId);
         } catch (IOException e) {

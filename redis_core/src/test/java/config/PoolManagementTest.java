@@ -14,7 +14,6 @@ import java.util.Map;
  * 注释的都是测试通过的，但是都是依赖于实验测试数据的方法，为了打包通过就全部注释了
  */
 public class PoolManagementTest {
-    PoolManagement management = new PoolManagement();
 
     // 直接boolean值的关键字是不能转String的，变量就可以
     @Test
@@ -42,7 +41,7 @@ public class PoolManagementTest {
 
         RedisPools pool = null;
         try {
-           pool = management.getRedisPool(management.createRedisPool(property));
+           pool = PoolManagement.getRedisPool(PoolManagement.createRedisPool(property));
            System.out.println("连接池实例"+pool);
            Jedis jedis = pool.getJedis();
            jedis.set("name","myth");
@@ -58,25 +57,32 @@ public class PoolManagementTest {
     public void getPool(){
         RedisPools pool = null;
         try {
-            pool = management.getRedisPool("1020");
+            pool = PoolManagement.getRedisPool("1022");
             System.out.println("得到连接池："+pool);
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        System.out.println("size:"+management.pools.size());
-        Jedis jedis = pool.getJedis();
-        // 得到连接池状态
-        Map<String,Integer> map = pool.getStatus();
-        for(String key:map.keySet()){
-            System.out.println(key+"<->"+map.get(key));
+        System.out.println("size:"+PoolManagement.getPoolMap().size());
+        Jedis jedis = null;
+        if (pool != null) {
+            jedis = pool.getJedis();
         }
-        System.out.println("jedis"+jedis);
-        jedis.select(1);
+        // 得到连接池状态
+        Map<String,Integer> map;
+        if (pool != null) {
+            map = pool.getStatus();
+            for(String key:map.keySet()){
+                System.out.println(key+"<->"+map.get(key));
+            }
+            System.out.println("jedis"+jedis);
+            jedis.select(1);
+        }
+
 //        jedis.set
     }
 //    // 测试多个连接池，并将管理类以及所有连接池挂在后台
 //    @Test
-//    public void getPools() throws Exception {
+//    public void getPoolMap() throws Exception {
 //        RedisPools redisPool1 = management.getRedisPool("1014");
 //        RedisPools redisPool2 = management.getRedisPool("1015");
 //        System.out.println("连接池实例数："+management.pools.size());
@@ -142,17 +148,17 @@ public class PoolManagementTest {
     @Test
     public void deletePool() throws Exception {
         // 销毁单个
-//        management.deleteRedisPool("1012");
-        management.clearAllPools();
+        PoolManagement.deleteRedisPool("1012");
+//        PoolManagement.clearAllPools();
     }
 
     // 测试从已有连接池中直接返回，这里的map又起作用了
     @Test
     public void testUsingId() throws Exception {
-        RedisPools redisPool1 = management.getRedisPool("1020");
+        RedisPools redisPool1 = PoolManagement.getRedisPool("1022");
         System.out.println(redisPool1);
         redisPool1.destroyPool();
-        redisPool1 = management.getRedisPool();
+        redisPool1 = PoolManagement.getRedisPool();
         System.out.println(redisPool1);
     }
 

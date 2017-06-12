@@ -44,44 +44,55 @@ public class PropertyFile {
 
 
     // 写入key
-    public static void save(String propertyFile, String key, String value) throws IOException {
+    public static void save(String key, String value) throws IOException {
 //        System.out.println(propertyFile);
-        MythProperties props = getProperties(propertyFile);
-        OutputStream fos = new FileOutputStream(propertyFile);
+        MythProperties props = getProperties(Configs.propertyFile);
+        OutputStream fos = new FileOutputStream(Configs.propertyFile);
         props.setProperty(key, value);
         props.store(fos, "Update '" + key + "' value");
 
     }
     // 删除key
-    public static void delete(String propertyFile, String key) throws IOException {
-        MythProperties props = getProperties(propertyFile);
-        OutputStream fos = new FileOutputStream(propertyFile);
+    public static void delete(String key) throws IOException {
+        MythProperties props = getProperties(Configs.propertyFile);
+        OutputStream fos = new FileOutputStream(Configs.propertyFile);
         props.remove(key);
 
         props.store(fos, "Delete '" + key + "' value");
 
     }
+    public static void update(){
+//        delete();
+
+    }
     // 获得最大的id，如果最开始没有就要新增
-    public static int getMaxId(String propertyFile) throws IOException{
-        MythProperties props = getProperties(propertyFile);
+    public static int getMaxId() throws IOException{
+        MythProperties props = getProperties(Configs.propertyFile);
 //        OutputStream fos = new FileOutputStream(propertyFile);
         String maxId = props.getString("maxId");
         if(maxId==null){
-            save(propertyFile,"maxId",Configs.START_ID+"");
+            save("maxId",Configs.START_ID+"");
             // 修改后重新加载文件
-            props = getProperties(propertyFile);
+            props = getProperties(Configs.propertyFile);
             maxId = props.getString("maxId");
 
         }
 //        if(maxId==null) return 0;
         return Integer.parseInt(maxId);
     }
-    // 为了展示面板的数据显示 ,列出配置文件所有连接
-    public static Map<String,RedisPoolProperty> getAllPoolConfig(String propertyFile) throws IOException {
-        Map<String,RedisPoolProperty> map = new HashMap<>();
-        int maxId = getMaxId(propertyFile);
-        MythProperties properties = getProperties(propertyFile);
 
+    // 为了展示面板的数据显示 ,列出配置文件所有连接
+    public static Map<String,RedisPoolProperty> getAllPoolConfig() {
+        Map<String,RedisPoolProperty> map = new HashMap<>();
+        int maxId = 0;
+        MythProperties properties = null;
+        try {
+            maxId = getMaxId();
+            properties = getProperties(Configs.propertyFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("加载配置文件异常");
+        }
         for(int i=Configs.START_ID;i<=maxId;i++){
             String poolId = properties.getString(i+Configs.SEPARATE+Configs.POOL_ID);
             if(poolId==null) continue;

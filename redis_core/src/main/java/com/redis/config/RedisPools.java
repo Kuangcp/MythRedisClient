@@ -28,12 +28,10 @@ public class RedisPools{
 //    public final static int EXPIRE_DAY = 60*60*24;        //一天
 //    public final static int EXPIRE_MONTH = 60*60*24*30;   //一个月
 
-
-
     /**
      * 初始化Redis连接池
      */
-    public void initialPool(){
+    void initialPool(){
         try {
             JedisPoolConfig config = new JedisPoolConfig();
             config.setMaxTotal(property.getMaxActive());
@@ -51,15 +49,15 @@ public class RedisPools{
         }
     }
 
-    /**
-     * 在多线程环境同步初始化
-     * @TODO 关于这个加锁的问题要考虑，目前还没有合适的场景
-     */
-    public synchronized void poolInit() {
-        if (jedisPool == null) {
-            initialPool();
-        }
-    }
+//    /**
+//     * 在多线程环境同步初始化
+//     * @TODO 关于这个加锁的问题要考虑，目前还没有合适的场景
+//     */
+//    public synchronized void poolInit() {
+//        if (jedisPool == null) {
+//            initialPool();
+//        }
+//    }
 
     /**
      * 同步获取Jedis实例
@@ -69,7 +67,8 @@ public class RedisPools{
     public Jedis getJedis(){
         if (jedisPool == null) {
             logger.info("连接池为空重新建立");
-            poolInit();
+//            poolInit();
+            initialPool();
         }
         Jedis jedis = null;
         try{
@@ -81,12 +80,27 @@ public class RedisPools{
             e.printStackTrace();
             logger.error("Could Get jedis error : "+e);
         }finally{
-            jedis.close();
+            if (jedis != null) {
+                jedis.close();
+            }
         }
         // 上面的方法是设置redis将会关闭超时超过30秒的空闲连接。而不是设置读取数据的超时时间。
+        //TODO 超时重连
         jedis.configSet("timeout", "30");
 //        System.out.println("密码是"+property.getPassword());
         return jedis;
+    }
+    // 测试当前连接池是否可用
+    public boolean available(){
+        Jedis jedis = getJedis();
+        jedis.select(0);
+        String key = "myth.kuang@outlook.com";
+        jedis.set(key,"available");
+        if("available".equals(jedis.get(key))){
+            jedis.del(key);
+            return true;
+        }
+        return false;
     }
     public boolean destroyPool(){
         System.out.println("销毁连接池："+jedisPool);
@@ -101,18 +115,18 @@ public class RedisPools{
         status.put("NumWaiters",jedisPool.getNumWaiters());//等待的连接数
         return status;
     }
-    /**
-     * 设置 过期时间
-     * @param key
-     * @param seconds 以秒为单位
-     * @param value
-     */
-    public void setString(String key ,int seconds,String value){
-        try {
-            value = value==null ? "" : value;
-            getJedis().setex(key, seconds, value);
-        } catch (Exception e) {
-            logger.error("Set keyex error : "+e);
-        }
-    }
+//    /**
+//     * 设置 过期时间
+//     * @param key
+//     * @param seconds 以秒为单位
+//     * @param value
+//     */
+//    public void setString(String key ,int seconds,String value){
+//        try {
+//            value = value==null ? "" : value;
+//            getJedis().setex(key, seconds, value);
+//        } catch (Exception e) {
+//            logger.error("Set keyex error : "+e);
+//        }
+//    }
 }
