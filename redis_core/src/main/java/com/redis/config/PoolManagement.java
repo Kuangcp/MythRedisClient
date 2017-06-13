@@ -4,9 +4,10 @@ import com.redis.common.exception.ExceptionInfo;
 import com.redis.common.exception.NoticeInfo;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.common.exception.RedisConnectionException;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
@@ -17,8 +18,13 @@ import java.util.concurrent.ConcurrentMap;
  * Created by https://github.com/kuangcp on 17-6-9  上午10:30
  * 管理所有的连接池，创建，删除，切换等， 完全操作RedisPools
  * 就应该写成静态的方法的，这样就直接调用了，获取连接池也要测试可用性，再加入map中
+ *
+ * 因为其他工具类使用的是直接获取当前id然后得到池，，，一般会先使用id得到Pool放在内存中，然后其他工具类就可以用来
+ * 测试类 自己加上一个方法
  */
-@Component
+//@Component
+@Setter
+@Getter
 public class PoolManagement {
     // 所有的连接池,不知道为什么，明明集合里有，却还是要新建，新建出来的还是同一个内存地址？
     private static ConcurrentMap<String,RedisPools> poolMap = new ConcurrentHashMap<>();
@@ -28,6 +34,10 @@ public class PoolManagement {
     private static String currentPoolId;
     // 获取指定id的连接池，断言id是存在的 TODO 这个得到的Bean会不会影响到依赖于他的bean
 
+    // 为了测试类方便，
+    public static void initPool(String poolId){
+        currentPoolId = poolId;
+    }
     // 为了方便操作方引用连接池,有异常就返回空
     public static RedisPools getRedisPool(){
         if(currentPoolId!=null) {

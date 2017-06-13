@@ -18,11 +18,11 @@ public class MythException extends Exception{
     public MythException(String message, Class location) {
         super(message);
         logger = LoggerFactory.getLogger(location);
-        logger.error(message);
+        logger.error("<"+this.getClass().getSimpleName()+">:"+message);
     }
     public MythException(String message,Throwable cause, Class location) {
         super(message,cause);
         logger = LoggerFactory.getLogger(location);
-        logger.error(message);
+        logger.error("<"+this.getClass().getSimpleName()+">:"+message);
     }
 }

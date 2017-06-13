@@ -10,6 +10,11 @@ buildscript {
 	}
 }
 
+configurations {
+	//compile.exclude module: 'commons-logging'
+	all*.exclude module: 'commons-logging'
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'

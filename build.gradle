@@ -55,6 +55,10 @@ project(':redis_core') {
 }
 project(':redis_web') {
     apply plugin: "war"
+    configurations {
+        compile.exclude module: 'commons-logging'
+//        all*.exclude module: 'commons-logging'
+    }
     dependencies {
         compile project(":redis_core")
         compile(

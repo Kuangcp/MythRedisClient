@@ -80,6 +80,8 @@ public class PoolManagementTest {
 
 //        jedis.set
     }
+
+
 //    // 测试多个连接池，并将管理类以及所有连接池挂在后台
 //    @Test
 //    public void getPoolMap() throws Exception {
@@ -192,5 +194,15 @@ public class PoolManagementTest {
 //        jedis.set("name","");
 //        assert jedis.get("name")!=null;
 //
+//    }
+
+//    由于依赖无法搞定 只好不用Spring commons-logging和slf4j的冲突 gradle无法排除
+//    @Test
+//    public void  testSpring() throws Exception {
+//        ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
+//        PoolManagement management = (PoolManagement) context.getBean("poolManagement");
+//        RedisPools pools = management.getRedisPool("1022");
+//        Jedis jedis = pools.getJedis();
+//        System.out.println(jedis.get("name"));
 //    }
 }
