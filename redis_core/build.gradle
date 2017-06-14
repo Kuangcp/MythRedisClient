@@ -6,7 +6,7 @@ apply plugin: "info.robotbrain.lombok"
 
 
 configurations {
-    all*.exclude module: 'commons-logging'
+//    all*.exclude module: 'commons-logging'
 }
 sourceCompatibility = 1.8
 buildscript {
@@ -27,6 +27,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
     compile 'redis.clients:jedis:2.9.0'
+//    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.21'
+
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'ch.qos.logback:logback-core:1.1.11'
     compile 'ch.qos.logback:logback-classic:1.1.11'
@@ -35,6 +37,6 @@ dependencies {
     compile 'org.springframework:spring-context:4.3.8.RELEASE'
     compile 'org.springframework:spring-beans:4.3.8.RELEASE'
 
-//    compile group: 'commons-logging', name: 'commons-logging', version: '1.1.1'
+    compile group: 'commons-logging', name: 'commons-logging', version: '1.1.1'
 //    compile 'org.projectlombok:lombok:1.16.10'
 }

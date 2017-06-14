@@ -26,7 +26,7 @@
 > 2017-06-12 08:27:06
 - 枚举类是实例固定不可变，final修饰所以不可派生，默认继承 java.lang.enum类，不能显示继承别的类
 
-## 
+## Spring 日志问题
 - java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory
 - 特别注意，如果使用了slf4j的另外实现方式，不是apche 那套的话，就要加入排除依赖
 ```xml
@@ -43,3 +43,7 @@
     </dependency>
 ```
 - gradle 排除依赖还是有问题，简直了，只好使用简单的静态类来处理，但是显然的，每次操作都在新建实例，所以，使用单例模式？
+
+### 日志问题
+> 2017-06-14 23:47:26
+- 相反的，引入commons-logging依赖，反而解决了问题，也是要醉

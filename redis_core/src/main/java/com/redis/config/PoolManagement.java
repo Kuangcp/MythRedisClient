@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
@@ -22,24 +23,24 @@ import java.util.concurrent.ConcurrentMap;
  * 因为其他工具类使用的是直接获取当前id然后得到池，，，一般会先使用id得到Pool放在内存中，然后其他工具类就可以用来
  * 测试类 自己加上一个方法
  */
-//@Component
+@Component
 @Setter
 @Getter
 public class PoolManagement {
     // 所有的连接池,不知道为什么，明明集合里有，却还是要新建，新建出来的还是同一个内存地址？
-    private static ConcurrentMap<String,RedisPools> poolMap = new ConcurrentHashMap<>();
-    private static Logger logger= LoggerFactory.getLogger(PoolManagement.class);
-    private static String propertyFile = Configs.propertyFile;
-    private static MythProperties configFile = null;
-    private static String currentPoolId;
+    private  ConcurrentMap<String,RedisPools> poolMap = new ConcurrentHashMap<>();
+    private  Logger logger= LoggerFactory.getLogger(PoolManagement.class);
+    private  String propertyFile = Configs.propertyFile;
+    private  MythProperties configFile = null;
+    private  String currentPoolId;
     // 获取指定id的连接池，断言id是存在的 TODO 这个得到的Bean会不会影响到依赖于他的bean
 
     // 为了测试类方便，
-    public static void initPool(String poolId){
+    public  void initPool(String poolId){
         currentPoolId = poolId;
     }
     // 为了方便操作方引用连接池,有异常就返回空
-    public static RedisPools getRedisPool(){
+    public  RedisPools getRedisPool(){
         if(currentPoolId!=null) {
             System.out.println("直接返回当前连接池");
             try {
@@ -60,7 +61,7 @@ public class PoolManagement {
      * @return RedisPools对象
      * @throws Exception 加载异常
      */
-    public static RedisPools getRedisPool(String poolId)throws Exception{
+    public  RedisPools getRedisPool(String poolId)throws Exception{
         currentPoolId = poolId;
         RedisPools pool = null;
 //        System.out.println("获取的id"+poolId);
@@ -106,7 +107,7 @@ public class PoolManagement {
     }
 
     // 创建RedisPool并连接使用，是否可以不用
-    public static RedisPools createRedisPoolAndConnection(RedisPoolProperty property)throws Exception{
+    public  RedisPools createRedisPoolAndConnection(RedisPoolProperty property)throws Exception{
         return getRedisPool(createRedisPool(property));
     }
 
@@ -116,7 +117,7 @@ public class PoolManagement {
      * @return id
      * @throws Exception 抛出可能创建失败的异常
      */
-    public static String  createRedisPool(RedisPoolProperty property) throws Exception{
+    public  String  createRedisPool(RedisPoolProperty property) throws Exception{
         int maxId = PropertyFile.getMaxId();
         maxId++;
         property.setPoolId(maxId+"");
@@ -131,7 +132,7 @@ public class PoolManagement {
     }
 
     // 切换到另一个连接池
-    public static boolean switchPool(String PoolId){
+    public  boolean switchPool(String PoolId){
         if(PropertyFile.getAllPoolConfig().containsKey(PoolId)) {
             currentPoolId = PoolId;
             return true;
@@ -144,7 +145,7 @@ public class PoolManagement {
      * @param poolId
      * @return id 或 null
      */
-    public static String deleteRedisPool(String poolId)throws IOException{
+    public  String deleteRedisPool(String poolId)throws IOException{
         try {
             configFile = PropertyFile.getProperties(propertyFile);
             String exist = configFile.getString(poolId + Configs.SEPARATE + Configs.POOL_ID);
@@ -165,7 +166,7 @@ public class PoolManagement {
      * 删除所有配置，文件中
      * @return 删除结果
      */
-    public static boolean clearAllPools(){
+    public  boolean clearAllPools(){
         try {
             int maxId = PropertyFile.getMaxId();
             for(int i=Configs.START_ID;i<=maxId;i++){
@@ -183,7 +184,7 @@ public class PoolManagement {
     }
     // map集合中删除,断开连接的时候调用
     // TODO 销毁指定id的连接池,似乎没有起作用，有就销毁，返回结果，没有就返回false
-    public static boolean destroyRedisPool(String poolId) throws Exception {
+    public  boolean destroyRedisPool(String poolId) throws Exception {
         if(poolMap.containsKey(poolId)) {
             boolean flag = poolMap.get(poolId).destroyPool();
             poolMap.remove(poolId);
@@ -192,7 +193,7 @@ public class PoolManagement {
             return false;
         }
     }
-    public static ConcurrentMap<String, RedisPools> getPoolMap() {
+    public ConcurrentMap<String, RedisPools> getPoolMap() {
         return poolMap;
     }
 
