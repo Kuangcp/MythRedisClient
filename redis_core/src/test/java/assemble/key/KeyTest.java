@@ -21,26 +21,29 @@ public class KeyTest{
         PoolManagement management = (PoolManagement)context.getBean("poolManagement");
         management.initPool("1022");
         Commands commands = (Commands)context.getBean("commands");
-        commands.initPools();
     }
 
+    // 测试连接可用 
     @Test
     public void run(){
         RedisKey redisKey = (RedisKey)context.getBean("redisKey");
-        System.out.println(redisKey.deleteKey("name"));
+        redisKey.set("name2","34");
+        System.out.println("设置："+redisKey.get("name2"));
+        System.out.println("删除："+redisKey.deleteKey("name"));
+        System.out.println("删除后"+redisKey.get("name2"));
 
     }
+
+
     @Test
     public void testDump(){
-//        RedisKey redisKey = RedisKey.getInstance();
         RedisKey redisKey = (RedisKey)context.getBean("redisKey");
         byte[]s = redisKey.dump("name");
         System.out.println(s.length);
         for(byte sr:s){
-            System.out.println(s.toString());
+            System.out.println(s.toString()+"8989898\n");
         }
     }
-    //    由于依赖无法搞定 只好不用Spring commons-logging和slf4j的冲突 gradle无法排除
     @Test
     public void  testSpring() throws Exception {
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);

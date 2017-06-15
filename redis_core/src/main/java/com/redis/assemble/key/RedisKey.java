@@ -8,21 +8,27 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class RedisKey extends Commands{
-    public String add (String key,String value){
-        return jedis.set(key,value);
+
+    public String get(String key){
+        return getJedis().get(key);
     }
 
+    public String set (String key,String value){
+        return getJedis().set(key,value);
+    }
 
+    // 返回 1成功0失败
     public long deleteKey(String key){
-        if(connectionStatus){
-            return jedis.del(key);
-        }else{
-            return 0;
-        }
+        return getJedis().del(key);
     }
-    //转化成utf码？
+    //转化成utf 码？
     public byte[] dump(String key){
-        byte[] result =  jedis.dump(key);
-        return result;
+        return getJedis().dump(key);
+    }
+    public long expire(String key,int second){
+        if(second != -1)
+            return getJedis().expire(key, second);
+        else
+            return getJedis().persist(key);
     }
 }
