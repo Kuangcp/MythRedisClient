@@ -20,22 +20,11 @@ public class Commands {
     @Autowired
     private PoolManagement management;
     // 当前所有的操作都是共享这个参数的： 当前连接池，当前的数据库
-//    protected boolean connectionStatus=false;
     private int db = 0;
     private RedisPools pools;
     private Jedis jedis;
     private static Logger logger = LoggerFactory.getLogger(Commands.class);
 
-
-    // 在所有操作前，检查连接状态
-//    public void checkStatus() throws RedisConnectionException {
-//        if(jedis!=null){
-//            connectionStatus = true;
-//        }
-//        if(!connectionStatus){
-//            throw new RedisConnectionException("获取jedis连接失败，操作执行中断",Commands.class);
-//        }
-//    }
     public void select(int db){
         this.db = db;
         getJedis().select(db);
@@ -61,3 +50,14 @@ public class Commands {
         }
     }
 }
+//    protected boolean connectionStatus=false;
+
+// 在所有操作前，检查连接状态
+//    public void checkStatus() throws RedisConnectionException {
+//        if(jedis!=null){
+//            connectionStatus = true;
+//        }
+//        if(!connectionStatus){
+//            throw new RedisConnectionException("获取jedis连接失败，操作执行中断",Commands.class);
+//        }
+//    }

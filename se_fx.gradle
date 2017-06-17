@@ -1,1 +1,8 @@
 // fx 和core的整合
+allprojects {
+    apply plugin: 'java'
+    group 'com.github.kuangcp'
+    version = '1.0'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}

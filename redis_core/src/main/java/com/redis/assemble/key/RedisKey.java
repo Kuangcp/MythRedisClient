@@ -25,6 +25,7 @@ public class RedisKey extends Commands{
     public byte[] dump(String key){
         return getJedis().dump(key);
     }
+
     public long expire(String key,int second){
         if(second != -1)
             return getJedis().expire(key, second);

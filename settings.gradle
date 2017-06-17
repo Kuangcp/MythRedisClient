@@ -1,3 +1,4 @@
 rootProject.name = 'MythRedis'
 include 'redis_core','redis_web'
+include 'redis_client'
 

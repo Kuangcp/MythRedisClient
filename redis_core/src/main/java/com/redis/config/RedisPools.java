@@ -13,7 +13,7 @@ import java.util.Map;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-9  上午9:56
- * 一个连接redis的连接池实例
+ * 一个连接redis的连接池实例, TODO 需要检查性能
  */
 @Getter
 @Setter
@@ -51,7 +51,7 @@ public class RedisPools{
 
 //    /**
 //     * 在多线程环境同步初始化
-//     * @TODO 关于这个加锁的问题要考虑，目前还没有合适的场景
+//     * 关于这个加锁的问题要考虑，目前还没有合适的场景
 //     */
 //    public synchronized void poolInit() {
 //        if (jedisPool == null) {
@@ -85,8 +85,8 @@ public class RedisPools{
             }
         }
         // 上面的方法是设置redis将会关闭超时超过30秒的空闲连接。而不是设置读取数据的超时时间。
-        //TODO 超时重连
-        jedis.configSet("timeout", "30");
+        // 超时重连
+//        jedis.configSet("timeout", "300");
 //        System.out.println("密码是"+property.getPassword());
         return jedis;
     }
