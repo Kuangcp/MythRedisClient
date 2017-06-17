@@ -2,7 +2,6 @@ package assemble.key;
 
 import com.redis.SpringInit;
 import com.redis.assemble.key.RedisKey;
-import com.redis.common.Commands;
 import com.redis.config.PoolManagement;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,19 +15,20 @@ public class KeyTest{
 
     ApplicationContext context;
     PoolManagement management;
+    RedisKey redisKey;
 
     @Before
     public void init(){
         context = new AnnotationConfigApplicationContext(SpringInit.class);
         management = (PoolManagement)context.getBean("poolManagement");
-        management.initPool("1022");
-        Commands commands = (Commands)context.getBean("commands");
+        management.initPool("1025");
+        redisKey = (RedisKey)context.getBean("redisKey");
+//        Commands commands = (Commands)context.getBean("commands");
     }
 
     // 测试连接可用 
     @Test
     public void run(){
-        RedisKey redisKey = (RedisKey)context.getBean("redisKey");
         redisKey.set("name2","34");
         System.out.println("设置："+redisKey.get("name2"));
         System.out.println("删除："+redisKey.deleteKey("name"));
@@ -39,12 +39,18 @@ public class KeyTest{
 
     @Test
     public void testDump(){
-        RedisKey redisKey = (RedisKey)context.getBean("redisKey");
         byte[]s = redisKey.dump("name");
         System.out.println(s.length);
         for(byte sr:s){
             System.out.println(s.toString()+"\n");
         }
+    }
+
+    @Test
+    public void testExpire(){
+        redisKey.set("name","myths");
+        long re = redisKey.expire("name",5);
+        System.out.println(re);
     }
     // 测试Spring的装载
 //    @Test
