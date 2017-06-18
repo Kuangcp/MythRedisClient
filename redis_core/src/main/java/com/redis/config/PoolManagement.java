@@ -97,7 +97,7 @@ public class PoolManagement {
             pool.setProperty(poolProperty);
         }
         pool.initialPool();
-        logger.info("添加连接池配置"+poolId+":"+pool+"-->"+poolProperty.toString());
+        logger.info("实例化连接池："+poolId+":"+pool+"-->"+poolProperty.toString());
         if(pool.available()) {
             poolMap.put(poolId, pool);
             return pool;

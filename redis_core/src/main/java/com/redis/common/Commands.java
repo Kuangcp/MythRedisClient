@@ -1,5 +1,6 @@
 package com.redis.common;
 
+import com.redis.common.domain.ElementsType;
 import com.redis.common.exception.ExceptionInfo;
 import com.redis.config.PoolManagement;
 import com.redis.config.RedisPools;
@@ -30,17 +31,29 @@ public class Commands {
         getJedis().select(db);
     }
 
-    // 子类使用该方法得到连接
+    /**
+     *
+     * @return 得到当前数据库的连接
+     */
     public Jedis getJedis(){
         if(jedis==null){
             pools = management.getRedisPool();
             jedis = pools.getJedis();
         }
-//        System.out.println(jedis);
+        return jedis;
+    }
+    /**
+     *
+     * @param db 数据库下标0开始
+     * @return 获取指定了数据库的jedis连接
+     */
+    public Jedis getJedisByDb(int db){
+        Jedis jedis = getJedis();
+        jedis.select(db);
         return jedis;
     }
 
-    // 切换到指定的id
+    // 切换到指定的id的配置下的连接池
     public void setPools(String id){
         try {
             this.pools = management.getRedisPool(id);
@@ -48,6 +61,43 @@ public class Commands {
             e.printStackTrace();
             logger.error(ExceptionInfo.GET_POOL_BY_ID_FAILED);
         }
+    }
+
+    protected ElementsType getValueType(String key) {
+        String type = jedis.type(key);
+        ElementsType nodeType = null;
+        if (type.equals("string"))
+            nodeType = ElementsType.STRING;
+        else if (type.equals("hash"))
+            nodeType = ElementsType.HASH;
+        else if (type.equals("list"))
+            nodeType = ElementsType.LIST;
+        else if (type.equals("set"))
+            nodeType = ElementsType.SET;
+        else
+            nodeType = ElementsType.SORTED_SET;
+        return nodeType;
+    }
+    public String getCurrentId(){
+        if (management!=null){
+            return management.getCurrentPoolId();
+        }else{
+            return null;
+        }
+    }
+
+    public int getDb() {
+        return db;
+    }
+
+    public void setDb(int db) {
+        this.db = db;
+    }
+    public String flushAll(){
+        return getJedis().flushAll();
+    }
+    public String flushDB(int db){
+        return getJedisByDb(db).flushDB();
     }
 }
 //    protected boolean connectionStatus=false;

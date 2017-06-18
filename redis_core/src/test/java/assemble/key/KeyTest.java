@@ -2,11 +2,14 @@ package assemble.key;
 
 import com.redis.SpringInit;
 import com.redis.assemble.key.RedisKey;
+import com.redis.common.exception.TypeErrorException;
 import com.redis.config.PoolManagement;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.util.List;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-13  下午10:35
@@ -31,7 +34,7 @@ public class KeyTest{
     public void run(){
         redisKey.set("name2","34");
         System.out.println("设置："+redisKey.get("name2"));
-        System.out.println("删除："+redisKey.deleteKey("name"));
+        System.out.println("删除数量："+redisKey.deleteKey("name2"));
         System.out.println("删除后"+redisKey.get("name2"));
 
     }
@@ -48,9 +51,53 @@ public class KeyTest{
 
     @Test
     public void testExpire(){
+        redisKey.setDb(2);
         redisKey.set("name","myths");
         long re = redisKey.expire("name",5);
         System.out.println(re);
+        redisKey.setExpire("name2",6,"erer");
+    }
+    @Test
+    public void testEncoding(){
+        String encode = redisKey.getEncoding("name");
+        System.out.println(encode);
+
+    }
+
+    @Test
+    public void testMergeGet(){
+        List<String> lists =  redisKey.getMultiKeys("1","5");
+        for(String key:lists){
+            System.out.println(key);
+        }
+        String res = redisKey.setMultiKey("fg","ty");
+        System.out.println(res);
+
+    }
+    @Test
+    public void testIncrease(){
+        long result = 0;
+        try {
+            result = redisKey.increaseKey("1");
+            System.out.println(result);
+            result = redisKey.decreaseKey("1");
+            System.out.println(result);
+        } catch (TypeErrorException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void testAppend(){
+        long re = redisKey.append("name232323","23");
+        System.out.println(re);
+    }
+
+    @Test
+    public void testFlush(){
+        String result = redisKey.flushAll();
+        System.out.println(result);
+        String result2 = redisKey.flushDB(1);
+        System.out.println(result2);
     }
     // 测试Spring的装载
 //    @Test

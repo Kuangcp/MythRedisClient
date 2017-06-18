@@ -5,7 +5,7 @@ package com.redis.common.domain;
  * 所有主体元素的类型
  */
 public enum ElementsType {
-    ROOT, SERVER, DATABASE, CONTAINER, STRING, HASH, LIST, SET, SORTEDSET;
+    ROOT, SERVER, DATABASE, CONTAINER, STRING, HASH, LIST, SET, SORTED_SET;
 
     @Override
     public String toString() {

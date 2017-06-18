@@ -13,14 +13,14 @@ public class MythProperties extends Properties{
         return Integer.parseInt(this.getProperty(key));
     }
     public String getString(String key){
-        String result = null;
+        String result = RunStatus.PROPERTY_IS_NULL;
         try {
             String temp = this.getProperty(key);
             if(temp!=null){
                 result = new String(temp.getBytes("iso8859-1"), "utf-8");
             }else{
                 // 如果没有这个key就返回null
-                return null;
+                return result;
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
