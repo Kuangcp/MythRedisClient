@@ -33,9 +33,9 @@ dependencies {
     compile 'ch.qos.logback:logback-core:1.1.11'
     compile 'ch.qos.logback:logback-classic:1.1.11'
     // 单独运行需要，整合时去掉
-    compile 'org.springframework:spring-core:4.3.8.RELEASE'
-    compile 'org.springframework:spring-context:4.3.8.RELEASE'
-    compile 'org.springframework:spring-beans:4.3.8.RELEASE'
+//    compile 'org.springframework:spring-core:4.3.8.RELEASE'
+//    compile 'org.springframework:spring-context:4.3.8.RELEASE'
+//    compile 'org.springframework:spring-beans:4.3.8.RELEASE'
 
     compile group: 'commons-logging', name: 'commons-logging', version: '1.1.1'
 //    compile 'org.projectlombok:lombok:1.16.10'

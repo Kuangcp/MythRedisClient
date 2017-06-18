@@ -53,6 +53,9 @@ public class Commands {
         return jedis;
     }
 
+    public String type(String key){
+        return getJedis().type(key);
+    }
     // 切换到指定的id的配置下的连接池
     public void setPools(String id){
         try {

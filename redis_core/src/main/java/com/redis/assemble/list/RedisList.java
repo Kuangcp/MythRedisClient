@@ -1,6 +1,8 @@
 package com.redis.assemble.list;
 
 import com.redis.common.Commands;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,15 +13,31 @@ import java.util.List;
 @Component
 public class RedisList extends Commands{
 
-    // TODO 类型的判断
-    // 插入，如果不存在就新建然后插入
+    private static Logger logger = LoggerFactory.getLogger(RedisList.class);
+
+    // TODO 类型的判断 交给中间层
+
+    //
+
+    /**
+     * 右/尾部插入，如果不存在就新建然后插入
+     * @param key key
+     * @param values 多个value
+     * @return 插入后的长度
+     */
     public long rPush(String key, String... values){
         return getJedis().rpush(key,values);
     }
     public long lPush(String key, String... values){
         return getJedis().lpush(key,values);
     }
-    // 区别在于，如果不存在key就不进行插入
+
+    /**
+     * 区别在于，如果不存在key就不进行任何操作
+     * @param key key
+     * @param value 多个value
+     * @return 更改后的长度
+     */
     public long lPushX(String key, String... value){
         return getJedis().lpushx(key,value);
     }
