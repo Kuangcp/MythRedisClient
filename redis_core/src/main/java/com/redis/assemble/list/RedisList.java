@@ -44,6 +44,12 @@ public class RedisList extends Commands{
     public long rPushX(String key, String... value){
         return getJedis().rpushx(key,value);
     }
+
+    /**
+     * 右/尾 弹出，如果为空就不操作
+     * @param key key
+     * @return 弹出的那个值
+     */
     public String rPop(String key){
         return getJedis().rpop(key);
     }
@@ -60,7 +66,7 @@ public class RedisList extends Commands{
     /**
      *
      * @param key 键
-     * @param index 长整型
+     * @param index 长整型 数组下标0
      * @return 值
      */
     public String index(String key, long index){

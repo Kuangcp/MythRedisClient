@@ -53,6 +53,14 @@ public class ListTest {
     }
     @Test
     public void testPop(){
-        redisList.lPop("");
+        String key = "lists";
+        String result = redisList.lPop(key);
+        System.out.println(">>>>"+result);
+        redisList.rPop(key);
+        System.out.println("Length"+redisList.length(key));
+        System.out.println("index"+redisList.index(key,1));
+        showList(key);
+        String [] l = {"53","435"};
+
     }
 }
