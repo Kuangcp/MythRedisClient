@@ -28,7 +28,7 @@ public class ListTest {
     }
 
     public void  showList(String key){
-        List<String> lists = redisList.range(key,0,-1);
+        List<String> lists = redisList.range(key,0L,-1L);
         for(String s:lists){
             System.out.println(s);
         }
@@ -63,4 +63,30 @@ public class ListTest {
         String [] l = {"53","435"};
 
     }
+    @Test
+    public void testTrim(){
+        String key = "lists";
+        String result = redisList.trim(key,1L,6L);
+        System.out.println(result);
+
+    }
+    @Test
+    public void testRem(){
+        String key = "lists";
+        redisList.rem(key,-2,"123");
+    }
+    @Test
+    public void testSet(){
+        String key = "lists";
+        System.out.println(redisList.setByIndex(key,0,"12121"));
+    }
+
+    @Test
+    public void testInsert(){
+        String key = "lists";
+        // 第一个的之后
+        System.out.println(redisList.insertAfter(key,"test","test2"));
+        System.out.println(redisList.insertBefore(key,"test","test3"));
+    }
+
 }

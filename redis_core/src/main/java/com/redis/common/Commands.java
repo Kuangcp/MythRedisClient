@@ -88,7 +88,6 @@ public class Commands {
             return null;
         }
     }
-
     public int getDb() {
         return db;
     }
@@ -103,14 +102,7 @@ public class Commands {
         return getJedisByDb(db).flushDB();
     }
 }
-//    protected boolean connectionStatus=false;
-
-// 在所有操作前，检查连接状态
-//    public void checkStatus() throws RedisConnectionException {
-//        if(jedis!=null){
-//            connectionStatus = true;
-//        }
-//        if(!connectionStatus){
-//            throw new RedisConnectionException("获取jedis连接失败，操作执行中断",Commands.class);
-//        }
-//    }
+// 开启事务
+//Transaction e = jedis.multi();
+// e.set("","");
+//e.exec();
