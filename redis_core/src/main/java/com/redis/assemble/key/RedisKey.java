@@ -5,7 +5,10 @@ import com.redis.common.domain.Elements;
 import com.redis.common.domain.ElementsType;
 import com.redis.common.exception.ExceptionInfo;
 import com.redis.common.exception.TypeErrorException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 import java.util.Set;
@@ -17,15 +20,21 @@ import java.util.TreeSet;
  */
 @Component
 public class RedisKey extends Commands{
-
-    // TODO 判断类型，并不是所有的类型都可以用这个
+    private static Logger logger = LoggerFactory.getLogger(RedisKey.class);
+    // 判断类型，并不是所有的类型都可以用这个,类型检查交给中间层
     /**
      *
      * @param key 键
-     * @return 有就返回，没有就返回null
+     * @return 有就返回，没有就返回null 或者不是String类型的
      */
     public String get(String key){
-        return getJedis().get(key);
+        Jedis jedis = getJedis();
+        if("string".equals(jedis.type(key))){
+            return jedis.get(key);
+        }else{
+            logger.error(ExceptionInfo.KEY_TYPE_NOT_STRING+" and type is "+jedis.type(key));
+            return null;
+        }
     }
 
     public String set (String key,String value){

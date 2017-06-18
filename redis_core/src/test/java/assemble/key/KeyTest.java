@@ -38,6 +38,13 @@ public class KeyTest{
         System.out.println("删除后"+redisKey.get("name2"));
 
     }
+    @Test
+    public void getHash(){
+        String re = redisKey.type("n");
+        System.out.println(re);
+        redisKey.get("n3");
+
+    }
 
 
     @Test
