@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class KeyTest{
 
-    ApplicationContext context;
-    PoolManagement management;
-    RedisKey redisKey;
+    private ApplicationContext context;
+    private PoolManagement management;
+    private RedisKey redisKey;
 
     @Before
     public void init(){
@@ -54,6 +54,7 @@ public class KeyTest{
         for(byte sr:s){
             System.out.println(s.toString()+"\n");
         }
+
     }
 
     @Test

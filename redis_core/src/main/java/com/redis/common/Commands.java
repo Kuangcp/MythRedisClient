@@ -69,13 +69,13 @@ public class Commands {
     protected ElementsType getValueType(String key) {
         String type = jedis.type(key);
         ElementsType nodeType = null;
-        if (type.equals("string"))
+        if ("string".equals(type))
             nodeType = ElementsType.STRING;
-        else if (type.equals("hash"))
+        else if ("hash".equals(type))
             nodeType = ElementsType.HASH;
-        else if (type.equals("list"))
+        else if ("list".equals(type))
             nodeType = ElementsType.LIST;
-        else if (type.equals("set"))
+        else if ("set".equals(type))
             nodeType = ElementsType.SET;
         else
             nodeType = ElementsType.SORTED_SET;

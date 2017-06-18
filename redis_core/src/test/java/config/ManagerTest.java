@@ -14,9 +14,9 @@ import redis.clients.jedis.Jedis;
  * Created by https://github.com/kuangcp on 17-6-14  下午9:41
  * 使用Spring后的测试类
  */
-public class ManagermentTest {
-    ApplicationContext context;
-    PoolManagement management;
+public class ManagerTest {
+    private ApplicationContext context;
+    private PoolManagement management;
     @Before
     public void init(){
         context = new AnnotationConfigApplicationContext(SpringInit.class);

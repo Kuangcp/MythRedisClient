@@ -1,4 +1,4 @@
-package com.redis.common;
+package com.redis;
 
 import redis.clients.jedis.Client;
 import redis.clients.jedis.ScanResult;
@@ -13,7 +13,7 @@ import java.util.Set;
  * Common interface for sharded and non-sharded Jedis
  * 用来查阅的API
  */
-public interface JedisCommands {
+public interface JedisFunction {
 
     /**
      * 存储数据到缓存中，若key已存在则覆盖 value的长度不能超过1073741824 bytes (1 GB)

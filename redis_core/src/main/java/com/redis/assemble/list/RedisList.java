@@ -85,7 +85,7 @@ public class RedisList extends Commands{
 
     /**
      * @param key list键
-     * @param pivot 关键的元素
+     * @param pivot 关键的元素,只匹配到第一个
      * @param value 之前插入
      * @return list 长度
      */

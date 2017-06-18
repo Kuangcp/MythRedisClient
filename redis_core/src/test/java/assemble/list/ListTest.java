@@ -14,9 +14,9 @@ import java.util.List;
  * Created by https://github.com/kuangcp on 17-6-18  上午10:30
  */
 public class ListTest {
-    ApplicationContext context;
-    PoolManagement management;
-    RedisList redisList;
+    private ApplicationContext context;
+    private PoolManagement management;
+    private RedisList redisList;
 
     @Before
     public void init(){

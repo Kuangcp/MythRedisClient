@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
  * Created by https://github.com/kuangcp on 17-6-12  上午9:57
  */
 public class MythException extends Exception{
-    private static Logger logger;
+    private Logger logger;
     public MythException() {
     }
 

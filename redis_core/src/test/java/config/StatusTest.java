@@ -1,3 +1,5 @@
+package config;
+
 import org.junit.Test;
 
 import java.io.File;

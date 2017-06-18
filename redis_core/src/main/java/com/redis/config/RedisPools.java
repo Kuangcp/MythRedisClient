@@ -22,7 +22,7 @@ public class RedisPools{
     private static Logger logger = LoggerFactory.getLogger(RedisPools.class);
     // 是否加static,静态就只有一个了。会被覆盖
     private JedisPool jedisPool = null;
-    RedisPoolProperty property=null;
+    private RedisPoolProperty property=null;
 //     * redis过期时间,以秒为单位
 //    public final static int EXPIRE_HOUR = 60*60;          //一小时
 //    public final static int EXPIRE_DAY = 60*60*24;        //一天
@@ -31,7 +31,7 @@ public class RedisPools{
     /**
      * 初始化Redis连接池
      */
-    void initialPool(){
+    protected void initialPool(){
         try {
             JedisPoolConfig config = new JedisPoolConfig();
             config.setMaxTotal(property.getMaxActive());
