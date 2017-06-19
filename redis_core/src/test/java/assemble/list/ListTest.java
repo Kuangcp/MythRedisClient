@@ -5,6 +5,8 @@ import com.redis.assemble.list.RedisList;
 import com.redis.config.PoolManagement;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -17,6 +19,7 @@ public class ListTest {
     private ApplicationContext context;
     private PoolManagement management;
     private RedisList redisList;
+    private Logger logger = LoggerFactory.getLogger(ListTest.class);
 
     @Before
     public void init(){
@@ -81,12 +84,18 @@ public class ListTest {
         System.out.println(redisList.setByIndex(key,0,"12121"));
     }
 
+    // 匹配到第一个
     @Test
     public void testInsert(){
         String key = "lists";
-        // 第一个的之后
         System.out.println(redisList.insertAfter(key,"test","test2"));
         System.out.println(redisList.insertBefore(key,"test","test3"));
+    }
+    @Test
+    public void testRange(){
+        String key = "lists";
+        System.out.println("截取结果"+redisList.range(key,0,25));
+        logger.info("fjdklsafjlks");
     }
 
 }

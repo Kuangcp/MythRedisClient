@@ -60,10 +60,13 @@ public class KeyTest{
     @Test
     public void testExpire(){
         redisKey.setDb(2);
-        redisKey.set("name","myths");
-        long re = redisKey.expire("name",5);
-        System.out.println(re);
-        redisKey.setExpire("name2",6,"erer");
+        long re;
+//        redisKey.set("name","myths");
+         re = redisKey.getJedis().expire("name",3);
+//         re = redisKey.getJedis().persist("name");
+         re = redisKey.expire("name",6);
+        System.out.println("结果："+re);
+//        redisKey.setExpire("name223",9,"erer");
     }
     @Test
     public void testEncoding(){
@@ -104,9 +107,10 @@ public class KeyTest{
     public void testFlush(){
         String result = redisKey.flushAll();
         System.out.println(result);
-        String result2 = redisKey.flushDB(1);
+        String result2 = redisKey.flushDB(2);
         System.out.println(result2);
     }
+
     // 测试Spring的装载
 //    @Test
 //    public void  testSpring() throws Exception {

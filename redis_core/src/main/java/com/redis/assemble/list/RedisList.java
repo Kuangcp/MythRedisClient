@@ -58,6 +58,17 @@ public class RedisList extends Commands{
     public String lPop(String key){
         return getJedis().lpop(key);
     }
+    // TODO rpoplpush
+
+    /**
+     * 队列的状态变化
+     * @param one 将这个list的末尾 移动到
+     * @param other 这个list的头部
+     */
+    public void rPopLPush(String one,String other){
+        getJedis().rpoplpush(one,other);
+    }
+
     public long length(String key){
        return getJedis().llen(key);
     }
@@ -92,20 +103,20 @@ public class RedisList extends Commands{
     public Long insertBefore(String key,String pivot,String value){
         return getJedis().linsert(key, BinaryClient.LIST_POSITION.BEFORE,pivot,value);
     }
-// TODO rpoplpush
     /**
-     *
+     * 截取指定区间的list，特点是区间不合理的时候是返回空集合，不会抛异常
      * @param key list键
-     * @param start start
+     * @param start start 如果start超出了长度，或者end小于start 没有异常，但是没有数据返回
      * @param end end
-     * @return 值集合
+     * @return 值集合，有问题就返回空集合
      */
     public List<String> range(String key, long start, long end){
+        logger.debug("Get range:"+key+" form "+start+" to "+end);
         return getJedis().lrange(key,start,end);
     }
 
     /**
-     *
+     * 正 左至右 负 右至左
      * @param key list键
      * @param count 大于0头到尾按顺序移除值为value的list元素 小于0相反 等于0是list中全部
      * @param value 移除的value

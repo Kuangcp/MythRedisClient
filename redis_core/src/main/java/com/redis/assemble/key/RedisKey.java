@@ -48,19 +48,31 @@ public class RedisKey extends Commands{
     public long deleteKey(String key){
         return getJedis().del(key);
     }
-    //转化成utf 码？
+    //序列化给定 key ，并返回被序列化的值，使用 RESTORE 命令可以将这个值反序列化为 Redis 键。
     public byte[] dump(String key){
         return getJedis().dump(key);
     }
 
-    public long expire(String key,int second){
-        if(second != -1)
-            return getJedis().expire(key, second);
-        else
-            return getJedis().persist(key);
-    }
+    /**
+     * 新建一个带存活时间的值,其他的数据类型没有这种操作，只能先新建然后设置存活时间，只好自己自定义一个了
+     * @param key 键
+     * @param second 存活时间 大于0
+     * @param value 值
+     * @return 1/0 成功/失败
+     */
     public String setExpire(String key,int second,String value){
         return getJedis().setex(key,second,value);
+    }
+
+    /**
+     *
+     * @param key key
+     * @param second 毫秒
+     * @param value 值
+     * @return 1/0 成功/失败
+     */
+    public String setExpireMs(String key,long second,String value){
+        return getJedis().psetex(key,second,value);
     }
 
     /**
