@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,15 +68,11 @@ public class RedisPoolProperty {
         MythProperties config = null;
         try {
             config = PropertyFile.getProperties(Configs.propertyFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for (String field:lists){
-            map.put(field,config.getString(pre+field));
-        }
-        try {
+            for (String field:lists){
+                map.put(field,config.getString(pre+field));
+            }
             property = (RedisPoolProperty) MythReflect.setFieldsValue(property,map);
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return property;

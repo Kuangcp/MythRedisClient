@@ -51,8 +51,7 @@ public class MythReflect {
     public static Map<String,Object> getFieldsValue(Object object) throws IllegalAccessException {
         Map<String,Object> map = new HashMap<>();
         target = object.getClass();
-        Field[] fields = target.getDeclaredFields();
-        for(Field field:fields){
+        for(Field field:target.getDeclaredFields()){
             field.setAccessible(true);//设置属性可访问
             Object value = field.get(object);
             String name = field.getName();
@@ -69,17 +68,18 @@ public class MythReflect {
      */
     public static Object setFieldsValue(Object object,Map<String,Object> maps) throws IllegalAccessException {
         target = object.getClass();
-        Field[] fields = target.getDeclaredFields();
-        for(Field field:fields){
+        for(Field field:target.getDeclaredFields()){
             field.setAccessible(true);
             String type = field.getType().getName();
 //            System.out.println("type:"+type);
             switch (type){
-                case "java.lang.Integer":field.set(object, Integer.parseInt(maps.get(field.getName()).toString())); break;
-                case "java.lang.String": field.set(object, maps.get(field.getName())); break;
-                case "boolean":field.set(object, "true".equals(maps.get(field.getName()).toString()));break;
+                case "java.lang.Integer":field.set(object, Integer.parseInt(maps.get(field.getName()).toString()));
+                break;
+                case "java.lang.String": field.set(object, maps.get(field.getName()));
+                break;
+                case "boolean":field.set(object, "true".equals(maps.get(field.getName()).toString()));
+                break;
             }
-
         }
         return object;
     }

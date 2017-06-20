@@ -1,5 +1,6 @@
 package com.redis.config;
 
+import com.redis.common.exception.ExceptionInfo;
 import com.redis.common.exception.ReadConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,19 +20,20 @@ public class PropertyFile {
     /**
      * 得到配置文件对象
      * @param propertyFile 文件名以及路径（完整）
-     * @return
+     * @return 配置文件的对象
      * @throws IOException
      */
     public static MythProperties getProperties(String propertyFile) throws IOException {
         MythProperties props = new MythProperties();
         File file = new File(propertyFile);
 //        System.out.println(propertyFile);
-        if(!file.exists())
-            if(file.createNewFile()){
-                logger.info("Create RedisConfigFile Success");
-            }else{
-                logger.info("Create RedisConfigFile Failed,Check the authority");
+        if(!file.exists()) {
+            if (file.createNewFile()) {
+                logger.info(ExceptionInfo.CREATE_CONFIG_SUCCESS);
+            } else {
+                logger.info(ExceptionInfo.CREATE_CONFIG_FIALED);
             }
+        }
         InputStream is;
         try {
             is = new BufferedInputStream(new FileInputStream(propertyFile));
@@ -58,27 +60,29 @@ public class PropertyFile {
         MythProperties props = getProperties(Configs.propertyFile);
         OutputStream fos = new FileOutputStream(Configs.propertyFile);
         props.remove(key);
-
         props.store(fos, "Delete '" + key + "' value");
 
     }
+    // TODO 修改文件
     public static void update(){
 //        delete();
 
     }
-    // 获得最大的id，如果最开始没有就要新增
+    /**
+     * 获得最大的id，如果最开始没有就要新增
+     * @return 返回最大的id（已用）
+     * @throws IOException 文件异常
+     */
     public static int getMaxId() throws IOException{
         MythProperties props = getProperties(Configs.propertyFile);
 //        OutputStream fos = new FileOutputStream(propertyFile);
-        String maxId = props.getString("maxId");
+        String maxId = props.getString(Configs.MAX_POOL_ID);
         if(maxId==null){
-            save("maxId",Configs.START_ID+"");
+            save(Configs.MAX_POOL_ID,Configs.START_ID+"");
             // 修改后重新加载文件
             props = getProperties(Configs.propertyFile);
-            maxId = props.getString("maxId");
-
+            maxId = props.getString(Configs.MAX_POOL_ID);
         }
-//        if(maxId==null) return 0;
         return Integer.parseInt(maxId);
     }
 
@@ -92,7 +96,8 @@ public class PropertyFile {
             properties = getProperties(Configs.propertyFile);
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error("加载配置文件异常");
+            logger.error(ExceptionInfo.OPEN_CONFIG_FAILED,e);
+            return map;
         }
         for(int i=Configs.START_ID;i<=maxId;i++){
             String poolId = properties.getString(i+Configs.SEPARATE+Configs.POOL_ID);

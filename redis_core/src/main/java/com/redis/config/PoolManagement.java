@@ -86,9 +86,7 @@ public class PoolManagement {
         RedisPoolProperty poolProperty;
         // 如果没有这个id的存在,就新建一个
         if(configFile.getString(pre+ Configs.NAME)==null){
-//                pool = createRedisPool(propertyFile);
-            logger.error(ExceptionInfo.POOL_NOT_EXIST_CONFIG);
-            throw new Exception(ExceptionInfo.POOL_NOT_EXIST_CONFIG);
+            throw new RedisConnectionException(ExceptionInfo.POOL_NOT_EXIST_CONFIG,PoolManagement.class);
             //@TODO 处理这种连接不存在的情况
             // 一般，连接的显示是从配置文件中加载的，是不会出现面板上有连接，而配置文件中没有的情况 除非是在客户端，删除了连接，没有刷新客户端缓存而导致
         }else {
