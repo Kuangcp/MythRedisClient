@@ -97,8 +97,7 @@ public class PropertyFile {
         for(int i=Configs.START_ID;i<=maxId;i++){
             String poolId = properties.getString(i+Configs.SEPARATE+Configs.POOL_ID);
             if(poolId==null) continue;
-            RedisPoolProperty property = new RedisPoolProperty();
-            property.initByIdFromFile(poolId);
+            RedisPoolProperty property = RedisPoolProperty.initByIdFromConfig(poolId);
             map.put(poolId,property);
         }
         return map;

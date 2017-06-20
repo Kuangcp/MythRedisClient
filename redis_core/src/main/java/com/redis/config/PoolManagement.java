@@ -93,8 +93,7 @@ public class PoolManagement {
             // 一般，连接的显示是从配置文件中加载的，是不会出现面板上有连接，而配置文件中没有的情况 除非是在客户端，删除了连接，没有刷新客户端缓存而导致
         }else {
             pool = new RedisPools();//新建连接池对象
-            poolProperty = new RedisPoolProperty();//新建连接池所有配置属性对象
-            poolProperty.initByIdFromFile(poolId);
+            poolProperty = RedisPoolProperty.initByIdFromConfig(poolId);
             pool.setProperty(poolProperty);
         }
         pool.initialPool();

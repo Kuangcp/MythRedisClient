@@ -60,4 +60,27 @@ public class MythReflect {
         }
         return map;
     }
+
+    /**
+     *
+     * @param object 要赋值的对象
+     * @param maps 属性名-属性值 映射
+     * @throws IllegalAccessException 可能没有权限
+     */
+    public static Object setFieldsValue(Object object,Map<String,Object> maps) throws IllegalAccessException {
+        target = object.getClass();
+        Field[] fields = target.getDeclaredFields();
+        for(Field field:fields){
+            field.setAccessible(true);
+            String type = field.getType().getName();
+//            System.out.println("type:"+type);
+            switch (type){
+                case "java.lang.Integer":field.set(object, Integer.parseInt(maps.get(field.getName()).toString())); break;
+                case "java.lang.String": field.set(object, maps.get(field.getName())); break;
+                case "boolean":field.set(object, "true".equals(maps.get(field.getName()).toString()));break;
+            }
+
+        }
+        return object;
+    }
 }
