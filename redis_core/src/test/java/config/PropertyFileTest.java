@@ -2,6 +2,7 @@ package config;
 
 import com.redis.config.PropertyFile;
 import com.redis.config.RedisPoolProperty;
+import com.redis.utils.MythReflect;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -13,12 +14,12 @@ import java.util.Map;
 public class PropertyFileTest {
     // 展示配置文件的数据
     @Test
-    public void testList() throws IOException {
+    public void testList() throws Exception {
         Map<String,RedisPoolProperty> map = PropertyFile.getAllPoolConfig();
         for(String key:map.keySet()){
             System.out.println(key);
             RedisPoolProperty property = map.get(key);
-            Map lists= property.getPropertyValueMap();
+            Map lists= MythReflect.getFieldsValue(property);
             for(Object keys:lists.keySet()){
                 System.out.println(keys.toString()+":"+lists.get(keys));
             }

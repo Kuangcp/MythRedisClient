@@ -16,17 +16,15 @@ import java.util.List;
  * Created by https://github.com/kuangcp on 17-6-18  上午10:30
  */
 public class ListTest {
-    private ApplicationContext context;
-    private PoolManagement management;
     private RedisList redisList;
     private Logger logger = LoggerFactory.getLogger(ListTest.class);
 
     @Before
     public void init(){
-        context = new AnnotationConfigApplicationContext(SpringInit.class);
-        management = (PoolManagement)context.getBean("poolManagement");
+        ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
+        PoolManagement management = (PoolManagement) context.getBean("poolManagement");
         management.initPool("1025");
-        redisList = (RedisList)context.getBean("redisList");
+        redisList = (RedisList) context.getBean("redisList");
 //        Commands commands = (Commands)context.getBean("commands");
     }
 
@@ -76,7 +74,7 @@ public class ListTest {
     @Test
     public void testRem(){
         String key = "lists";
-        redisList.rem(key,-2,"123");
+        redisList.remove(key,-2,"123");
     }
     @Test
     public void testSet(){
@@ -96,6 +94,12 @@ public class ListTest {
         String key = "lists";
         System.out.println("截取结果"+redisList.range(key,0,25));
         logger.info("fjdklsafjlks");
+    }
+    @Test
+    public void testPopPush(){
+        redisList.rPopLPush("list1","list2");
+        showList("list1");
+        showList("list2");
     }
 
 }

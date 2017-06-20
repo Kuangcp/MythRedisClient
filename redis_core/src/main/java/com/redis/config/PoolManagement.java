@@ -4,6 +4,7 @@ import com.redis.common.exception.ExceptionInfo;
 import com.redis.common.exception.NoticeInfo;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.common.exception.RedisConnectionException;
+import com.redis.utils.MythReflect;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -121,7 +122,8 @@ public class PoolManagement {
         int maxId = PropertyFile.getMaxId();
         maxId++;
         property.setPoolId(maxId+"");
-        Map<String,?> map = property.getPropertyValueMap();
+        Map<String,?> map = MythReflect.getFieldsValue(property);
+        // 将所有属性都转换成String类型，特别注意bool类型的没有toString方法，就只能靠拼接
         for (String key:map.keySet()) {
             PropertyFile.save( maxId+Configs.SEPARATE+key,map.get(key)+"");
         }
@@ -133,10 +135,15 @@ public class PoolManagement {
 
     // 切换到另一个连接池
     public  boolean switchPool(String PoolId){
-        if(PropertyFile.getAllPoolConfig().containsKey(PoolId)) {
-            currentPoolId = PoolId;
-            return true;
-        }else{
+        try {
+            if(PropertyFile.getAllPoolConfig().containsKey(PoolId)) {
+                currentPoolId = PoolId;
+                return true;
+            }else{
+                return false;
+            }
+        } catch (ReadConfigException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -153,7 +160,7 @@ public class PoolManagement {
                 logger.info(ExceptionInfo.DELETE_POOL_NOT_EXIST+poolId);
                 return null;
             }
-            for (String key : RedisPoolProperty.getPropertyList()) {
+            for (String key : MythReflect.getFieldByClass(RedisPoolProperty.class)) {
                 PropertyFile.delete( poolId + Configs.SEPARATE + key);
             }
         }catch (IOException e){

@@ -1,5 +1,6 @@
 package com.redis.config;
 
+import com.redis.common.exception.ReadConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +83,7 @@ public class PropertyFile {
     }
 
     // 为了展示面板的数据显示 ,列出配置文件所有连接
-    public static Map<String,RedisPoolProperty> getAllPoolConfig() {
+    public static Map<String,RedisPoolProperty> getAllPoolConfig() throws ReadConfigException {
         Map<String,RedisPoolProperty> map = new HashMap<>();
         int maxId = 0;
         MythProperties properties = null;

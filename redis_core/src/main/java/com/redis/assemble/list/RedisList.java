@@ -58,8 +58,6 @@ public class RedisList extends Commands{
     public String lPop(String key){
         return getJedis().lpop(key);
     }
-    // TODO rpoplpush
-
     /**
      * 队列的状态变化
      * @param one 将这个list的末尾 移动到
@@ -122,7 +120,7 @@ public class RedisList extends Commands{
      * @param value 移除的value
      * @return 个数
      */
-    public Long rem(String key, long count, String value){
+    public Long remove(String key, long count, String value){
         return getJedis().lrem(key,count,value);
     }
 

@@ -16,16 +16,14 @@ import java.util.List;
  */
 public class KeyTest{
 
-    private ApplicationContext context;
-    private PoolManagement management;
     private RedisKey redisKey;
 
     @Before
     public void init(){
-        context = new AnnotationConfigApplicationContext(SpringInit.class);
-        management = (PoolManagement)context.getBean("poolManagement");
+        ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
+        PoolManagement management = (PoolManagement) context.getBean("poolManagement");
         management.initPool("1025");
-        redisKey = (RedisKey)context.getBean("redisKey");
+        redisKey = (RedisKey) context.getBean("redisKey");
 //        Commands commands = (Commands)context.getBean("commands");
     }
 

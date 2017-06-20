@@ -10,6 +10,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import redis.clients.jedis.Jedis;
 
+import java.io.IOException;
+
 /**
  * Created by https://github.com/kuangcp on 17-6-14  下午9:41
  * 使用Spring后的测试类
@@ -60,5 +62,13 @@ public class ManagerTest {
             e.printStackTrace();
         }
 
+    }
+    @Test
+    public void deleteTest(){
+        try {
+            management.deleteRedisPool("1026");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

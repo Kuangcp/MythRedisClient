@@ -1,17 +1,12 @@
 package com.redis.config;
 
+import com.redis.common.exception.ReadConfigException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-9  下午9:09
@@ -22,7 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RedisPoolProperty {
-    private static Logger logger= LoggerFactory.getLogger(RedisPoolProperty.class);
+    // 最好不要在配置属性类中添加logger对象
     // 10个属性,修改记得修改下面的方法，使用反射最省事
     private int maxActive;//最大连接数
     private int maxIdle;//最大闲置数,超过的就会被回收掉
@@ -36,45 +31,11 @@ public class RedisPoolProperty {
     private String password="";//设定默认值为空字符串而不是null，因为后面的机制是要把null转String的
 
     /**
-     * 前提是对象已经初始化好
-     * @return 返回属性对象的键值对map
+     * 根据id从配置文件中加载配置对象
+     * @param poolId id
+     * @return 返回从配置文件中装载好数据的property对象
      */
-    public Map<String,Object> getPropertyValueMap(){
-        Map<String,Object> map = new HashMap<>();
-        map.put(Configs.HOST,getHost());
-        map.put(Configs.PORT,getPort());
-        map.put(Configs.NAME,getName());
-        map.put(Configs.MAX_ACTIVE,getMaxActive());
-        map.put(Configs.MAX_IDLE,getMaxIdle());
-        map.put(Configs.MAX_WAIT_MILLIS,getMaxWaitMills());
-        map.put(Configs.TEST_ON_BORROW,isTestOnBorrow()+"");
-        map.put(Configs.TIMEOUT,getTimeout());
-        map.put(Configs.POOL_ID,getPoolId());
-        map.put(Configs.PASSWORD,getPassword());
-        return map;
-    }
-
-    /**
-     * @return 返回属性对象的所有属性名
-     */
-    public static List<String> getPropertyList(){
-        List<String> list = new ArrayList<>();
-        list.add(Configs.HOST);
-        list.add(Configs.PORT);
-        list.add(Configs.NAME);
-        list.add(Configs.MAX_ACTIVE);
-        list.add(Configs.MAX_IDLE);
-        list.add(Configs.TIMEOUT);
-        list.add(Configs.TEST_ON_BORROW);
-        list.add(Configs.POOL_ID);
-        list.add(Configs.MAX_WAIT_MILLIS);
-        list.add(Configs.PASSWORD);
-
-        return list;
-    }
-
-    // 根据id从配置文件中加载配置对象
-    public RedisPoolProperty initByIdFromFile(String poolId){
+    public RedisPoolProperty initByIdFromFile(String poolId) throws ReadConfigException {
         String pre = poolId+ Configs.SEPARATE;
         MythProperties config = null;
 
@@ -92,7 +53,7 @@ public class RedisPoolProperty {
             setPassword(config.getString(pre+Configs.PASSWORD));
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error("打开"+Configs.propertyFile+"配置文件失败",e);
+            throw new ReadConfigException("打开"+Configs.propertyFile+"配置文件失败",e,RedisPoolProperty.class);
         }
         return this;
     }
