@@ -23,7 +23,7 @@ public class ListTest {
     public void init(){
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
         PoolManagement management = (PoolManagement) context.getBean("poolManagement");
-        management.initPool("1025");
+        management.setCurrentPoolId("1025");
         redisList = (RedisList) context.getBean("redisList");
 //        Commands commands = (Commands)context.getBean("commands");
     }

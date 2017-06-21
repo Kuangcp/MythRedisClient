@@ -81,7 +81,7 @@ public class RedisPoolProperty {
     @Override
     public String toString() {
         return "RedisPoolProperty{" +
-                " name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", poolId='" + poolId + '\'' +
                 ", password='" + password + '\'' +
                 ", maxActive=" + maxActive +

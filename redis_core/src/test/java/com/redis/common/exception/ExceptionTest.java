@@ -1,12 +1,10 @@
-package common.exception;
+package com.redis.common.exception;
 
-import com.redis.common.exception.ExceptionInfo;
-import com.redis.common.exception.ReadConfigException;
-import com.redis.common.exception.RedisConnectionException;
 import org.junit.Test;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-13  下午8:36
+ * 测试Exception 日志记录
  */
 public class ExceptionTest {
 

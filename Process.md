@@ -49,4 +49,5 @@
 - 相反的，引入commons-logging依赖，反而解决了问题，也是要醉
 
 ### Long 和 long 的区别，以及测试框架Jmockit的使用
-- Long
+- Long 就是long 的包装类，但是缺少了equals方法，所以在断言中会报错
+- 同样的，Float Char Byte Integer 也都是装箱后的类型

@@ -41,13 +41,6 @@ public class RedisKey extends Commands{
         return getJedis().set(key,value);
     }
 
-    /**
-     * @param key 键
-     * @return  1成功 0失败
-     */
-    public long deleteKey(String key){
-        return getJedis().del(key);
-    }
     //序列化给定 key ，并返回被序列化的值，使用 RESTORE 命令可以将这个值反序列化为 Redis 键。
     public byte[] dump(String key){
         return getJedis().dump(key);

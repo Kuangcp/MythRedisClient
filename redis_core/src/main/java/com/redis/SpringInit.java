@@ -1,5 +1,7 @@
 package com.redis;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,7 +12,11 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan({"com.redis","redis.manager"})
 @Configuration
 public class SpringInit {
+    private Logger logger = LoggerFactory.getLogger(SpringInit.class);
     public SpringInit(){
-        System.out.println("spring容器启动初始化。。。");
+        logger.info("Spring配置类 构造器初始化");
+    }
+    public void test(){
+        logger.info("test");
     }
 }

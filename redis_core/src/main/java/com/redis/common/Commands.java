@@ -117,6 +117,13 @@ public class Commands {
         setDb(db);
         return getJedis().flushDB();
     }
+    /**
+     * @param key 键
+     * @return  1成功 0失败
+     */
+    public long deleteKey(String key){
+        return getJedis().del(key);
+    }
 }
 // 开启事务
 //Transaction e = jedis.multi();

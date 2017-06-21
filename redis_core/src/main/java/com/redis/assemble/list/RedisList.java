@@ -60,8 +60,8 @@ public class RedisList extends Commands{
      * @param one 将这个list的末尾 移动到
      * @param other 这个list的头部
      */
-    public void rPopLPush(String one,String other){
-        getJedis().rpoplpush(one,other);
+    public String rPopLPush(String one, String other){
+        return getJedis().rpoplpush(one,other);
     }
 
     public long length(String key){
@@ -106,7 +106,7 @@ public class RedisList extends Commands{
      * @return 值集合，有问题就返回空集合
      */
     public List<String> range(String key, long start, long end){
-        logger.debug("Get range:"+key+" form "+start+" to "+end);
+        logger.debug("Get range: ["+key+"] form "+start+" to "+end);
         return getJedis().lrange(key,start,end);
     }
 

@@ -6,6 +6,7 @@ import org.junit.Test;
 /**
  * Created by https://github.com/kuangcp on 17-6-20  下午4:49
  * 在使用断言的时候，对于对象的判断，使用toString方法更稳妥,就不必担心空指针了，有空指针正好说明方法有问题
+ * 全部测试通过
  */
 public class RedisPoolPropertyTest {
     private RedisPoolProperty redisPoolProperty = new RedisPoolProperty(400, 100, 10000, false,
