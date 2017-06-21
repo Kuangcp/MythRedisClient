@@ -135,6 +135,12 @@ public class PoolManagement {
     }
 
     // 切换到另一个连接池
+
+    /**
+     * 切换数据连接池
+     * @param PoolId 目标id
+     * @return true 切换成功,id在配置文件中不存在就返回false
+     */
     public  boolean switchPool(String PoolId){
         try {
             if(PropertyFile.getAllPoolConfig().containsKey(PoolId)) {

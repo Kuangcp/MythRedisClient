@@ -33,6 +33,7 @@ public class RedisListTest {
 //    Jedis jedis;
     @InjectMocks
     RedisList redisList;
+    // TODO 完成List Keys Set的完整测试代码
 
     @Before
     public void setUp() {
