@@ -82,7 +82,7 @@ public class Commands {
     }
     protected ElementsType getValueType(String key) {
         String type = jedis.type(key);
-        ElementsType nodeType = null;
+        ElementsType nodeType;
         if ("string".equals(type))
             nodeType = ElementsType.STRING;
         else if ("hash".equals(type))

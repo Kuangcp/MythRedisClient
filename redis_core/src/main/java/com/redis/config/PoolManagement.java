@@ -31,7 +31,7 @@ public class PoolManagement {
     // 所有的连接池,不知道为什么，明明集合里有，却还是要新建，新建出来的还是同一个内存地址？
     private  ConcurrentMap<String,RedisPools> poolMap = new ConcurrentHashMap<>();
     private  Logger logger= LoggerFactory.getLogger(PoolManagement.class);
-    private  String propertyFile = Configs.propertyFile;
+    private  String propertyFile = Configs.PROPERTY_FILE;
     private  MythProperties configFile = null;
     private  String currentPoolId;
     // 获取指定id的连接池，断言id是存在的 TODO 这个得到的Bean会不会影响到依赖于他的bean
@@ -154,16 +154,17 @@ public class PoolManagement {
             configFile = PropertyFile.getProperties(propertyFile);
             String exist = configFile.getString(poolId + Configs.SEPARATE + Configs.POOL_ID);
             if (exist == null) {
-                logger.info(ExceptionInfo.DELETE_POOL_NOT_EXIST+poolId);
+                logger.error(ExceptionInfo.DELETE_POOL_NOT_EXIST+poolId);
                 return null;
             }
             for (String key : MythReflect.getFieldByClass(RedisPoolProperty.class)) {
                 PropertyFile.delete( poolId + Configs.SEPARATE + key);
             }
-        }catch (IOException e){
+        }catch (Exception e){
             logger.error(ExceptionInfo.OPEN_CONFIG_FAILED,e);
             return null;
         }
+        logger.info(NoticeInfo.DELETE_POOL_SUCCESS+poolId,PoolManagement.class);
         return poolId;
     }
     /**

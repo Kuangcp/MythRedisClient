@@ -16,10 +16,7 @@ import java.util.List;
 public class RedisList extends Commands{
 
     private static Logger logger = LoggerFactory.getLogger(RedisList.class);
-
     // TODO 类型的判断 交给中间层
-
-    //
 
     /**
      * 右/尾部插入，如果不存在就新建然后插入
@@ -88,7 +85,7 @@ public class RedisList extends Commands{
      * @param value 在关键元素之后插入
      * @return list长度
      */
-    public Long insertAfter(String key, String pivot,String value){
+    public long insertAfter(String key, String pivot,String value){
         return getJedis().linsert(key, BinaryClient.LIST_POSITION.AFTER,pivot,value);
     }
 
@@ -98,7 +95,7 @@ public class RedisList extends Commands{
      * @param value 之前插入
      * @return list 长度
      */
-    public Long insertBefore(String key,String pivot,String value){
+    public long insertBefore(String key,String pivot,String value){
         return getJedis().linsert(key, BinaryClient.LIST_POSITION.BEFORE,pivot,value);
     }
     /**
@@ -120,7 +117,7 @@ public class RedisList extends Commands{
      * @param value 移除的value
      * @return 个数
      */
-    public Long remove(String key, long count, String value){
+    public long remove(String key, long count, String value){
         return getJedis().lrem(key,count,value);
     }
 

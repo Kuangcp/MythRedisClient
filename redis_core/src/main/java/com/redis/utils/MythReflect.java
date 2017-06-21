@@ -73,12 +73,12 @@ public class MythReflect {
             String type = field.getType().getName();
 //            System.out.println("type:"+type);
             switch (type){
-                case "java.lang.Integer":field.set(object, Integer.parseInt(maps.get(field.getName()).toString()));
-                break;
-                case "java.lang.String": field.set(object, maps.get(field.getName()));
-                break;
-                case "boolean":field.set(object, "true".equals(maps.get(field.getName()).toString()));
-                break;
+                case "java.lang.Integer":field.set(object,
+                        Integer.parseInt(maps.get(field.getName()).toString()));break;
+                case "java.lang.String": field.set(object,
+                        maps.get(field.getName()));break;
+                case "boolean":field.set(object,
+                        "true".equals(maps.get(field.getName()).toString()));break;
             }
         }
         return object;

@@ -41,7 +41,8 @@ public class RedisPools{
                 jedisPool = new JedisPool(config, property.getHost(), property.getPort(),
                         property.getTimeout(),property.getPassword());
             }else{
-                jedisPool = new JedisPool(config, property.getHost(), property.getPort(), property.getTimeout());
+                jedisPool = new JedisPool(config, property.getHost(), property.getPort(),
+                        property.getTimeout());
             }
         } catch (Exception e) {
             e.printStackTrace();

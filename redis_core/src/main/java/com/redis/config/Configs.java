@@ -9,7 +9,7 @@ import java.io.File;
 public interface Configs {
 
     // 配置文件目录
-    String propertyFile = System.getProperty("user.home") + File.separatorChar +".MythRedisClient.properties";
+    String PROPERTY_FILE = System.getProperty("user.home") + File.separatorChar +".MythRedisClient.properties";
 
     // 配置文件的基本属性
     int START_ID=1000;// 起始id
@@ -22,10 +22,11 @@ public interface Configs {
     String PORT = "port";
     String HOST = "host";
     String NAME = "name";
-
     String SEPARATE=".";//分隔id和属性
     String POOL_ID = "poolId";//记录id
     String MAX_POOL_ID = "maxPoolId";//记录存放的最大id，为了新增需要
+
+    // 超时的规范数据，单位 s
     int EXPIRE_HOUR = 60*60;          //一小时
     int EXPIRE_DAY = 60*60*24;        //一天
     int EXPIRE_MONTH = 60*60*24*30;   //一个月

@@ -66,7 +66,7 @@ public class ManagerTest {
     @Test
     public void deleteTest(){
         try {
-            management.deleteRedisPool("1026");
+            management.deleteRedisPool("1027");
         } catch (IOException e) {
             e.printStackTrace();
         }

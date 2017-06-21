@@ -42,7 +42,7 @@ public class RedisPoolProperty {
 //        MythProperties config = null;
 //
 //        try {
-//            config = PropertyFile.getProperties(Configs.propertyFile);
+//            config = PropertyFile.getProperties(Configs.PROPERTY_FILE);
 //            setPoolId(poolId);
 //            setMaxActive(config.getInt(pre + Configs.MAX_ACTIVE));
 //            setMaxIdle(config.getInt(pre + Configs.MAX_IDLE));
@@ -55,7 +55,7 @@ public class RedisPoolProperty {
 //            setPassword(config.getString(pre+Configs.PASSWORD));
 //        } catch (IOException e) {
 //            e.printStackTrace();
-//            throw new ReadConfigException("打开"+Configs.propertyFile+"配置文件失败",e,RedisPoolProperty.class);
+//            throw new ReadConfigException("打开"+Configs.PROPERTY_FILE+"配置文件失败",e,RedisPoolProperty.class);
 //        }
 //        return this;
 //    }
@@ -67,7 +67,7 @@ public class RedisPoolProperty {
         Map<String ,Object> map = new HashMap<>();
         MythProperties config = null;
         try {
-            config = PropertyFile.getProperties(Configs.propertyFile);
+            config = PropertyFile.getProperties(Configs.PROPERTY_FILE);
             for (String field:lists){
                 map.put(field,config.getString(pre+field));
             }
@@ -91,7 +91,6 @@ public class RedisPoolProperty {
                 ", port=" + port +
                 ", timeout=" + timeout +
                 ", host='" + host + '\'' +
-
                 '}';
     }
 }
