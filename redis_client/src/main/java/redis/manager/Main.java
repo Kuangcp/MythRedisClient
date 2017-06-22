@@ -49,7 +49,7 @@ public class Main extends Application {
         PoolManagement management;
         context = new AnnotationConfigApplicationContext(SpringInit.class);
         management = (PoolManagement)context.getBean("poolManagement");
-        management.initPool("1001");
+        management.setCurrentPoolId("1001");
         /*RedisPools pools = management.getRedisPool();
         Jedis jedis = pools.getJedis();
         jedis.set("name","huang");

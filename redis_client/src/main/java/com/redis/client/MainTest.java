@@ -15,6 +15,6 @@ public class MainTest {
         PoolManagement management;
         context = new AnnotationConfigApplicationContext(SpringInit.class);
         management = (PoolManagement)context.getBean("poolManagement");
-        management.initPool("1025");
+        management.setCurrentPoolId("1025");
     }
 }
