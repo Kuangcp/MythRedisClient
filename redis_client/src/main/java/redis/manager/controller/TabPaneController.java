@@ -1,14 +1,19 @@
 package redis.manager.controller;
 
+import com.redis.assemble.key.RedisKey;
 import javafx.fxml.FXML;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * tab面板的controller.
  * User: huang
  * Date: 17-6-9
  */
+@Component
 public class TabPaneController {
-
+    @Autowired
+    RedisKey redisKey;
     /**
      * 初始化, 装载数据.
      */

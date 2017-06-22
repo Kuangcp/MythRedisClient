@@ -2,3 +2,6 @@ build/
 *.iml
 .gradle/
 *.log
+.idea/
+target/
+
