@@ -16,7 +16,7 @@ public class MythRedis implements Runnable{
         PoolManagement management;
         context = new AnnotationConfigApplicationContext(SpringInit.class);
         management = (PoolManagement)context.getBean("poolManagement");
-        management.initPool(id);
+        management.setCurrentPoolId(id);
         Thread thread = new Thread(new MythRedis());
         thread.start();
     }

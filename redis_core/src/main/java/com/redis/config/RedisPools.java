@@ -22,16 +22,14 @@ public class RedisPools{
     private static Logger logger = LoggerFactory.getLogger(RedisPools.class);
     // 是否加static,静态就只有一个了。会被覆盖
     private JedisPool jedisPool = null;
-    RedisPoolProperty property=null;
+    private RedisPoolProperty property=null;
 //     * redis过期时间,以秒为单位
-//    public final static int EXPIRE_HOUR = 60*60;          //一小时
-//    public final static int EXPIRE_DAY = 60*60*24;        //一天
-//    public final static int EXPIRE_MONTH = 60*60*24*30;   //一个月
+
 
     /**
      * 初始化Redis连接池
      */
-    void initialPool(){
+    protected void initialPool(){
         try {
             JedisPoolConfig config = new JedisPoolConfig();
             config.setMaxTotal(property.getMaxActive());
@@ -40,11 +38,14 @@ public class RedisPools{
             config.setTestOnBorrow(property.isTestOnBorrow());
 //            System.out.println("密码："+property.getPassword()+property.getPassword().length());
             if(property.getPassword() != null && property.getPassword().length() > 0){
-                jedisPool = new JedisPool(config, property.getHost(), property.getPort(), property.getTimeout(),property.getPassword());
+                jedisPool = new JedisPool(config, property.getHost(), property.getPort(),
+                        property.getTimeout(),property.getPassword());
             }else{
-                jedisPool = new JedisPool(config, property.getHost(), property.getPort(), property.getTimeout());
+                jedisPool = new JedisPool(config, property.getHost(), property.getPort(),
+                        property.getTimeout());
             }
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("create JedisPool error : "+e);
         }
     }
@@ -115,18 +116,4 @@ public class RedisPools{
         status.put("NumWaiters",jedisPool.getNumWaiters());//等待的连接数
         return status;
     }
-//    /**
-//     * 设置 过期时间
-//     * @param key
-//     * @param seconds 以秒为单位
-//     * @param value
-//     */
-//    public void setString(String key ,int seconds,String value){
-//        try {
-//            value = value==null ? "" : value;
-//            getJedis().setex(key, seconds, value);
-//        } catch (Exception e) {
-//            logger.error("Set keyex error : "+e);
-//        }
-//    }
 }

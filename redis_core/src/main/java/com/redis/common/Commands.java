@@ -24,12 +24,12 @@ public class Commands {
     private int db = 0;
     private RedisPools pools;
     private Jedis jedis;
-    private static Logger logger = LoggerFactory.getLogger(Commands.class);
+    private Logger logger = LoggerFactory.getLogger(Commands.class);
 
-    public void select(int db){
-        this.db = db;
-        getJedis().select(db);
-    }
+//    public void select(int db){
+//        this.db = db;
+//        getJedis().select(db);
+//    }
 
     /**
      *
@@ -40,18 +40,19 @@ public class Commands {
             pools = management.getRedisPool();
             jedis = pools.getJedis();
         }
-        return jedis;
-    }
-    /**
-     *
-     * @param db 数据库下标0开始
-     * @return 获取指定了数据库的jedis连接
-     */
-    public Jedis getJedisByDb(int db){
-        Jedis jedis = getJedis();
         jedis.select(db);
         return jedis;
     }
+//    /**
+//     *
+//     * @param db 数据库下标0开始
+//     * @return 获取指定了数据库的jedis连接
+//     */
+//    public Jedis getJedisByDb(int db){
+//        Jedis jedis = getJedis();
+//        jedis.select(db);
+//        return jedis;
+//    }
 
     public String type(String key){
         return getJedis().type(key);
@@ -66,16 +67,29 @@ public class Commands {
         }
     }
 
+    /**
+     * 修改已经存在的键的存活时间,适用于所有key
+     * @param key 键
+     * @param second 大于等于0就expire，否则persist
+     * @return persist 1:成功 0：key没有设存活时间，或者key不存在。expire 1：成功设置，0：key不存在代表2.1.3以下版本已经设置了存活时间就不能设置（高版本就随意更改）
+     */
+    public Long expire(String key,int second){
+        if(second >= 0)
+            // second 为 0 就是立即删除，小于0也是
+            return getJedis().expire(key, second);
+        else
+            return getJedis().persist(key);
+    }
     protected ElementsType getValueType(String key) {
         String type = jedis.type(key);
-        ElementsType nodeType = null;
-        if (type.equals("string"))
+        ElementsType nodeType;
+        if ("string".equals(type))
             nodeType = ElementsType.STRING;
-        else if (type.equals("hash"))
+        else if ("hash".equals(type))
             nodeType = ElementsType.HASH;
-        else if (type.equals("list"))
+        else if ("list".equals(type))
             nodeType = ElementsType.LIST;
-        else if (type.equals("set"))
+        else if ("set".equals(type))
             nodeType = ElementsType.SET;
         else
             nodeType = ElementsType.SORTED_SET;
@@ -96,21 +110,25 @@ public class Commands {
     public void setDb(int db) {
         this.db = db;
     }
+
+    // OK 或 null
     public String flushAll(){
         return getJedis().flushAll();
     }
+    // OK 或 null
     public String flushDB(int db){
-        return getJedisByDb(db).flushDB();
+        setDb(db);
+        return getJedis().flushDB();
+    }
+    /**
+     * @param key 键
+     * @return  1成功 0失败
+     */
+    public long deleteKey(String key){
+        return getJedis().del(key);
     }
 }
-//    protected boolean connectionStatus=false;
-
-// 在所有操作前，检查连接状态
-//    public void checkStatus() throws RedisConnectionException {
-//        if(jedis!=null){
-//            connectionStatus = true;
-//        }
-//        if(!connectionStatus){
-//            throw new RedisConnectionException("获取jedis连接失败，操作执行中断",Commands.class);
-//        }
-//    }
+// 开启事务
+//Transaction e = jedis.multi();
+// e.set("","");
+//e.exec();

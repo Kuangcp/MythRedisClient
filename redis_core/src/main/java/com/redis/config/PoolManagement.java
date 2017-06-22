@@ -4,6 +4,7 @@ import com.redis.common.exception.ExceptionInfo;
 import com.redis.common.exception.NoticeInfo;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.common.exception.RedisConnectionException;
+import com.redis.utils.MythReflect;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -30,28 +31,27 @@ public class PoolManagement {
     // 所有的连接池,不知道为什么，明明集合里有，却还是要新建，新建出来的还是同一个内存地址？
     private  ConcurrentMap<String,RedisPools> poolMap = new ConcurrentHashMap<>();
     private  Logger logger= LoggerFactory.getLogger(PoolManagement.class);
-    private  String propertyFile = Configs.propertyFile;
+    private  String propertyFile = Configs.PROPERTY_FILE;
     private  MythProperties configFile = null;
     private  String currentPoolId;
     // 获取指定id的连接池，断言id是存在的 TODO 这个得到的Bean会不会影响到依赖于他的bean
 
-    // 为了测试类方便，
-    public  void initPool(String poolId){
-        currentPoolId = poolId;
-    }
-    // 为了方便操作方引用连接池,有异常就返回空
+    /**
+     * 获取连接池,得到currentId指定的连接池，可以通过更改currentId切换连接池
+     * @return 连接池实例，异常发生就返回空
+     */
     public  RedisPools getRedisPool(){
-        if(currentPoolId!=null) {
-            System.out.println("直接返回当前连接池");
-            try {
-                return getRedisPool(currentPoolId);
-            } catch (Exception e) {
-                e.printStackTrace();
-                logger.error(ExceptionInfo.GET_POOL_BY_ID_FAILED,e);
-                return null;
-            }
-        }else{
+        // 如果当前id是空的，说明初始化有问题
+        if(currentPoolId==null){
             logger.error(ExceptionInfo.NOT_EXIST_CURRENT_POOL);
+            return null;
+        }
+        logger.info(NoticeInfo.CONFIG_CONTAIN_POOL +currentPoolId);
+        try {
+            return getRedisPool(currentPoolId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(ExceptionInfo.GET_POOL_BY_ID_FAILED,e);
             return null;
         }
     }
@@ -63,14 +63,14 @@ public class PoolManagement {
      */
     public  RedisPools getRedisPool(String poolId)throws Exception{
         currentPoolId = poolId;
-        RedisPools pool = null;
+        RedisPools pool;
 //        System.out.println("获取的id"+poolId);
 //        for (String name: poolMap.keySet()) {
 //            System.out.println(name);
 //        }
         // 如果内存中有就直接返回
         if(poolMap.containsKey(poolId)){
-            logger.info(NoticeInfo.ALREADY_EXIST_POOL+poolId);
+            logger.info(NoticeInfo.MAP_CONTAIN_POOL +poolId);
             return poolMap.get(poolId);
         }
 
@@ -84,20 +84,17 @@ public class PoolManagement {
         String pre = poolId+ Configs.SEPARATE;//前缀
         RedisPoolProperty poolProperty;
         // 如果没有这个id的存在,就新建一个
-        if(configFile.getString(pre+ Configs.NAME)==null){
-//                pool = createRedisPool(propertyFile);
-            logger.error(ExceptionInfo.POOL_NOT_EXIST_CONFIG);
-            throw new Exception(ExceptionInfo.POOL_NOT_EXIST_CONFIG);
+        if(configFile.getString(pre+ Configs.NAME)==RunStatus.PROPERTY_IS_NULL){
+            throw new RedisConnectionException(ExceptionInfo.POOL_NOT_EXIST_CONFIG,PoolManagement.class);
             //@TODO 处理这种连接不存在的情况
             // 一般，连接的显示是从配置文件中加载的，是不会出现面板上有连接，而配置文件中没有的情况 除非是在客户端，删除了连接，没有刷新客户端缓存而导致
         }else {
             pool = new RedisPools();//新建连接池对象
-            poolProperty = new RedisPoolProperty();//新建连接池所有配置属性对象
-            poolProperty.initByIdFromFile(poolId);
+            poolProperty = RedisPoolProperty.initByIdFromConfig(poolId);
             pool.setProperty(poolProperty);
         }
         pool.initialPool();
-        logger.info("实例化连接池："+poolId+":"+pool+"-->"+poolProperty.toString());
+        logger.info("实例化连接池 ["+poolId+"]:"+pool+"<=="+poolProperty.toString());
         if(pool.available()) {
             poolMap.put(poolId, pool);
             return pool;
@@ -106,7 +103,12 @@ public class PoolManagement {
         }
     }
 
-    // 创建RedisPool并连接使用，是否可以不用
+    /**
+     * 创建RedisPool并连接使用
+     * @param property 配置的属性
+     * @return 连接池实例
+     * @throws Exception 配置文件出错连不上
+     */
     public  RedisPools createRedisPoolAndConnection(RedisPoolProperty property)throws Exception{
         return getRedisPool(createRedisPool(property));
     }
@@ -121,28 +123,40 @@ public class PoolManagement {
         int maxId = PropertyFile.getMaxId();
         maxId++;
         property.setPoolId(maxId+"");
-        Map<String,?> map = property.getPropertyValueMap();
+        Map<String,?> map = MythReflect.getFieldsValue(property);
+        // 将所有属性都转换成String类型，特别注意bool类型的没有toString方法，就只能靠拼接
         for (String key:map.keySet()) {
             PropertyFile.save( maxId+Configs.SEPARATE+key,map.get(key)+"");
         }
-        PropertyFile.delete("maxId");
-        PropertyFile.save("maxId",maxId+"");
+        PropertyFile.delete(Configs.MAX_POOL_ID);
+        PropertyFile.save(Configs.MAX_POOL_ID,maxId+"");
         logger.info(NoticeInfo.CRETE_POOL+maxId);
         return maxId+"";
     }
 
     // 切换到另一个连接池
+
+    /**
+     * 切换数据连接池
+     * @param PoolId 目标id
+     * @return true 切换成功,id在配置文件中不存在就返回false
+     */
     public  boolean switchPool(String PoolId){
-        if(PropertyFile.getAllPoolConfig().containsKey(PoolId)) {
-            currentPoolId = PoolId;
-            return true;
-        }else{
+        try {
+            if(PropertyFile.getAllPoolConfig().containsKey(PoolId)) {
+                currentPoolId = PoolId;
+                return true;
+            }else{
+                return false;
+            }
+        } catch (ReadConfigException e) {
+            e.printStackTrace();
             return false;
         }
     }
     /**
      * 删除配置文件 成功返回id,失败(不存在或异常)返回 null
-     * @param poolId
+     * @param poolId id
      * @return id 或 null
      */
     public  String deleteRedisPool(String poolId)throws IOException{
@@ -150,16 +164,17 @@ public class PoolManagement {
             configFile = PropertyFile.getProperties(propertyFile);
             String exist = configFile.getString(poolId + Configs.SEPARATE + Configs.POOL_ID);
             if (exist == null) {
-                logger.info(ExceptionInfo.DELETE_POOL_NOT_EXIST+poolId);
+                logger.error(ExceptionInfo.DELETE_POOL_NOT_EXIST+poolId);
                 return null;
             }
-            for (String key : RedisPoolProperty.getPropertyList()) {
+            for (String key : MythReflect.getFieldByClass(RedisPoolProperty.class)) {
                 PropertyFile.delete( poolId + Configs.SEPARATE + key);
             }
-        }catch (IOException e){
+        }catch (Exception e){
             logger.error(ExceptionInfo.OPEN_CONFIG_FAILED,e);
             return null;
         }
+        logger.info(NoticeInfo.DELETE_POOL_SUCCESS+poolId,PoolManagement.class);
         return poolId;
     }
     /**
