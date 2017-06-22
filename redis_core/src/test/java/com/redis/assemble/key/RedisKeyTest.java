@@ -36,6 +36,7 @@ public class RedisKeyTest {
     Jedis jedis;
     @InjectMocks
     RedisKey redisKey;
+    String key="testKey";
 
     @Before
     public void setUp() {
@@ -47,108 +48,117 @@ public class RedisKeyTest {
         redisKey = (RedisKey) context.getBean("redisKey");
     }
 
+    // 测试了set get delete
     @Test
-    public void testGet() throws Exception {
-        System.out.println(redisKey);
-        String result = redisKey.get("key");
-        Assert.assertEquals("d", result);
+    public void testGetSet() throws Exception {
+        redisKey.set(key,"gg");
+        String result = redisKey.get(key);
+        Assert.assertEquals("gg", result);
+        testDeleteKey();
     }
-
-    @Test
-    public void testSet() throws Exception {
-        String result = redisKey.set("key", "value");
-        Assert.assertEquals("OK", result);
-    }
-
-    @Test
     public void testDeleteKey() throws Exception {
-        long result = redisKey.deleteKey("key");
-        Assert.assertEquals(0L, result);
+        long result = redisKey.deleteKey(key);
+        Assert.assertEquals(1L, result);
     }
 
     @Test
     public void testDump() throws Exception {
-        byte[] result = redisKey.dump("key");
-        Assert.assertArrayEquals(new byte[]{(byte) 0}, result);
+        byte[] result = redisKey.dump(key);
+        Assert.assertArrayEquals(null, result);
     }
 
     @Test
     public void testSetExpire() throws Exception {
-        String result = redisKey.setExpire("key", 0, "value");
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
+        Long result = redisKey.setExpire(key, 0, "value");
+        assert(1L == result);
     }
 
     @Test
     public void testSetExpireMs() throws Exception {
-        String result = redisKey.setExpireMs("key", 0L, "value");
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
+        String result = redisKey.setExpireMs(key, 12L, "value");
+        Assert.assertEquals("OK", result);
     }
 
     @Test
     public void testIncreaseKey() throws Exception {
-        long result = redisKey.increaseKey("key");
-        Assert.assertEquals(0L, result);
+        redisKey.set(key,"1");
+        long result = redisKey.increaseKey(key);
+        Assert.assertEquals(2L, result);
+        testDeleteKey();
     }
 
     @Test
     public void testDecreaseKey() throws Exception {
-        long result = redisKey.decreaseKey("key");
+        redisKey.set(key,"1");
+        long result = redisKey.decreaseKey(key);
         Assert.assertEquals(0L, result);
+        testDeleteKey();
     }
 
     @Test
     public void testAppend() throws Exception {
-        long result = redisKey.append("key", "value");
-        Assert.assertEquals(0L, result);
+        redisKey.set(key,"1");
+        long result = redisKey.append(key, "value");
+        Assert.assertEquals(6L, result);
     }
 
     @Test
     public void testGetMultiKeys() throws Exception {
-        List<String> result = redisKey.getMultiKeys("keys");
-        Assert.assertEquals(Arrays.<String>asList("String"), result);
+        redisKey.set(key,"1");
+        redisKey.set("1","2");
+        List<String> result = redisKey.getMultiKeys(key,"1");
+        Assert.assertEquals(Arrays.<String>asList("1","2"), result);
+        testDeleteKey();
+        redisKey.deleteKey("1");
     }
 
     @Test
     public void testSetMultiKey() throws Exception {
-        String result = redisKey.setMultiKey("keys");
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
+        String result = redisKey.setMultiKey("keys","a",key,"b");
+        Assert.assertEquals("OK", result);
+        List<String> results = redisKey.getMultiKeys(key,"keys");
+        Assert.assertEquals(Arrays.<String>asList("b","a"), results);
+        testDeleteKey();
+        redisKey.deleteKey("keys");
     }
 
     @Test
     public void testGetEncoding() throws Exception {
-        String result = redisKey.getEncoding("key");
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
+        redisKey.set(key,"78.89");
+        String result = redisKey.getEncoding(key);
+        Assert.assertEquals("embstr", result);
+        testDeleteKey();
     }
 
+    // TODO ???? 差这个方法没有测试
     @Test
     public void testListKeys() throws Exception {
         Set<Elements> result = redisKey.listKeys();
-        Assert.assertEquals(new HashSet<Elements>(Arrays.asList(new Elements(0, "id", "key", ElementsType.ROOT, Order.Ascend))), result);
+        Assert.assertEquals(new HashSet<Elements>(Arrays.asList(new Elements(0, "id", key, ElementsType.ROOT, Order.Ascend))), result);
     }
 
     @Test
     public void testType() throws Exception {
-        String result = redisKey.type("key");
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
+        redisKey.set(key,"12");
+        String result = redisKey.type(key);
+        Assert.assertEquals("string", result);
     }
 
     @Test
     public void testExpire() throws Exception {
-        long result = redisKey.expire("key", 0);
-        Assert.assertEquals(0L, result);
+        long result = redisKey.expire(key, 0);
+        Assert.assertEquals(1L, result);
     }
 
-    @Test
-    public void testFlushAll() throws Exception {
-        String result = redisKey.flushAll();
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
-    }
-
-    @Test
-    public void testFlushDB() throws Exception {
-        String result = redisKey.flushDB(0);
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
-    }
+//    @Test
+//    public void testFlushAll() throws Exception {
+//        String result = redisKey.flushAll();
+//        Assert.assertEquals("OK", result);
+//    }
+//
+//    @Test
+//    public void testFlushDB() throws Exception {
+//        String result = redisKey.flushDB(0);
+//        Assert.assertEquals("OK", result);
+//    }
 }
-
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme

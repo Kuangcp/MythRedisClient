@@ -22,4 +22,6 @@ public interface ExceptionInfo {
     String UPDATE_CONFIG_KEY_FAILED = "配置文件中更新属性失败";
     String SAVE_CONFIG__KEY_FAILED = "配置文件中添加属性失败";
     String DELETE_CONFIG_KEY_FAILED = "配置文件中删除属性失败";
+
+    String KEY_NOT_EXIST = "Key 不存在";
 }

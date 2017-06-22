@@ -1,6 +1,8 @@
 package com.redis.assemble.list;
 
 import com.redis.common.Commands;
+import com.redis.common.exception.ActionErrorException;
+import com.redis.common.exception.ExceptionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,13 @@ public class RedisList extends Commands{
     public long rPush(String key, String... values){
         return getJedis().rpush(key,values);
     }
+
+    /**
+     * 头，左
+     * @param key key
+     * @param values 多个值，插入后是逆序的
+     * @return 插入操作后长度
+     */
     public long lPush(String key, String... values){
         return getJedis().lpush(key,values);
     }
@@ -59,6 +68,7 @@ public class RedisList extends Commands{
      * 队列的状态变化
      * @param one 将这个list的末尾 移动到
      * @param other 这个list的头部
+     * @return String 成功是1 失败就是null(键不存在，list没有元素了)
      */
     public String rPopLPush(String one, String other){
         return getJedis().rpoplpush(one,other);
@@ -75,8 +85,14 @@ public class RedisList extends Commands{
      * @param value 值
      * @return 状态值成功就OK
      */
-    public String setByIndex(String key, long index, String value){
-        return getJedis().lset(key,index,value);
+    public String setByIndex(String key, long index, String value) throws ActionErrorException {
+        String result;
+        try{
+            result = getJedis().lset(key,index,value);
+            return result;
+        }catch (Exception e){
+            throw new ActionErrorException(ExceptionInfo.KEY_NOT_EXIST,e,RedisList.class);
+        }
     }
 
     /**
@@ -109,20 +125,23 @@ public class RedisList extends Commands{
         logger.debug("Get range: ["+key+"] form "+start+" to "+end);
         return getJedis().lrange(key,start,end);
     }
+    public List<String> allElements(String key){
+        return getJedis().lrange(key,0,-1);
+    }
 
     /**
      * 正 左至右 负 右至左
      * @param key list键
      * @param count 大于0头到尾按顺序移除值为value的list元素 小于0相反 等于0是list中全部
      * @param value 移除的value
-     * @return 个数
+     * @return 移除的个数
      */
     public long remove(String key, long count, String value){
         return getJedis().lrem(key,count,value);
     }
 
     /**
-     * 对list截取
+     * 截取，只保留list[start:end]
      * @param key key
      * @param start start
      * @param end end 如果end超出了list长度就是默认end为list最大下标

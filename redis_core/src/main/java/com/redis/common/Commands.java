@@ -73,7 +73,7 @@ public class Commands {
      * @param second 大于等于0就expire，否则persist
      * @return persist 1:成功 0：key没有设存活时间，或者key不存在。expire 1：成功设置，0：key不存在代表2.1.3以下版本已经设置了存活时间就不能设置（高版本就随意更改）
      */
-    public long expire(String key,int second){
+    public Long expire(String key,int second){
         if(second >= 0)
             // second 为 0 就是立即删除，小于0也是
             return getJedis().expire(key, second);
@@ -110,9 +110,12 @@ public class Commands {
     public void setDb(int db) {
         this.db = db;
     }
+
+    // OK 或 null
     public String flushAll(){
         return getJedis().flushAll();
     }
+    // OK 或 null
     public String flushDB(int db){
         setDb(db);
         return getJedis().flushDB();

@@ -53,8 +53,11 @@ public class RedisKey extends Commands{
      * @param value 值
      * @return 1/0 成功/失败
      */
-    public String setExpire(String key,int second,String value){
-        return getJedis().setex(key,second,value);
+    public Long setExpire(String key, int second, String value){
+        Jedis jedis = getJedis();
+        jedis.set(key,value);
+        return expire(key,second);
+
     }
 
     /**
@@ -62,7 +65,7 @@ public class RedisKey extends Commands{
      * @param key key
      * @param second 毫秒
      * @param value 值
-     * @return 1/0 成功/失败
+     * @return OK 成功/失败
      */
     public String setExpireMs(String key,long second,String value){
         return getJedis().psetex(key,second,value);
@@ -117,6 +120,12 @@ public class RedisKey extends Commands{
     public String setMultiKey(String... keys){
         return getJedis().mset(keys);
     }
+
+    /**
+     *
+     * @param key
+     * @return 整数 int，字符串 embstr， 浮点数 当成字符串
+     */
     public String getEncoding(String key){
         return getJedis().objectEncoding(key);
     }
