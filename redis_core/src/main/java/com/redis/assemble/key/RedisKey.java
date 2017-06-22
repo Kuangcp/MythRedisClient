@@ -123,7 +123,7 @@ public class RedisKey extends Commands{
 
     /**
      *
-     * @param key
+     * @param key 键
      * @return 整数 int，字符串 embstr， 浮点数 当成字符串
      */
     public String getEncoding(String key){

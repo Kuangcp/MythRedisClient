@@ -65,6 +65,7 @@ public class MythReflect {
      * @param object 要赋值的对象
      * @param maps 属性名-属性值 映射
      * @throws IllegalAccessException 可能没有权限
+     * @return Object 返回赋值后的对象
      */
     public static Object setFieldsValue(Object object,Map<String,Object> maps) throws IllegalAccessException {
         target = object.getClass();
