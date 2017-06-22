@@ -2,6 +2,7 @@ package redis.manager.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
+import redis.manager.Main;
 import redis.manager.compont.MyTab;
 
 /**
@@ -13,6 +14,8 @@ public class MainController {
 
     @FXML
     private TabPane tabPane;
+
+    private Main main;
 
     /**
      * 初始化
@@ -37,11 +40,24 @@ public class MainController {
     }
 
     /**
+     * 创建新连接.
+     */
+    @FXML
+    private void newConnect() {
+        boolean ok = false;
+        ok = main.showConnectPanel();
+    }
+
+    /**
      * 退出程序.
      */
     @FXML
     private void exit() {
         System.exit(0);
+    }
+
+    public void setMain(Main main) {
+        this.main = main;
     }
 
 }
