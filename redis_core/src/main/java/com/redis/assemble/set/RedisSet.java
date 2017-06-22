@@ -18,10 +18,10 @@ public class RedisSet extends Commands{
 
     // TODO 测试完所有的方法
     /**
-     * 往set追加成员，如果set不存在就新建，如果set已经存在，且追加的成员有重复，重复的忽略操作
-     * @param key
-     * @param member
-     * @return
+     * 往set追加成员，如果set不存在就新建，如果set已经存在，且追加的成员有重复，重复的忽略操作，头插法
+     * @param key 键
+     * @param member 元素
+     * @return set长度
      */
     public Long add(String key, String... member){
         return getJedis().sadd(key,member);

@@ -41,56 +41,59 @@ public class RedisSetTest {
         redisSet = (RedisSet) context.getBean("redisSet");
     }
 
+    // 采用的头插法
     @Test
     public void testAdd() throws Exception {
-
-        Long result = redisSet.add("key", "member");
-        Assert.assertEquals((Long)1L, result);
+        deleteKey();
+        Long result = redisSet.add(key, "member","12","12");
+        Assert.assertEquals((Long)2L, result);
+        showKey();
+        deleteKey();
     }
 
     @Test
     public void testRemove() throws Exception {
-        Long result = redisSet.remove("key", "members");
+        Long result = redisSet.remove(key, "members");
         Assert.assertEquals((Long)1L, result);
     }
 
     @Test
     public void testGetMembersSet() throws Exception {
-        Set<String> result = redisSet.getMembersSet("key");
+        Set<String> result = redisSet.getMembersSet(key);
         Assert.assertEquals(new HashSet<String>(Arrays.asList("String")), result);
     }
 
     @Test
     public void testPop() throws Exception {
-        redisSet.pop("key");
+        redisSet.pop(key);
     }
 
     @Test
     public void testPop2() throws Exception {
-        redisSet.pop("key", 0L);
+        redisSet.pop(key, 0L);
     }
 
     @Test
     public void testLength() throws Exception {
-        Long result = redisSet.length("key");
+        Long result = redisSet.length(key);
         Assert.assertEquals((Long)1L, result);
     }
 
     @Test
     public void testContain() throws Exception {
-        boolean result = redisSet.contain("key", "member");
+        boolean result = redisSet.contain(key, "member");
         Assert.assertEquals(true, result);
     }
 
     @Test
     public void testRandomMember() throws Exception {
-        String result = redisSet.randomMember("key");
+        String result = redisSet.randomMember(key);
         Assert.assertEquals("replaceMeWithExpectedResult", result);
     }
 
     @Test
     public void testRandomMember2() throws Exception {
-        List<String> result = redisSet.randomMember("key", 0);
+        List<String> result = redisSet.randomMember(key, 0);
         Assert.assertEquals(Arrays.<String>asList("String"), result);
     }
 
@@ -134,13 +137,13 @@ public class RedisSetTest {
 
     @Test
     public void testType() throws Exception {
-        String result = redisSet.type("key");
+        String result = redisSet.type(key);
         Assert.assertEquals("replaceMeWithExpectedResult", result);
     }
 
     @Test
     public void testExpire() throws Exception {
-        Long result = redisSet.expire("key", 0);
+        Long result = redisSet.expire(key, 0);
         Assert.assertEquals((Long)1L, result);
     }
 
@@ -158,9 +161,16 @@ public class RedisSetTest {
 
     @Test
     public void testDeleteKey() throws Exception {
-        long result = redisSet.deleteKey("key");
-        Assert.assertEquals(0L, result);
+        long result = redisSet.deleteKey(key);
+        Assert.assertEquals(1L, result);
+    }
+    private void deleteKey(){
+        redisSet.deleteKey(key);
+    }
+    private void showKey(){
+        Set<String> sets= redisSet.getMembersSet(key);
+        for (String re:sets){
+            System.out.println("==>"+re);
+        }
     }
 }
-
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme
