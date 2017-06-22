@@ -2,14 +2,17 @@ package assemble.key;
 
 import com.redis.SpringInit;
 import com.redis.assemble.key.RedisKey;
+import com.redis.common.domain.Elements;
 import com.redis.common.exception.TypeErrorException;
 import com.redis.config.PoolManagement;
+import javafx.scene.effect.SepiaTone;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-13  下午10:35
@@ -24,7 +27,7 @@ public class KeyTest{
     public void init(){
         context = new AnnotationConfigApplicationContext(SpringInit.class);
         management = (PoolManagement)context.getBean("poolManagement");
-        management.initPool("1025");
+        management.initPool("1001");
         redisKey = (RedisKey)context.getBean("redisKey");
 //        Commands commands = (Commands)context.getBean("commands");
     }
@@ -106,6 +109,7 @@ public class KeyTest{
         String result2 = redisKey.flushDB(1);
         System.out.println(result2);
     }
+
     // 测试Spring的装载
 //    @Test
 //    public void  testSpring() throws Exception {
@@ -113,4 +117,5 @@ public class KeyTest{
 //        ActionCore action = (ActionCore) context.getBean("actionCore");
 //        System.out.println(action.Redis());
 //    }
+
 }

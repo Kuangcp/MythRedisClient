@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * Created by https://github.com/kuangcp on 17-6-9  下午9:09
  * RedisPool 的必要的非必要的所有连接属性
