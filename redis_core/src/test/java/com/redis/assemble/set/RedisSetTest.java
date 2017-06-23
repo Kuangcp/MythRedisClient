@@ -67,69 +67,106 @@ public class RedisSetTest {
         Assert.assertEquals(new HashSet<String>(Arrays.asList("2","23")), result);
         deleteKey();
     }
-    //
+    // 随机删除，因为set的无序性
     @Test
     public void testPop() throws Exception {
-        redisSet.add(key,"1","2");
+        redisSet.add(key,"1","2","3");
         String result = redisSet.pop(key);
-        Assert.assertEquals("",result);
+        System.out.println("随机删除："+result);
+        Long results = redisSet.size(key);
+        Assert.assertEquals((Long)2L,results);
+        deleteKey();
     }
 
     @Test
     public void testPop2() throws Exception {
-        redisSet.pop(key, 0L);
+
+        redisSet.add(key,"1","2","3","4");
+        Set<String> result = redisSet.pop(key, 2L);
+        System.out.println("随机删除："+result);
+        Long results = redisSet.size(key);
+        Assert.assertEquals((Long)2L,results);
+        deleteKey();
     }
 
-    @Test
-    public void testLength() throws Exception {
-        Long result = redisSet.length(key);
-        Assert.assertEquals((Long)1L, result);
-    }
 
     @Test
     public void testContain() throws Exception {
+        redisSet.add(key,"member");
         boolean result = redisSet.contain(key, "member");
         Assert.assertEquals(true, result);
+        deleteKey();
     }
 
     @Test
     public void testRandomMember() throws Exception {
+        redisSet.add(key,"sa");
         String result = redisSet.randomMember(key);
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
+        assert result!=null;
+        deleteKey();
     }
 
     @Test
     public void testRandomMember2() throws Exception {
-        List<String> result = redisSet.randomMember(key, 0);
-        Assert.assertEquals(Arrays.<String>asList("String"), result);
+        redisSet.add(key,"sa");
+        List<String> result = redisSet.randomMember(key, 2);
+        Assert.assertEquals(Arrays.<String>asList("sa"), result);
     }
 
     @Test
     public void testInter() throws Exception {
-        Set<String> result = redisSet.inter("keys");
-        Assert.assertEquals(new HashSet<String>(Arrays.asList("String")), result);
+        redisSet.add(key,"1","2","3");
+        redisSet.add("1","2","4");
+
+        Set<String> result = redisSet.inter(key,"1");
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("2")), result);
+        redisSet.deleteKey(key,"1");
     }
 
     @Test
     public void testInterStore() throws Exception {
-        redisSet.interStore();
+        redisSet.add("store","1","23","45");
+        System.out.println(redisSet.getMembersSet("store"));
+        redisSet.add(key,"1","2","3");
+        redisSet.add("1","2","4");
+
+        Long f = redisSet.interStore("store",key,"1");
+        System.out.println(f+" : "+redisSet.getMembersSet("store").toString());
+        Set<String> result = redisSet.getMembersSet("store");
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("2")),result);
+        redisSet.deleteKey(key,"1","store");
+
     }
 
     @Test
     public void testUnion() throws Exception {
-        Set<String> result = redisSet.union("keys");
-        Assert.assertEquals(new HashSet<String>(Arrays.asList("String")), result);
+        redisSet.add("1","1","2","3");
+        redisSet.add("2","2","3","4");
+        Set<String> result = redisSet.union("1","2");
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("1","2","3","4")), result);
+        redisSet.deleteKey("1","2");
     }
 
     @Test
     public void testUnionStore() throws Exception {
-        redisSet.unionStore();
+        redisSet.add("1","1","2","3");
+        redisSet.add("2","2","3","4");
+        Long num = redisSet.unionStore("store","1","2");
+        System.out.println(num);
+        Set<String> result = redisSet.getMembersSet("store");
+
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("1","2","3","4")), result);
+        redisSet.deleteKey("1","2","store");
     }
 
     @Test
     public void testDiff() throws Exception {
-        Set<String> result = redisSet.diff("keys");
-        Assert.assertEquals(new HashSet<String>(Arrays.asList("String")), result);
+        redisSet.add("1","1","2","3","5");
+        redisSet.add("2","2","3","4","6");
+        redisSet.add("3","1","4");
+        Set<String> result = redisSet.diff("1","2","3");
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("5")), result);
+        redisSet.deleteKey("1","2");
     }
 
     @Test
@@ -179,5 +216,8 @@ public class RedisSetTest {
         for (String re:sets){
             System.out.println("==>"+re);
         }
+    }
+    private void initSet(){
+
     }
 }

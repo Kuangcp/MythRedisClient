@@ -36,7 +36,7 @@ public class RedisPools{
             config.setMaxIdle(property.getMaxIdle());
             config.setMaxWaitMillis(property.getMaxWaitMills());
             config.setTestOnBorrow(property.isTestOnBorrow());
-//            System.out.println("密码："+property.getPassword()+property.getPassword().length());
+//            System.out.println("密码："+property.getPassword()+property.getPassword().size());
             if(property.getPassword() != null && property.getPassword().length() > 0){
                 jedisPool = new JedisPool(config, property.getHost(), property.getPort(),
                         property.getTimeout(),property.getPassword());
