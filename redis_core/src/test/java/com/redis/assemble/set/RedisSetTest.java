@@ -16,6 +16,7 @@ import java.util.Set;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-22  下午4:27
+ * 测试完成 2017-06-23 21:42:54
  */
 public class RedisSetTest {
 //    @Mock
@@ -171,42 +172,27 @@ public class RedisSetTest {
 
     @Test
     public void testDiffStore() throws Exception {
-        redisSet.diffStore();
+        redisSet.add("1","1","2","3","5");
+        redisSet.add("2","2","3","4","6");
+        redisSet.add("3","1","4");
+         Long num = redisSet.diffStore("store","1","2","3");
+        System.out.println(num);
+        Set<String> result = redisSet.getMembersSet("store");
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("5")), result);
+        redisSet.deleteKey("store","1","2","3");
     }
 
     @Test
     public void testMoveMember() throws Exception {
-        redisSet.moveMember("fromKey", "member", "toKey");
-    }
+        redisSet.add("1","2","3");
+        redisSet.add("2","2");
 
-    @Test
-    public void testType() throws Exception {
-        String result = redisSet.type(key);
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
-    }
+        Long re = redisSet.moveMember("1", "2", "3");
+        System.out.println(re);
+        Set<String> results = redisSet.getMembersSet("2");
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("2","3")),results);
+        redisSet.deleteKey("1","2");
 
-    @Test
-    public void testExpire() throws Exception {
-        Long result = redisSet.expire(key, 0);
-        Assert.assertEquals((Long)1L, result);
-    }
-
-    @Test
-    public void testFlushAll() throws Exception {
-        String result = redisSet.flushAll();
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
-    }
-
-    @Test
-    public void testFlushDB() throws Exception {
-        String result = redisSet.flushDB(0);
-        Assert.assertEquals("replaceMeWithExpectedResult", result);
-    }
-
-    @Test
-    public void testDeleteKey() throws Exception {
-        long result = redisSet.deleteKey(key);
-        Assert.assertEquals(1L, result);
     }
     private void deleteKey(){
         redisSet.deleteKey(key);
@@ -216,8 +202,5 @@ public class RedisSetTest {
         for (String re:sets){
             System.out.println("==>"+re);
         }
-    }
-    private void initSet(){
-
     }
 }

@@ -11,4 +11,6 @@ public interface NoticeInfo {
     String DELETE_POOL_SUCCESS = "删除该连接池配置成功 : ";
     String DELETE_POOL_FAILED = "删除该连接池配置失败 : ";
 
+    String DESTROY_POOL = "销毁连接池 : ";
+
 }

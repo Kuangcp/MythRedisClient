@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.util.Map;
@@ -134,7 +135,25 @@ public class PoolManagement {
         return maxId+"";
     }
 
-    // 切换到另一个连接池
+    /**
+     * 测试对应Property的连接是否能连接上
+     * @param property 连接池属性
+     * @return 测试成功与否
+     */
+    public boolean checkConnection(RedisPoolProperty property){
+        RedisPools pools = new RedisPools();
+        pools.setProperty(property);
+        Jedis jedis = pools.getJedis();
+        jedis.set("testConnection","90");
+        if("90".equals(jedis.get("testConnection"))){
+            jedis.del("testConnection");
+            pools.destroyPool();
+            return true;
+        }else{
+            return false;
+        }
+
+    }
 
     /**
      * 切换数据连接池
@@ -199,7 +218,13 @@ public class PoolManagement {
     }
     // map集合中删除,断开连接的时候调用
     // TODO 销毁指定id的连接池,似乎没有起作用，有就销毁，返回结果，没有就返回false
-    public  boolean destroyRedisPool(String poolId) throws Exception {
+
+    /**
+     * 销毁 配置文件中存在，并加载到了内存Map中的连接池实例
+     * @param poolId 连接池配置文件的id
+     * @return 销毁状态 true false
+     */
+    public  boolean destroyRedisPool(String poolId){
         if(poolMap.containsKey(poolId)) {
             boolean flag = poolMap.get(poolId).destroyPool();
             poolMap.remove(poolId);
@@ -207,6 +232,10 @@ public class PoolManagement {
         }else {
             return false;
         }
+    }
+    // 销毁一个创建的对象，为了测试连接
+    public boolean destroyRedisPool(RedisPools redisPools){
+        return redisPools.destroyPool();
     }
     public ConcurrentMap<String, RedisPools> getPoolMap() {
         return poolMap;

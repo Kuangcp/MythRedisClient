@@ -110,6 +110,12 @@ public class RedisSet extends Commands{
     public Long interStore(String key, String... keys){
         return getJedis().sinterstore(key,keys);
     }
+
+    /**
+     * 并集
+     * @param keys 并集操作的键
+     * @return 返回并集的集合
+     */
     public Set<String> union(String... keys){
         return getJedis().sunion(keys);
     }
@@ -125,11 +131,26 @@ public class RedisSet extends Commands{
     public Set<String> diff(String... keys){
         return getJedis().sdiff(keys);
     }
-    public void diffStore(){
 
+    /**
+     *
+     * @param key 存放的键
+     * @param keys 运算的键，第一个键减去后面所有的键
+     * @return 1/0 成功/失败
+     */
+    public Long diffStore(String key, String... keys){
+        return getJedis().sdiffstore(key,keys);
     }
-    public void moveMember(String fromKey, String toKey, String member){
 
+    /**
+     *
+     * @param fromKey 源 键
+     * @param toKey 目标 键
+     * @param member 元素
+     * @return 1/0
+     */
+    public Long moveMember(String fromKey, String toKey, String member){
+        return getJedis().smove(fromKey,toKey,member);
     }
 
 }
