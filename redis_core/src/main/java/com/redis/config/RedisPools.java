@@ -1,5 +1,7 @@
 package com.redis.config;
 
+import com.redis.common.exception.ExceptionInfo;
+import com.redis.common.exception.NoticeInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -36,7 +38,7 @@ public class RedisPools{
             config.setMaxIdle(property.getMaxIdle());
             config.setMaxWaitMillis(property.getMaxWaitMills());
             config.setTestOnBorrow(property.isTestOnBorrow());
-//            System.out.println("密码："+property.getPassword()+property.getPassword().length());
+//            System.out.println("密码："+property.getPassword()+property.getPassword().size());
             if(property.getPassword() != null && property.getPassword().length() > 0){
                 jedisPool = new JedisPool(config, property.getHost(), property.getPort(),
                         property.getTimeout(),property.getPassword());
@@ -68,7 +70,6 @@ public class RedisPools{
     public Jedis getJedis(){
         if (jedisPool == null) {
             logger.info("连接池为空重新建立");
-//            poolInit();
             initialPool();
         }
         Jedis jedis = null;
@@ -79,7 +80,7 @@ public class RedisPools{
             }
         }catch (Exception e){
             e.printStackTrace();
-            logger.error("Could Get jedis error : "+e);
+            logger.error(ExceptionInfo.POOL_NOT_AVAILABLE,e);
         }finally{
             if (jedis != null) {
                 jedis.close();
@@ -103,12 +104,24 @@ public class RedisPools{
         }
         return false;
     }
+
+    /**
+     * 销毁连接池，有用的
+     * @return 销毁结果
+     */
     public boolean destroyPool(){
         System.out.println("销毁连接池："+jedisPool);
-        jedisPool.destroy();
-        return true;
+        logger.info(NoticeInfo.DESTROY_POOL+this.getProperty());
+        if(jedisPool!=null){
+            jedisPool.destroy();
+            return true;
+        }
+        return false;
     }
-    // 获取连接池状态信息
+    /**
+     * 获取连接池的当前状态信息
+     * @return map集合
+     */
     public Map<String,Integer> getStatus(){
         Map<String,Integer> status = new HashMap<>();
         status.put("NumActive",jedisPool.getNumActive());//活跃的连接数

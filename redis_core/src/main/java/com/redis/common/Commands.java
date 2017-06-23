@@ -127,6 +127,9 @@ public class Commands {
     public long deleteKey(String key){
         return getJedis().del(key);
     }
+    public long deleteKey(String... key){
+        return getJedis().del(key);
+    }
 }
 // 开启事务
 //Transaction e = jedis.multi();
