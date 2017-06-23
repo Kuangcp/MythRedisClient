@@ -1,21 +1,35 @@
 package redis.manager.controller;
 
+import com.redis.config.Configs;
+import com.redis.config.PoolManagement;
+import com.redis.config.RedisPoolProperty;
+import com.redis.config.RedisPools;
+import com.redis.utils.MythReflect;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 连接设置Controller.
  * User: huang
  * Date: 17-6-22
  */
+@Component
 public class ConnectController {
 
+    private PoolManagement poolManagement;
     private Stage dialogStage;
     private boolean okChecked = false;
+
     /** 最大连接数输入框. */
     @FXML
     private TextField maxActiveText;
@@ -103,14 +117,40 @@ public class ConnectController {
     @FXML
     private void handleOk() {
 
-        // TODO 保存数据
-
         // 是否符合输入规则
         if (isNumActive[0] && isNumIdle[0] && isNumWait[0] && isNumPort[0] && isEqPassword[0]) {
+            inputPoolManagement();
+
             okChecked = true;
             dialogStage.close();
         }
 
+    }
+    public RedisPools inputPoolManagement(){
+        // TODO 保存数据
+        RedisPools pool = null;
+        Map<String,Object> maps = new HashMap<>();
+        maps.put(Configs.MAX_ACTIVE,maxActiveText.getText());
+        maps.put(Configs.MAX_IDLE, maxIdleText.getText());
+        maps.put(Configs.HOST, hostText.getText());
+        maps.put(Configs.MAX_WAIT_MILLIS, maxWaitMillsText.getText());
+        maps.put(Configs.NAME, nameText.getText());
+        maps.put(Configs.PASSWORD, passwordText.getText());
+        maps.put(Configs.PORT, portText.getText());
+        maps.put(Configs.TEST_ON_BORROW,false);
+        maps.put(Configs.TIMEOUT,6000);
+        for(String key:maps.keySet()){
+            System.out.println(key+"-----"+maps.get(key));
+        }
+        System.out.println("创建连接:"+poolManagement);
+        try {
+            RedisPoolProperty property =new RedisPoolProperty();
+            property = (RedisPoolProperty) MythReflect.setFieldsValue(property,maps);
+            return poolManagement.createRedisPoolAndConnection(property);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pool;
     }
 
     /**
@@ -142,6 +182,7 @@ public class ConnectController {
                         label.setText("请输入数字");
                         label.setTextFill(Color.rgb(255, 0, 0));
                         ok[0] = false;
+                        System.out.println(field.getText());
                         return;
                     }
 
@@ -171,5 +212,23 @@ public class ConnectController {
                     ok[0] = true;
                 }
         );
+    }
+
+    public PoolManagement getPoolManagement() {
+        return poolManagement;
+    }
+
+    public void setPoolManagement(PoolManagement poolManagement) {
+        this.poolManagement = poolManagement;
+    }
+
+    @FXML
+    private void test() {
+
+        System.out.println(poolManagement.getCurrentPoolId());
+        RedisPools pool = inputPoolManagement();
+        Jedis jedis = pool.getJedis();
+        jedis.set("123","jkjkj");
+        System.out.println(jedis.get("123"));
     }
 }

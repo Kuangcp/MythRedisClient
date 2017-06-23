@@ -11,6 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.manager.controller.ConnectController;
 import redis.manager.controller.MainController;
@@ -22,8 +23,10 @@ import java.io.IOException;
  * 应用主程序.
  *
  */
+@Component
 public class Main extends Application {
 
+    private static ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
 
     private AnchorPane rootLayout;
     private FXMLLoader rootLoader;
@@ -79,6 +82,11 @@ public class Main extends Application {
         ConnectController connectController = loader.getController();
         connectController.setDialogStage(dialogStage);
 
+        PoolManagement management;
+        management = (PoolManagement)context.getBean("poolManagement");
+
+        connectController.setPoolManagement(management);
+
         // 显示对话框, 并等待, 直到用户关闭
         dialogStage.showAndWait();
 
@@ -87,15 +95,18 @@ public class Main extends Application {
 
 
     public static void main( String[] args ) {
-        ApplicationContext context;
+
         PoolManagement management;
-        context = new AnnotationConfigApplicationContext(SpringInit.class);
         management = (PoolManagement)context.getBean("poolManagement");
-        management.setCurrentPoolId("1001");
+        System.out.println("Spring : "+management);
+
+        ConnectController d = (ConnectController) context.getBean("connectController");
+//        management.setCurrentPoolId("1001");
         /*RedisPools pools = management.getRedisPool();
         Jedis jedis = pools.getJedis();
         jedis.set("name","huang");
         System.out.println(jedis.get("name"));*/
         launch(args);
+
     }
 }
