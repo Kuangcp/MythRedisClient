@@ -26,6 +26,13 @@ public class RedisSet extends Commands{
     public Long add(String key, String... member){
         return getJedis().sadd(key,member);
     }
+
+    /**
+     *
+     * @param key 键
+     * @param members 要删除的成员
+     * @return set剩余长度
+     */
     public Long remove(String key, String... members){
         return getJedis().srem(key,members);
     }
@@ -33,8 +40,8 @@ public class RedisSet extends Commands{
         return getJedis().smembers(key);
     }
 
-    public void pop(String key){
-
+    public String pop(String key){
+        return getJedis().spop(key);
     }
     public void pop(String key,long count){
 
