@@ -1,0 +1,13 @@
+ext.versions = [
+        spring: '4.3.8.RELEASE',
+        slf4j: '1.7.25',
+        jackson: '1.9.13',
+        logback: '1.2.3',
+        logging: '1.1.11',
+        httpclient: '4.3.1',
+        jedis:'2.9.0',
+        junit:'4.12',
+        springboot:'1.5.3.RELEASE'
+]
+ext.libraries = [
+]
