@@ -53,19 +53,26 @@ public class RedisSetTest {
 
     @Test
     public void testRemove() throws Exception {
-        Long result = redisSet.remove(key, "members");
-        Assert.assertEquals((Long)1L, result);
+        redisSet.add(key,"2","23","3434","343223");
+        Long result = redisSet.remove(key, "2","23");
+        Assert.assertEquals((Long)2L, result);
+        deleteKey();
     }
 
+    // 获取所有
     @Test
     public void testGetMembersSet() throws Exception {
+        redisSet.add(key,"2","23");
         Set<String> result = redisSet.getMembersSet(key);
-        Assert.assertEquals(new HashSet<String>(Arrays.asList("String")), result);
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("2","23")), result);
+        deleteKey();
     }
-
+    //
     @Test
     public void testPop() throws Exception {
-        redisSet.pop(key);
+        redisSet.add(key,"1","2");
+        String result = redisSet.pop(key);
+        Assert.assertEquals("",result);
     }
 
     @Test
