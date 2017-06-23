@@ -1,9 +1,19 @@
 package redis.manager.controller;
 
+import com.redis.common.exception.ReadConfigException;
+import com.redis.config.Configs;
+import com.redis.config.PropertyFile;
+import com.redis.config.RedisPoolProperty;
+import com.redis.utils.MythReflect;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import redis.manager.Main;
 import redis.manager.compont.MyTab;
+import redis.manager.compont.MyTreeItem;
+import redis.manager.entity.TreeEntity;
+
+import java.util.Map;
 
 /**
  * 主界面controller.
@@ -12,15 +22,27 @@ import redis.manager.compont.MyTab;
  */
 public class MainController {
 
+
     @FXML
     private TabPane tabPane;
+    /** 左侧树. */
+    @FXML
+    private TreeView<Label> treeView;
 
     private Main main;
 
     /**
      * 初始化
      */
+    @FXML
     private void initialize() {
+        try {
+            setTreeView();
+        } catch (ReadConfigException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -56,8 +78,43 @@ public class MainController {
         System.exit(0);
     }
 
+    /**
+     * 设置面板左侧树状图.
+     */
+    private void setTreeView() throws ReadConfigException, IllegalAccessException {
+
+        MyTreeItem<Label> root = new MyTreeItem<>(new Label("连接"));
+        // 默认展开
+        root.setExpanded(true);
+
+        Map<String,RedisPoolProperty> map = PropertyFile.getAllPoolConfig();
+        for(String key:map.keySet()){
+            RedisPoolProperty property = map.get(key);
+            Map lists= MythReflect.getFieldsValue(property);
+
+            // 创建一级子节点
+            MyTreeItem<Label> childOne = new MyTreeItem<>(new Label((String) lists.get(Configs.NAME)));
+            // 创建二级子节点
+            MyTreeItem<Label> childTwo = new MyTreeItem<>(new Label("二级节点"));
+            // 添加三级子节点
+            childTwo.addFirstChild(new Label("三级节点"));
+            // 添加二级子节点
+            childOne.addSecondChild(childTwo);
+            // 添加一级子节点
+            root.addSecondChild(childOne);
+        }
+
+        // 设置右键菜单
+        ContextMenu menu = new ContextMenu(new MenuItem("测试"));
+        root.getChildren().get(0).getValue().setContextMenu(menu);
+
+        treeView.setShowRoot(true);
+        treeView.setRoot(root);
+    }
+
     public void setMain(Main main) {
         this.main = main;
     }
+
 
 }
