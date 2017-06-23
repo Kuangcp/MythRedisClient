@@ -50,6 +50,10 @@ public class Main extends Application {
     }
 
 
+    /**
+     * 显示连接设置窗口.
+     * @return 是否点击了确定
+     */
     public boolean showConnectPanel() {
         boolean ok = false;
 
