@@ -1,6 +1,3 @@
-//group 'com.github.kuangcp'
-//version '1.0-SNAPSHOT'
-
 apply plugin: 'java'
 apply plugin: "info.robotbrain.lombok"
 
@@ -11,7 +8,7 @@ javadoc {
         charSet 'UTF-8'
         author true
         version true
-        links "http://docs.oracle.com/javase/7/docs/api"
+        links "http://docs.oracle.com/javase/8/docs/api"
     }
 }
 configurations {

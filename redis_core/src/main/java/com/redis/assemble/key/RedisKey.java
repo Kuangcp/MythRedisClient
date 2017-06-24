@@ -1,8 +1,6 @@
 package com.redis.assemble.key;
 
 import com.redis.common.Commands;
-import com.redis.common.domain.Elements;
-import com.redis.common.domain.ElementsType;
 import com.redis.common.exception.ExceptionInfo;
 import com.redis.common.exception.TypeErrorException;
 import org.slf4j.Logger;
@@ -12,7 +10,6 @@ import redis.clients.jedis.Jedis;
 
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-12  上午10:45
@@ -130,15 +127,24 @@ public class RedisKey extends Commands{
         return getJedis().objectEncoding(key);
     }
     //列出当前数据库所有key
-    public Set<Elements> listKeys(){
-        Set<Elements> elementsSet = new TreeSet<>();
-        Set<String> keys = getJedis().keys("*");
-        for (String key : keys) {
-            ElementsType nodeType = getValueType(key);
-            Elements node = new Elements(getDb(), getCurrentId(), key, nodeType);
-            elementsSet.add(node);
-        }
-        return elementsSet;
+//    public Set<Elements> listKeys(){
+//        Set<Elements> elementsSet = new TreeSet<>();
+//        Set<String> keys = getJedis().keys("*");
+//        for (String key : keys) {
+//            ElementsType nodeType = getValueType(key);
+//            Elements node = new Elements(getDb(), getCurrentId(), key, nodeType);
+//            elementsSet.add(node);
+//        }
+//        return elementsSet;
+//    }
+
+    /**
+     * 取得所有key 当前数据库
+     * @return Set 集合
+     */
+    public Set<String> listAllKeys(int db){
+        setDb(db);
+        return getJedis().keys("*");
     }
 
 }

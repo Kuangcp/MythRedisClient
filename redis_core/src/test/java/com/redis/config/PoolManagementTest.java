@@ -71,7 +71,10 @@ public class PoolManagementTest {
     @Test
     public void testGetRedisPool() throws Exception {
         RedisPools result = poolManagement.getRedisPool();
+
+        System.out.println(result.getDatabaseNum());
         Jedis jedis = result.getJedis();
+        jedis.keys("");
         jedis.set("names","testGetRedisPool");
         Assert.assertEquals("testGetRedisPool",jedis.get("names"));
     }

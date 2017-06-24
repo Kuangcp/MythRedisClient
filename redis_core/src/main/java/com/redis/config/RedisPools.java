@@ -11,6 +11,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -105,6 +106,14 @@ public class RedisPools{
         return false;
     }
 
+    /**
+     * 得到最大的数据库数
+     * @return 整型值
+     */
+    public Integer getDatabaseNum(){
+        List config = jedisPool.getResource().configGet("*");
+        return Integer.parseInt(config.get(config.indexOf("databases")+1).toString());
+    }
     /**
      * 销毁连接池，有用的
      * @return 销毁结果
