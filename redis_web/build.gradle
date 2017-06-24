@@ -8,11 +8,6 @@ buildscript {
 	}
 }
 
-configurations {
-	//compile.exclude module: 'commons-logging'
-	all*.exclude module: 'commons-logging'
-}
-
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
@@ -26,12 +21,8 @@ repositories {
 }
 
 configurations {
+	//compile.exclude module: 'commons-logging'
+	all*.exclude module: 'commons-logging'
 	providedRuntime
 }
 
-dependencies {
-	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
-	compile('org.springframework.boot:spring-boot-starter-web')
-//	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-}

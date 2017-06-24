@@ -1,7 +1,9 @@
 package com.redis.assemble.set;
 
 import com.redis.SpringInit;
+import com.redis.common.exception.ReadConfigException;
 import com.redis.config.PoolManagement;
+import com.redis.config.PropertyFile;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,13 +34,13 @@ public class RedisSetTest {
     String key = "testSet";
 
     @Before
-    public void setUp() {
+    public void setUp() throws ReadConfigException {
         MockitoAnnotations.initMocks(this);
 
         // 装载Spring环境，获取bean
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
         PoolManagement management = (PoolManagement) context.getBean("poolManagement");
-        management.setCurrentPoolId("1025");
+        management.setCurrentPoolId(PropertyFile.getMaxId()+"");
         redisSet = (RedisSet) context.getBean("redisSet");
     }
 

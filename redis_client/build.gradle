@@ -9,10 +9,10 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-//    compile 'org.springframework:spring-core:4.3.8.RELEASE'
-//    compile 'org.springframework:spring-context:4.3.8.RELEASE'
-//    compile 'org.springframework:spring-beans:4.3.8.RELEASE'
-
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-}
+//dependencies {
+////    compile 'org.springframework:spring-core:4.3.8.RELEASE'
+////    compile 'org.springframework:spring-context:4.3.8.RELEASE'
+////    compile 'org.springframework:spring-beans:4.3.8.RELEASE'
+//
+//    testCompile group: 'junit', name: 'junit', version: '4.12'
+//}

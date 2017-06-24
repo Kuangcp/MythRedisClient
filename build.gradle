@@ -1,5 +1,5 @@
-//group 'com.github.kuangcp'
-//version '1.0-SNAPSHOT'
+group 'com.github.kuangcp'
+version '1.0-SNAPSHOT'
 apply from: 'dependencys.gradle'
 
 allprojects {
@@ -9,9 +9,7 @@ allprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 }
-//javadoc {
-//    options.encoding = "UTF-8"
-//}
+
 subprojects {
     [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
     repositories {
@@ -22,31 +20,51 @@ subprojects {
         //compile.exclude module: 'commons-logging'
 //        all*.exclude module: 'commons-logging'
     }
+    // 所有的依赖放在这里
     dependencies {
         compile(
-                 "redis.clients:jedis:$versions.jedis",
+//                libraries.'common-logging',
+                libraries.'slf4j-api',
+                libraries.'logback-classic',
+                libraries.'spring-core',
+                libraries.'spring-context',
+                libraries.'spring-beans',
 //                 'org.slf4j:slf4j-api:1.7.25',
 //                'org.slf4j:slf4j-log4j12:1.7.21',
-                 "ch.qos.logback:logback-classic:$versions.logback",
-                "commons-logging:commons-logging:$versions.logging",
-                "org.springframework:spring-core:$versions.spring",
-                 "org.springframework:spring-context:$versions.spring",
-                 "org.springframework:spring-beans:$versions.spring"
-
         )
         testCompile(
-                "org.springframework:spring-test:$versions.spring",
-                "junit:junit:$versions.junit"
+                libraries.'spring-test',
+                libraries.'junit',
+
         )
     }
 }
 project(':redis_core') {
+    dependencies {
+        compile(
+                libraries.'jedis',
+                libraries.'common-logging'
+        )
+        testCompile(
+                libraries.'mockito-core',
+                libraries.'junit'
+        )
+    }
+
+}
+project(':redis_client'){
+    dependencies{
+        compile project(":redis_core")
+        testCompile(
+                libraries.'junit'
+        )
+    }
 }
 project(':redis_web') {
     apply plugin: "war"
     configurations {
 //        compile.exclude module: 'commons-logging'
-//        all*.exclude module: 'commons-logging'
+        all*.exclude module: 'commons-logging'
     }
     dependencies {
         compile project(":redis_core")
@@ -90,3 +108,4 @@ task explodedDist(type: Copy) {
     }
 }
 
+// TODO 做到打包成两种文件，一个是FX的jar 一个是Springboot的war
