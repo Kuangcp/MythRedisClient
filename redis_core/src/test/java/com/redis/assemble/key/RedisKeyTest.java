@@ -122,12 +122,12 @@ public class RedisKeyTest {
         testDeleteKey();
     }
 
-    // TODO ???? 差这个方法没有测试,测试没有通过
-    @Test
-    public void testListKeys() throws Exception {
+//     TODO ???? 差这个方法没有测试,测试没有通过
+//    @Test
+//    public void testListKeys() throws Exception {
 //        Set<Elements> result = redisKey.listKeys();
 //        Assert.assertEquals(new HashSet<Elements>(Arrays.asList(new Elements(0, "id", key, ElementsType.ROOT, Order.Ascend))), result);
-    }
+//    }
 
     @Test
     public void testType() throws Exception {

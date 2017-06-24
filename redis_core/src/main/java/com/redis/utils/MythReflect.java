@@ -73,6 +73,7 @@ public class MythReflect {
             field.setAccessible(true);
             String type = field.getType().getName();
 //            System.out.println("type:"+type);
+            // TODO 检查 空的情况
             switch (type){
                 case "java.lang.Integer":field.set(object,
                         Integer.parseInt(maps.get(field.getName()).toString()));break;
