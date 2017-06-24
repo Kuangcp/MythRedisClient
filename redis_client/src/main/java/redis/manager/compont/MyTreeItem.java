@@ -1,6 +1,8 @@
 package redis.manager.compont;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 
 /**
@@ -35,6 +37,23 @@ public class MyTreeItem<T> extends TreeItem<T> {
         this.getChildren().add(item);
     }
 
+    /**
+     * 设置上下文菜单.
+     * @param menu 上下文菜单
+     */
+    public void setContextMenu(ContextMenu menu) {
+        ((Label)this.getValue()).setContextMenu(menu);
+    }
 
+    /**
+     * 设置所有孩子节点的上下文菜单.
+     * @param menu 上下文菜单
+     */
+    public void setNextContextMenu(ContextMenu menu) {
+        ObservableList<TreeItem<T>> items = this.getChildren();
+        for (TreeItem item : items) {
+            ((Label)item.getValue()).setContextMenu(menu);
+        }
+    }
 
 }
