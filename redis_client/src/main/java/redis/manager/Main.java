@@ -55,7 +55,7 @@ public class Main extends Application {
 
     /**
      * 显示连接设置窗口.
-     * @return 是否点击了确定
+     * @return 是否点击了确定, true为已点击
      */
     public boolean showConnectPanel() {
         boolean ok = false;
@@ -101,11 +101,6 @@ public class Main extends Application {
         System.out.println("Spring : "+management);
 
         ConnectController d = (ConnectController) context.getBean("connectController");
-//        management.setCurrentPoolId("1001");
-        /*RedisPools pools = management.getRedisPool();
-        Jedis jedis = pools.getJedis();
-        jedis.set("name","huang");
-        System.out.println(jedis.get("name"));*/
         launch(args);
 
     }

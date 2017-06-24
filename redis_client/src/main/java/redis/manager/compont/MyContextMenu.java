@@ -2,47 +2,59 @@ package redis.manager.compont;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TreeView;
+import redis.manager.compont.menu.ConnectDelMenu;
 
 /**
- * 我的上下文菜单.
+ * 左侧树状上下文菜单.
  * User: huang
  * Date: 17-6-23
  */
 public class MyContextMenu extends ContextMenu {
 
+    private TreeView treeView;
+
     public MyContextMenu() {
 
     }
 
-    public MyContextMenu(MenuItem... items) {
+    public MyContextMenu(TreeView treeView) {
+        this.treeView = treeView;
+    }
+
+    public MyContextMenu(TreeView treeView, MenuItem... items) {
         super(items);
+        this.treeView = treeView;
     }
 
     /**
      * 设置为一级节点的菜单.
      */
-    public void firstChileMenu() {
+    public void setFirstChileMenu() {
         setEmpty();
 
         // TODO 添加一级节点的上下文菜单内容
+        this.getItems().add(new ConnectDelMenu(treeView));
     }
 
     /**
      * 设置成二级节点的菜单.
      */
-    public void secondChildMenu() {
+    public void setSecondChildMenu() {
         setEmpty();
 
         // TODO 添加二级节点的上下文菜单内容
+        this.getItems().add(new ConnectDelMenu(treeView));
     }
 
     /**
      * 设置为三级节点的上下文菜单.
      */
-    public void thirdChildMenu() {
+    public void setThirdChildMenu() {
         setEmpty();
 
         // TODO 添加三级节点的上下文菜单内容
+        this.getItems().add(new ConnectDelMenu(treeView));
     }
 
     /**
