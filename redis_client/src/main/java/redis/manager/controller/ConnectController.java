@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,11 @@ public class ConnectController {
     /** 确认密码输入提醒. */
     @FXML
     private Label passwordLabel;
+    /** 连接提示信息. */
+    @FXML
+    private Label resultLabel;
+    @FXML
+    private TreeView<Label> treeView;
 
     /** 最大连接数输入是否为数字. */
     private final boolean[] isNumActive = {false};
@@ -81,12 +87,15 @@ public class ConnectController {
     private final boolean[] isNumPort = {false};
     /** 两次密码是否输入一致. */
     private final boolean[] isEqPassword = {false};
+    /** 输入的配置是否正确. */
+    private boolean isRight = false;
 
     /**
      * 初始化.
      */
     @FXML
     private void initialize() {
+        resultLabel.setTextFill(Color.RED);
 
         // 监听最大连接数输入
         textChangeListener(maxActiveText, maxActiveLabel, isNumActive);
@@ -98,8 +107,6 @@ public class ConnectController {
         textChangeListener(portText, portLabel, isNumPort);
         // 监听密码确认
         confirmPassword(passwordText, repasswordText, passwordLabel, isEqPassword);
-
-
     }
 
 
@@ -116,19 +123,27 @@ public class ConnectController {
      */
     @FXML
     private void handleOk() {
-
+        System.out.println(treeView);
         // 是否符合输入规则
         if (isNumActive[0] && isNumIdle[0] && isNumWait[0] && isNumPort[0] && isEqPassword[0]) {
-            inputPoolManagement();
-
-            okChecked = true;
-            dialogStage.close();
+            RedisPools pools = inputPoolManagement();
+            // 输入的配置可用
+            if (pools != null) {
+                okChecked = true;
+                dialogStage.close();
+                return;
+            }
+            resultLabel.setText("配置错误");
         }
 
     }
-    public RedisPools inputPoolManagement(){
-        // TODO 保存数据
-        RedisPools pool = null;
+
+    /**
+     * 将数据转成Property.
+     * @return RedisPoolProperty
+     */
+    private RedisPoolProperty getProperty() {
+        RedisPoolProperty property = new RedisPoolProperty();
         Map<String,Object> maps = new HashMap<>();
         maps.put(Configs.MAX_ACTIVE,maxActiveText.getText());
         maps.put(Configs.MAX_IDLE, maxIdleText.getText());
@@ -142,11 +157,26 @@ public class ConnectController {
         for(String key:maps.keySet()){
             System.out.println(key+"-----"+maps.get(key));
         }
-        System.out.println("创建连接:"+poolManagement);
         try {
-            RedisPoolProperty property =new RedisPoolProperty();
             property = (RedisPoolProperty) MythReflect.setFieldsValue(property,maps);
-            return poolManagement.createRedisPoolAndConnection(property);
+        } catch (IllegalAccessException e) {
+            //e.printStackTrace();
+        }
+        return property;
+    }
+
+    /**
+     * 保存信息.
+     * @return RedisPools
+     */
+    public RedisPools inputPoolManagement(){
+        RedisPools pool = null;
+        RedisPoolProperty property = getProperty();
+        try {
+            isRight = poolManagement.checkConnection(property);
+            if (isRight) {
+                return poolManagement.createRedisPoolAndConnection(property);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -177,18 +207,14 @@ public class ConnectController {
     private void textChangeListener(TextField field, Label label, boolean[] ok) {
         field.focusedProperty().addListener(
                 (observable, oldValue, newValue) -> {
-
                     if (!field.getText().matches("[0-9]*")) {
                         label.setText("请输入数字");
                         label.setTextFill(Color.rgb(255, 0, 0));
                         ok[0] = false;
-                        System.out.println(field.getText());
                         return;
                     }
-
                     label.setText("");
                     ok[0] = true;
-
                 }
         );
     }
@@ -198,7 +224,8 @@ public class ConnectController {
      * @param password 密码输入框
      * @param rePassword 确认密码输入框
      */
-    private void confirmPassword(PasswordField password, PasswordField rePassword, Label label, boolean[] ok) {
+    private void confirmPassword(PasswordField password, PasswordField rePassword,
+                                 Label label, boolean[] ok) {
         rePassword.focusedProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (!rePassword.getText().equals(password.getText())) {
@@ -207,7 +234,6 @@ public class ConnectController {
                         ok[0] = false;
                         return;
                     }
-
                     label.setText("");
                     ok[0] = true;
                 }
@@ -222,13 +248,33 @@ public class ConnectController {
         this.poolManagement = poolManagement;
     }
 
+    /**
+     * 连接测试.
+     */
     @FXML
     private void test() {
+        RedisPoolProperty property = getProperty();
+        try {
+            isRight = poolManagement.checkConnection(property);
+        } catch (Exception e) {
+            // 密码为空时有异常
+        }
+        if (isRight) {
+            resultLabel.setText("成功");
+            return;
+        }
+        resultLabel.setText("失败");
+        return;
+    }
 
-        System.out.println(poolManagement.getCurrentPoolId());
-        RedisPools pool = inputPoolManagement();
-        Jedis jedis = pool.getJedis();
-        jedis.set("123","jkjkj");
-        System.out.println(jedis.get("123"));
+    /**
+     * 获取新连接的名称和id.
+     * @return map
+     */
+    public Map<String, String> getConnectMessage() {
+        Map<String, String> map = new HashMap<>();
+        map.put("name", nameText.getText());
+        map.put("id", "1005");
+        return map;
     }
 }

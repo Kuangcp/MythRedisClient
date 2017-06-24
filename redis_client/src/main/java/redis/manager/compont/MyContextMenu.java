@@ -1,5 +1,6 @@
 package redis.manager.compont;
 
+import com.redis.config.PoolManagement;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeView;
@@ -13,6 +14,7 @@ import redis.manager.compont.menu.ConnectDelMenu;
 public class MyContextMenu extends ContextMenu {
 
     private TreeView treeView;
+    private PoolManagement poolManagement;
 
     public MyContextMenu() {
 
@@ -44,7 +46,7 @@ public class MyContextMenu extends ContextMenu {
         setEmpty();
 
         // TODO 添加二级节点的上下文菜单内容
-        this.getItems().add(new ConnectDelMenu(treeView));
+
     }
 
     /**
@@ -64,4 +66,16 @@ public class MyContextMenu extends ContextMenu {
         this.getItems().remove(0, this.getItems().size());
     }
 
+    /**
+     * 设置子节点的PoolManager.
+     * @param poolManagement PoolManagement
+     */
+    public void setPoolManagement(PoolManagement poolManagement) {
+        this.poolManagement = poolManagement;
+        for (MenuItem item : this.getItems()) {
+            if (item instanceof ConnectDelMenu) {
+                ((ConnectDelMenu)item).setPoolManagement(poolManagement);
+            }
+        }
+    }
 }

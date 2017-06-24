@@ -1,17 +1,15 @@
 package redis.manager.controller;
 
 import com.redis.common.exception.ReadConfigException;
-import com.redis.config.Configs;
-import com.redis.config.PropertyFile;
-import com.redis.config.RedisPoolProperty;
+import com.redis.config.*;
 import com.redis.utils.MythReflect;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.springframework.stereotype.Component;
 import redis.manager.Main;
 import redis.manager.compont.MyContextMenu;
 import redis.manager.compont.MyTab;
 import redis.manager.compont.MyTreeItem;
-
 import java.util.Map;
 
 /**
@@ -19,8 +17,10 @@ import java.util.Map;
  * User: huang
  * Date: 17-6-7
  */
+@Component
 public class MainController {
 
+    private PoolManagement poolManagement;
 
     @FXML
     private TabPane tabPane;
@@ -37,11 +37,31 @@ public class MainController {
     private void initialize() {
         try {
             setTreeView();
-        } catch (ReadConfigException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // 监听选择的节点
+        treeView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    MyTreeItem<Label> selectedItem = (MyTreeItem<Label>) treeView.getSelectionModel().getSelectedItem();
+                    String flag = selectedItem.getValue().getAccessibleHelp();
+                    // 展示当前数据库中所有的键
+                    if ("db".equals(flag)) {
+                        System.out.println("查询键");
+                        return;
+                    }
+                    // 显示当前连接中的所有数据库
+                    if ("link".equals(flag)) {
+                        try {
+                            createSecondNode(selectedItem);
+                        } catch (Exception e) {
+                            System.out.println("打开连接失败::::");
+                        }
+                        return;
+                    }
+                }
+        );
     }
 
     /**
@@ -92,34 +112,76 @@ public class MainController {
             Map lists= MythReflect.getFieldsValue(property);
 
             // 创建一级子节点
-            MyTreeItem<Label> childOne = new MyTreeItem<>(new Label((String) lists.get(Configs.NAME)));
+            Label firstLabel = new Label((String) lists.get(Configs.NAME));
+            firstLabel.setAccessibleHelp("link");
+            // 将连接的ID保存
+            firstLabel.setAccessibleText((String) lists.get(Configs.POOL_ID));
+            MyTreeItem<Label> childOne = new MyTreeItem<>(firstLabel);
             MyContextMenu firstMenu = new MyContextMenu(treeView);
             firstMenu.setFirstChileMenu();
             childOne.setContextMenu(firstMenu);
-            // 创建二级子节点
-            MyTreeItem<Label> childTwo = new MyTreeItem<>(new Label("二级节点"));
-            MyContextMenu secondMenu = new MyContextMenu(treeView);
-            secondMenu.setSecondChildMenu();
-            childTwo.setContextMenu(secondMenu);
-            // 添加三级子节点
-            childTwo.addFirstChild(new Label("三级节点"));
-            MyContextMenu thridMenu = new MyContextMenu(treeView);
-            thridMenu.setThirdChildMenu();
-            childTwo.setNextContextMenu(thridMenu);
-            // 添加二级子节点
-            childOne.addSecondChild(childTwo);
             // 添加一级子节点
             root.addSecondChild(childOne);
         }
 
-
         treeView.setShowRoot(true);
         treeView.setRoot(root);
+    }
+
+
+    /**
+     * 创建二级节点, 数据库显示节点
+     * @param treeItem 连接节点
+     */
+    private void createSecondNode(MyTreeItem treeItem) {
+
+        String poolId = ((Label)treeItem.getValue()).getAccessibleText();
+        poolManagement.switchPool(poolId);
+        System.out.println("Main : ::::::::::::::::::::::" + poolManagement);
+
+        treeItem.setContextMenuPoolManager(poolManagement);
+
+        RedisPools redisPools = poolManagement.getRedisPool();
+        int num = redisPools.getDatabaseNum();
+        for (int i = 0; i < num; i++) {
+            Label secondLable = new Label("数据库 " + (i+1));
+            // 标志为数据库节点
+            secondLable.setAccessibleHelp("db");
+            MyTreeItem<Label> childTwo = new MyTreeItem<>(secondLable);
+            MyContextMenu secondMenu = new MyContextMenu(treeView);
+            secondMenu.setSecondChildMenu();
+            childTwo.setContextMenu(secondMenu);
+            // 添加二级子节点
+            treeItem.addSecondChild(childTwo);
+        }
+    }
+
+    /**
+     * 更新连接树显示.
+     * @param name 连接名称
+     * @param id 连接编号
+     */
+    public void updateTree(String name, String id) {
+        Label firstLabel = new Label(name);
+        firstLabel.setAccessibleHelp("link");
+        firstLabel.setAccessibleText(id);
+        MyTreeItem<Label> childOne = new MyTreeItem<>(firstLabel);
+        MyContextMenu firstMenu = new MyContextMenu(treeView);
+        firstMenu.setFirstChileMenu();
+        childOne.setContextMenu(firstMenu);
+
+        treeView.getRoot().getChildren().add(childOne);
     }
 
     public void setMain(Main main) {
         this.main = main;
     }
 
+    public PoolManagement getPoolManagement() {
+        return poolManagement;
+    }
 
+    public void setPoolManagement(PoolManagement poolManagement) {
+        this.poolManagement = poolManagement;
+    }
 }
