@@ -1,7 +1,9 @@
 package com.redis.assemble.list;
 
 import com.redis.SpringInit;
+import com.redis.common.exception.ReadConfigException;
 import com.redis.config.PoolManagement;
+import com.redis.config.PropertyFile;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,12 +39,12 @@ public class RedisListTest {
     // TODO 完成List Keys Set的完整测试代码
 
     @Before
-    public void setUp() {
+    public void setUp() throws ReadConfigException {
         MockitoAnnotations.initMocks(this);
         // 装载Spring环境，获取bean
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
         PoolManagement management = (PoolManagement) context.getBean("poolManagement");
-        management.setCurrentPoolId("1025");
+        management.setCurrentPoolId(PropertyFile.getMaxId()+"");
         redisList = (RedisList) context.getBean("redisList");
     }
 
