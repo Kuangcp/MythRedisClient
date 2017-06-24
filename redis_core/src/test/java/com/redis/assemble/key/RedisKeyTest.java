@@ -5,17 +5,12 @@ import com.redis.common.domain.Elements;
 import com.redis.common.domain.ElementsType;
 import com.redis.common.domain.Order;
 import com.redis.config.PoolManagement;
-import com.redis.config.RedisPools;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import redis.clients.jedis.Jedis;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,15 +21,15 @@ import java.util.Set;
  * Created by https://github.com/kuangcp on 17-6-20  下午8:02
  */
 public class RedisKeyTest {
-    @Mock //用@Mocked标注的对象，不需要赋值，jmockit自动mock
-    Logger logger;
-    @Mock
-    PoolManagement management;
-    @Mock
-    RedisPools pools;
-    @Mock
-    Jedis jedis;
-    @InjectMocks
+//    @Mock //用@Mocked标注的对象，不需要赋值，jmockit自动mock
+//    Logger logger;
+//    @Mock
+//    PoolManagement management;
+//    @Mock
+//    RedisPools pools;
+//    @Mock
+//    Jedis jedis;
+//    @InjectMocks
     RedisKey redisKey;
     String key="testKey";
 

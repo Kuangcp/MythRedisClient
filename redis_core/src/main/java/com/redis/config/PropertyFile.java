@@ -30,7 +30,7 @@ public class PropertyFile {
             if (file.createNewFile()) {
                 logger.info(ExceptionInfo.CREATE_CONFIG_SUCCESS);
             } else {
-                logger.info(ExceptionInfo.CREATE_CONFIG_FIALED);
+                logger.info(ExceptionInfo.CREATE_CONFIG_FAILED);
             }
         }
         InputStream is;

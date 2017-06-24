@@ -4,27 +4,25 @@ import com.redis.SpringInit;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import redis.clients.jedis.Jedis;
 
-import java.util.concurrent.ConcurrentMap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-21  下午4:00
  */
 public class PoolManagementTest {
-    @Mock
-    ConcurrentMap<String, RedisPools> poolMap;
-    @Mock
-    Logger logger;
-    @Mock
-    MythProperties configFile;
-    @InjectMocks
+//    @Mock
+//    ConcurrentMap<String, RedisPools> poolMap;
+//    @Mock
+//    Logger logger;
+//    @Mock
+//    MythProperties configFile;
+//    @InjectMocks
     PoolManagement poolManagement;
     RedisPoolProperty property;
 
@@ -75,6 +73,24 @@ public class PoolManagementTest {
         jedis.set("names","testGetRedisPool");
         Assert.assertEquals("testGetRedisPool",jedis.get("names"));
     }
+    // 对输入的数据，进行连接测试,并测试了销毁方法，成功
+    @Test
+    public void testCheckConnection(){
+        property = new RedisPoolProperty();
+        property.setHost("120.25.203.47");
+//        property.setHost("127.0.0.1");
+        property.setMaxActive(400);
+        property.setMaxIdle(100);
+        property.setMaxWaitMills(10000);//等待连接超时时间
+        property.setTestOnBorrow(false);// 如果设置密码就必须是false
+        property.setName("myth");
+        property.setPort(6381);
+        property.setPassword("myth");
+        property.setTimeout(600);//读取超时时间
+        boolean result = poolManagement.checkConnection(property);
+        System.out.println(result);
+
+    }
     // 进行切换连接池,测试是通过了，测试结果是内存中的会复用的，但是连接池共存数要设置，不能在MAP里共存太多了
     @Test
     public void testSwitchPool() throws Exception {
@@ -92,7 +108,23 @@ public class PoolManagementTest {
         System.out.println("连接池  ： "+poolManagement.getPoolMap().size());
         Assert.assertEquals(true, result);
     }
-    // TODO 测试destroy方法，共存多个连接池
+    // 共存多个连接池,测试Map获取已有的连接池的机制
+    @Test
+    public void testPools() throws Exception {
+        RedisPools pool1 = poolManagement.getRedisPool("1025");
+        List<RedisPools> list = new ArrayList<>();
+        for(int i=0;i<5;i++){
+            RedisPools pool = poolManagement.getRedisPool("1025");
+            list.add(pool);
+        }
+        RedisPools pool2 = poolManagement.getRedisPool("1024");
+        Jedis jedis1 = pool1.getJedis();
+        Jedis jedis2 = pool2.getJedis();
+        jedis1.set("name","myth");
+        jedis2.get("name");
+        jedis1.del("name");
+        System.out.println(poolManagement.getPoolMap().size());
+    }
 
     // 测试删除，按初始环境的测试来说，这里应该是空的，完工后，还要改代码
     @Test
