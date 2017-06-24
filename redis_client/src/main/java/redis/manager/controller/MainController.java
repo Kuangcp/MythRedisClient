@@ -140,11 +140,13 @@ public class MainController {
         System.out.println("Main : ::::::::::::::::::::::" + poolManagement);
 
         treeItem.setContextMenuPoolManager(poolManagement);
-
         RedisPools redisPools = poolManagement.getRedisPool();
         int num = redisPools.getDatabaseNum();
+        // 清除所有的孩子节点
+        int childNum = treeItem.getChildren().size();
+        treeItem.getChildren().remove(0, childNum);
         for (int i = 0; i < num; i++) {
-            Label secondLable = new Label("数据库 " + (i+1));
+            Label secondLable = new Label("数据库 " + i);
             // 标志为数据库节点
             secondLable.setAccessibleHelp("db");
             MyTreeItem<Label> childTwo = new MyTreeItem<>(secondLable);
