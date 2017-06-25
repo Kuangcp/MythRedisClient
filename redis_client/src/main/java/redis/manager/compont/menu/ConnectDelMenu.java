@@ -14,9 +14,7 @@ import java.io.IOException;
  * User: huang
  * Date: 17-6-24
  */
-public class ConnectDelMenu extends MenuItem {
-
-    private PoolManagement poolManagement;
+public class ConnectDelMenu extends MyMenuItem {
 
     public ConnectDelMenu(TreeView treeView) {
         super("删除");
@@ -28,7 +26,8 @@ public class ConnectDelMenu extends MenuItem {
      * 删除连接.
      * @param treeView
      */
-    private void setAction(TreeView treeView) {
+    @Override
+    protected void setAction(TreeView treeView) {
         super.setOnAction(
                 (event) -> {
                     TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
@@ -46,7 +45,4 @@ public class ConnectDelMenu extends MenuItem {
         );
     }
 
-    public void setPoolManagement(PoolManagement poolManagement) {
-        this.poolManagement = poolManagement;
-    }
 }

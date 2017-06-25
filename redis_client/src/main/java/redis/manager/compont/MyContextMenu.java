@@ -5,6 +5,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeView;
 import redis.manager.compont.menu.ConnectDelMenu;
+import redis.manager.compont.menu.MyMenuItem;
 
 /**
  * 左侧树状上下文菜单.
@@ -73,8 +74,8 @@ public class MyContextMenu extends ContextMenu {
     public void setPoolManagement(PoolManagement poolManagement) {
         this.poolManagement = poolManagement;
         for (MenuItem item : this.getItems()) {
-            if (item instanceof ConnectDelMenu) {
-                ((ConnectDelMenu)item).setPoolManagement(poolManagement);
+            if (item instanceof MyMenuItem) {
+                ((MyMenuItem)item).setPoolManagement(poolManagement);
             }
         }
     }
