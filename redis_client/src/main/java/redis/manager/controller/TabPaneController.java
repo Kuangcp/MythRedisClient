@@ -2,8 +2,8 @@ package redis.manager.controller;
 
 import com.redis.assemble.key.RedisKey;
 import javafx.fxml.FXML;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import redis.manager.Main;
 
 /**
  * tab面板的controller.
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TabPaneController {
-    @Autowired
-    RedisKey redisKey;
+
+    private RedisKey redisKey = Main.redisKey;
     /**
      * 初始化, 装载数据.
      */
@@ -87,4 +87,8 @@ public class TabPaneController {
         // TODO 显示后一页数据.
     }
 
+
+    public void setRedisKey(RedisKey redisKey) {
+        this.redisKey = redisKey;
+    }
 }

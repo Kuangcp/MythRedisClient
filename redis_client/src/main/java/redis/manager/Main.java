@@ -5,21 +5,16 @@ import com.redis.assemble.key.RedisKey;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.config.PoolManagement;
 import com.redis.config.PropertyFile;
-import com.redis.config.RedisPools;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
 import redis.manager.controller.ConnectController;
 import redis.manager.controller.MainController;
-
 import java.io.IOException;
 import java.util.Map;
 
@@ -32,7 +27,8 @@ import java.util.Map;
 public class Main extends Application {
 
     private static ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
-    private static PoolManagement management = (PoolManagement)context.getBean("poolManagement");
+    public static PoolManagement management = (PoolManagement)context.getBean("poolManagement");
+    public static RedisKey redisKey = (RedisKey) context.getBean("redisKey");
 
     private AnchorPane rootLayout;
     private FXMLLoader rootLoader;
@@ -49,10 +45,7 @@ public class Main extends Application {
         rootLayout = rootLoader.load();
 
         MainController mainController = rootLoader.getController();
-        mainController.setPoolManagement(management);
         mainController.setMain(this);
-        RedisKey redisKey = (RedisKey) context.getBean("redisKey");
-        mainController.setRedisKey(redisKey);
 
         Scene scene = new Scene(rootLayout);
         this.primaryStage.setScene(scene);
@@ -91,8 +84,7 @@ public class Main extends Application {
         connectController.setDialogStage(dialogStage);
 
 
-        //PoolManagement management = (PoolManagement)context.getBean("poolManagement");
-        connectController.setPoolManagement(management);
+        //connectController.setPoolManagement(management);
 
         // 显示对话框, 并等待, 直到用户关闭
         dialogStage.showAndWait();
@@ -110,6 +102,8 @@ public class Main extends Application {
 
         return ok;
     }
+
+
 
 
     public static void main( String[] args ) throws ReadConfigException {

@@ -33,6 +33,7 @@ public class ConnectDelMenu extends MyMenuItem {
                     TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
                     item.getParent().getChildren().remove(item);
                     String flag = item.getValue().getAccessibleHelp();
+                    System.out.println("测试:: " + flag);
                     if ("link".equals(flag)) {
                         String id = item.getValue().getAccessibleText();
                         try {

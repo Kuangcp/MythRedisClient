@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 
+import redis.manager.Main;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +25,7 @@ import java.util.Map;
 @Component
 public class ConnectController {
 
-    private PoolManagement poolManagement;
+    private PoolManagement poolManagement = Main.management;
     private Stage dialogStage;
     private boolean okChecked = false;
 
@@ -260,7 +262,6 @@ public class ConnectController {
             return;
         }
         resultLabel.setText("失败");
-        return;
     }
 
     /**
