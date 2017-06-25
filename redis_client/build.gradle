@@ -8,7 +8,22 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
 
+apply plugin: 'com.github.johnrengelman.shadow'
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'redis.manager.Main'
+    }
+}
 //dependencies {
 ////    compile 'org.springframework:spring-core:4.3.8.RELEASE'
 ////    compile 'org.springframework:spring-context:4.3.8.RELEASE'
