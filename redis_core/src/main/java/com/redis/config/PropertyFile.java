@@ -17,6 +17,8 @@ import java.util.Map;
 public class PropertyFile {
 
     private static Logger logger = LoggerFactory.getLogger(PropertyFile.class);
+    private static MythProperties props;
+    private static OutputStream fos;
     /**
      * 得到配置文件对象
      * @param propertyFile 文件名以及路径（完整）
@@ -43,6 +45,11 @@ public class PropertyFile {
         is.close();
         return props;
     }
+    // 有异常所以不能直接放到属性那里去
+    private static OutputStream getFromFile() throws IOException {
+        props = getProperties(Configs.PROPERTY_FILE);
+        return new FileOutputStream(Configs.PROPERTY_FILE);
+    }
     /**
      * 保存属性,如果属性已经存在就直接覆盖，其实也可以用作修改使用，但是会污染数据
      * @param key 属性
@@ -53,8 +60,7 @@ public class PropertyFile {
     public static String  save(String key, String value) throws ReadConfigException {
         String result;
         try {
-            MythProperties props = getProperties(Configs.PROPERTY_FILE);
-            OutputStream fos = new FileOutputStream(Configs.PROPERTY_FILE);
+            getFromFile();
             result = (String)props.setProperty(key, value);
             props.store(fos, "Update '" + key + "' value");
         } catch (IOException e) {
@@ -72,8 +78,7 @@ public class PropertyFile {
     public static String delete(String key) throws ReadConfigException {
         String result;
         try {
-            MythProperties props = getProperties(Configs.PROPERTY_FILE);
-            OutputStream fos = new FileOutputStream(Configs.PROPERTY_FILE);
+            getFromFile();
             result = (String) props.remove(key);
             props.store(fos, "Delete '" + key + "' value");
         }catch (Exception e){
@@ -112,7 +117,7 @@ public class PropertyFile {
      * @throws ReadConfigException 文件异常
      */
     public static int getMaxId() throws  ReadConfigException {
-        String maxId = null;
+        String maxId;
         try {
             MythProperties props = getProperties(Configs.PROPERTY_FILE);
             maxId = props.getString(Configs.MAX_POOL_ID);
@@ -134,7 +139,7 @@ public class PropertyFile {
      */
     public static Map<String,RedisPoolProperty> getAllPoolConfig() throws ReadConfigException {
         Map<String,RedisPoolProperty> map = new HashMap<>();
-        int maxId = 0;
+        int maxId;
         MythProperties properties;
         try {
             maxId = getMaxId();

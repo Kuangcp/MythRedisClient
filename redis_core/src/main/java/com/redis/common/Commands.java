@@ -1,7 +1,6 @@
 package com.redis.common;
 
 import com.redis.common.domain.ElementsType;
-import com.redis.common.exception.ExceptionInfo;
 import com.redis.config.PoolManagement;
 import com.redis.config.RedisPools;
 import org.slf4j.Logger;
@@ -54,18 +53,19 @@ public class Commands {
 //        return jedis;
 //    }
 
+
     public String type(String key){
         return getJedis().type(key);
     }
     // 切换到指定的id的配置下的连接池
-    public void setPools(String id){
-        try {
-            this.pools = management.getRedisPool(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(ExceptionInfo.GET_POOL_BY_ID_FAILED);
-        }
-    }
+//    public void setPools(String id){
+//        try {
+//            this.pools = management.getRedisPool(id);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            logger.error(ExceptionInfo.GET_POOL_BY_ID_FAILED);
+//        }
+//    }
 
     /**
      * 修改已经存在的键的存活时间,适用于所有key

@@ -48,11 +48,13 @@ project(':redis_core') {
                 libraries.'junit'
         )
     }
-
 }
 project(':redis_client'){
     dependencies{
         compile project(":redis_core")
+        compile(
+                libraries.'openjfx-dialogs'
+        )
         testCompile(
                 libraries.'junit',
                 libraries.'spring-test'
