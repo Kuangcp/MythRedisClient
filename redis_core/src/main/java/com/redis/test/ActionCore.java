@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ActionCore {
     private Logger logger = LoggerFactory.getLogger(ActionCore.class);
-    public String Redis(){
+    public String redis(){
         logger.info("3434");
         logger.error("7895403");
         return "Send Redis from redis_core";
