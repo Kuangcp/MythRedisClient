@@ -18,6 +18,7 @@ public class MythProperties extends Properties{
             String temp = this.getProperty(key);
             if(temp!=null){
                 result = new String(temp.getBytes("utf-8"), "utf-8");
+//                System.out.println(result);
             }else{
                 // 如果没有这个key就返回null
                 return result;

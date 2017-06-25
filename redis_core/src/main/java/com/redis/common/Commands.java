@@ -21,6 +21,11 @@ public class Commands {
     private PoolManagement management;
     // 当前所有的操作都是共享这个参数的： 当前连接池，当前的数据库
     private int db = 0;
+
+    public RedisPools getPools() {
+        return pools;
+    }
+
     private RedisPools pools;
     private Jedis jedis;
     private Logger logger = LoggerFactory.getLogger(Commands.class);
@@ -35,10 +40,10 @@ public class Commands {
      * @return 得到当前数据库的连接
      */
     public Jedis getJedis(){
-        if(jedis==null){
+//        if(jedis==null){
             pools = management.getRedisPool();
             jedis = pools.getJedis();
-        }
+//        }
         jedis.select(db);
         return jedis;
     }

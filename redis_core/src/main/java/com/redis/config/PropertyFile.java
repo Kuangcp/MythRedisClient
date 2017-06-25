@@ -48,7 +48,8 @@ public class PropertyFile {
     // 有异常所以不能直接放到属性那里去
     private static OutputStream getFromFile() throws IOException {
         props = getProperties(Configs.PROPERTY_FILE);
-        return new FileOutputStream(Configs.PROPERTY_FILE);
+        fos = new FileOutputStream(Configs.PROPERTY_FILE);
+        return fos;
     }
     /**
      * 保存属性,如果属性已经存在就直接覆盖，其实也可以用作修改使用，但是会污染数据

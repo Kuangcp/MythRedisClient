@@ -6,12 +6,13 @@ import com.redis.config.*;
 import com.redis.utils.MythReflect;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import redis.manager.Main;
 import redis.manager.compont.MyContextMenu;
 import redis.manager.compont.MyTab;
 import redis.manager.compont.MyTreeItem;
-import redis.manager.compont.menu.MyMenuItem;
 
 import java.util.Map;
 import java.util.Set;
@@ -23,6 +24,7 @@ import java.util.Set;
  */
 @Component
 public class MainController {
+    private static Logger logger = LoggerFactory.getLogger(MainController.class);
 
     private PoolManagement poolManagement = Main.management;
 
@@ -136,10 +138,10 @@ public class MainController {
             // 创建一级子节点
             Label firstLabel = new Label((String) lists.get(Configs.NAME));
             firstLabel.setAccessibleHelp("link");
-            System.out.println(firstLabel.getAccessibleHelp());
+//            System.out.println(firstLabel.getAccessibleHelp());
             // 将连接的ID保存
             firstLabel.setAccessibleText((String) lists.get(Configs.POOL_ID));
-            System.out.println((String) lists.get(Configs.POOL_ID));
+//            System.out.println((String) lists.get(Configs.POOL_ID));
             MyTreeItem<Label> childOne = new MyTreeItem<>(firstLabel);
             MyContextMenu firstMenu = new MyContextMenu(treeView);
             firstMenu.setFirstChileMenu();
@@ -194,6 +196,7 @@ public class MainController {
             int childSize = treeItem.getChildren().size();
             treeItem.getChildren().remove(0, childSize);
             for (String key : keys) {
+//                logger.debug(" 每个键 ：  "+key);
                 Label thridLabel = new Label(key);
                 thridLabel.setAccessibleHelp("key");
                 MyTreeItem<Label> childThrid = new MyTreeItem<>(thridLabel);
