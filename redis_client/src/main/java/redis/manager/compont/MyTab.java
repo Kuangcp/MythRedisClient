@@ -1,14 +1,9 @@
 package redis.manager.compont;
 
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.event.Event;
-import javafx.event.EventTarget;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import redis.manager.Main;
-
 import java.io.IOException;
 
 /**

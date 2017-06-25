@@ -6,14 +6,13 @@ import com.redis.config.*;
 import com.redis.utils.MythReflect;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.manager.Main;
 import redis.manager.compont.MyContextMenu;
 import redis.manager.compont.MyTab;
 import redis.manager.compont.MyTreeItem;
+import redis.manager.compont.menu.MyMenuItem;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,9 +24,9 @@ import java.util.Set;
 @Component
 public class MainController {
 
-    private PoolManagement poolManagement;
-    @Autowired
-    private RedisKey redisKey;
+    private PoolManagement poolManagement = Main.management;
+
+    private RedisKey redisKey = Main.redisKey;
 
     @FXML
     private TabPane tabPane;
@@ -45,7 +44,9 @@ public class MainController {
         try {
             setTreeView();
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("错误");
+            alert.setHeaderText("连接显示错误");
         }
 
         // 监听选择的节点
@@ -54,7 +55,9 @@ public class MainController {
                     MyTreeItem<Label> selectedItem =
                             (MyTreeItem<Label>) treeView.getSelectionModel().getSelectedItem();
                     String flag = selectedItem.getValue().getAccessibleHelp();
-
+                    if (flag == null) {
+                        flag = "";
+                    }
                     switch (flag) {
                         case "db" :
                             // 展示当前数据库中所有的键
@@ -133,8 +136,10 @@ public class MainController {
             // 创建一级子节点
             Label firstLabel = new Label((String) lists.get(Configs.NAME));
             firstLabel.setAccessibleHelp("link");
+            System.out.println(firstLabel.getAccessibleHelp());
             // 将连接的ID保存
             firstLabel.setAccessibleText((String) lists.get(Configs.POOL_ID));
+            System.out.println((String) lists.get(Configs.POOL_ID));
             MyTreeItem<Label> childOne = new MyTreeItem<>(firstLabel);
             MyContextMenu firstMenu = new MyContextMenu(treeView);
             firstMenu.setFirstChileMenu();
@@ -198,9 +203,11 @@ public class MainController {
                 treeItem.addSecondChild(childThrid);
             }
         } catch (Exception e) {
-            // TODO 可能无法转换
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("错误");
+            alert.setHeaderText("数据库定位出错");
+            alert.show();
         }
-
     }
 
     /**
@@ -245,15 +252,4 @@ public class MainController {
         this.main = main;
     }
 
-    public PoolManagement getPoolManagement() {
-        return poolManagement;
-    }
-
-    public void setPoolManagement(PoolManagement poolManagement) {
-        this.poolManagement = poolManagement;
-    }
-
-    public void setRedisKey(RedisKey redisKey) {
-        this.redisKey = redisKey;
-    }
 }
