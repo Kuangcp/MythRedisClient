@@ -1,5 +1,6 @@
 package redis.manager.compont;
 
+import com.redis.config.PoolManagement;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -13,7 +14,6 @@ import javafx.scene.control.TreeItem;
 public class MyTreeItem<T> extends TreeItem<T> {
 
     public MyTreeItem() {
-
     }
 
     public MyTreeItem(T t) {
@@ -54,6 +54,14 @@ public class MyTreeItem<T> extends TreeItem<T> {
         for (TreeItem item : items) {
             ((Label)item.getValue()).setContextMenu(menu);
         }
+    }
+
+    /**
+     * 设置上下文菜单的PoolManager.
+     * @param menuPoolManager PoolManager
+     */
+    public void setContextMenuPoolManager(PoolManagement menuPoolManager) {
+        ((MyContextMenu)((Label)this.getValue()).getContextMenu()).setPoolManagement(menuPoolManager);
     }
 
 }
