@@ -51,6 +51,8 @@ public class Main extends Application {
         MainController mainController = rootLoader.getController();
         mainController.setPoolManagement(management);
         mainController.setMain(this);
+        RedisKey redisKey = (RedisKey) context.getBean("redisKey");
+        mainController.setRedisKey(redisKey);
 
         Scene scene = new Scene(rootLayout);
         this.primaryStage.setScene(scene);
@@ -95,14 +97,18 @@ public class Main extends Application {
         // 显示对话框, 并等待, 直到用户关闭
         dialogStage.showAndWait();
 
-        // 更新连接信息
-        MainController mainController = rootLoader.getController();
-        Map<String, String> map = connectController.getConnectMessage();
-        String name = map.get("name");
-        String id = map.get("id");
-        mainController.updateTree(name, id);
+        ok = connectController.isOkChecked();
+        if (ok) {
+            // 更新连接信息
+            MainController mainController = rootLoader.getController();
+            Map<String, String> map = connectController.getConnectMessage();
+            String name = map.get("name");
+            String id = map.get("id");
+            mainController.updateTree(name, id);
+        }
 
-        return connectController.isOkChecked();
+
+        return ok;
     }
 
 

@@ -5,7 +5,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeView;
 
 /**
- * 上下文菜单的抽象类.
+ * 上下文菜单的抽象类, 所有上下文菜单的基类.
  * User: huang
  * Date: 17-6-25
  */
@@ -23,6 +23,10 @@ public abstract class MyMenuItem extends MenuItem {
      */
     protected abstract void setAction(TreeView treeView);
 
+    /**
+     * 设置PoolManagement.
+     * @param poolManagement PoolManagement
+     */
     public void setPoolManagement(PoolManagement poolManagement) {
         this.poolManagement = poolManagement;
     }

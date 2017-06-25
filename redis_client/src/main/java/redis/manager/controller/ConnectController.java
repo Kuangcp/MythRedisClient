@@ -1,9 +1,7 @@
 package redis.manager.controller;
 
-import com.redis.config.Configs;
-import com.redis.config.PoolManagement;
-import com.redis.config.RedisPoolProperty;
-import com.redis.config.RedisPools;
+import com.redis.common.exception.ReadConfigException;
+import com.redis.config.*;
 import com.redis.utils.MythReflect;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -274,7 +272,13 @@ public class ConnectController {
     public Map<String, String> getConnectMessage() {
         Map<String, String> map = new HashMap<>();
         map.put("name", nameText.getText());
-        map.put("id", "1005");
+        String id = null;
+        try {
+            id = String.valueOf(PropertyFile.getMaxId());
+        } catch (ReadConfigException e) {
+            e.printStackTrace();
+        }
+        map.put("id", id);
         return map;
     }
 }
