@@ -72,6 +72,7 @@ public class MainController {
                                 createSecondNode(selectedItem);
                             } catch (Exception e) {
                                 System.out.println("打开连接失败::::");
+                                logger.error("打开连接失败");
                             }
                             break;
 

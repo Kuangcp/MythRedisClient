@@ -51,8 +51,9 @@ public class PoolManagement {
         try {
             return getRedisPool(currentPoolId);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(ExceptionInfo.GET_POOL_BY_ID_FAILED,e);
+//            e.printStackTrace();
+            logger.error(ExceptionInfo.GET_POOL_BY_ID_FAILED);
+            logger.debug("",e);
             return null;
         }
     }
@@ -74,11 +75,10 @@ public class PoolManagement {
             logger.info(NoticeInfo.MAP_CONTAIN_POOL +poolId);
             return poolMap.get(poolId);
         }
-
         try {
             configFile = PropertyFile.getProperties(propertyFile);
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
            throw new ReadConfigException(ExceptionInfo.OPEN_CONFIG_FAILED+propertyFile,e,PoolManagement.class);
         }
 
@@ -95,12 +95,13 @@ public class PoolManagement {
             pool.setProperty(poolProperty);
         }
         pool.initialPool();
-        logger.info("实例化连接池 ["+poolId+"]:"+pool+"<=="+poolProperty.toString());
+        logger.info("实例化连接池 "+poolId+" - "+pool.toString());
+        logger.debug("实例化的配置："+poolProperty.toString());
         if(pool.available()) {
             poolMap.put(poolId, pool);
             return pool;
         }else{
-            throw new RedisConnectionException(ExceptionInfo.POOL_NOT_AVAILABLE,PoolManagement.class);
+            throw new RedisConnectionException(ExceptionInfo.POOL_NOT_AVAILABLE,new Exception("该连接不可用"),PoolManagement.class);
         }
     }
 
