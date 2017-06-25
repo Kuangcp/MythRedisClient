@@ -24,4 +24,5 @@ public interface ExceptionInfo {
     String DELETE_CONFIG_KEY_FAILED = "配置文件中删除属性失败";
 
     String KEY_NOT_EXIST = "Key 不存在";
+    String TYPE_ERROR = "类型错误";
 }

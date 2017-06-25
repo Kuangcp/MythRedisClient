@@ -1,5 +1,8 @@
 package com.redis.utils;
 
+import com.redis.common.exception.ExceptionInfo;
+import com.redis.common.exception.TypeErrorException;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,20 +70,29 @@ public class MythReflect {
      * @throws IllegalAccessException 可能没有权限
      * @return Object 返回赋值后的对象
      */
-    public static Object setFieldsValue(Object object,Map<String,Object> maps) throws IllegalAccessException {
+    public static Object setFieldsValue(Object object,Map<String,Object> maps) throws Exception {
         target = object.getClass();
         for(Field field:target.getDeclaredFields()){
             field.setAccessible(true);
             String type = field.getType().getName();
 //            System.out.println("type:"+type);
-            // TODO 检查 空的情况
-            switch (type){
-                case "java.lang.Integer":field.set(object,
-                        Integer.parseInt(maps.get(field.getName()).toString()));break;
-                case "java.lang.String": field.set(object,
-                        maps.get(field.getName()));break;
-                case "boolean":field.set(object,
-                        "true".equals(maps.get(field.getName()).toString()));break;
+            try {
+                switch (type) {
+                    case "java.lang.Integer":
+                        field.set(object,
+                                Integer.parseInt(maps.get(field.getName()).toString()));
+                        break;
+                    case "java.lang.String":
+                        field.set(object,
+                                maps.get(field.getName()));
+                        break;
+                    case "boolean":
+                        field.set(object,
+                                "true".equals(maps.get(field.getName()).toString()));
+                        break;
+                }
+            }catch (Exception e){
+                throw new TypeErrorException(ExceptionInfo.TYPE_ERROR,e,MythReflect.class);
             }
         }
         return object;

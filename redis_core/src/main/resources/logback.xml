@@ -7,17 +7,44 @@
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <!--文件输出-->
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/home/kcp/logs/debug.log</file>
+    <!-- debug -->
+    <appender name="DEBUG" class="ch.qos.logback.core.FileAppender">
+        <file>./logs/debug.log</file>
         <append>true</append>
         <encoder>
-            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+    <!--info-->
+    <appender name="INFO" class="ch.qos.logback.core.FileAppender">
+        <file>./logs/info.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
     </appender>
 
+    <!-- error -->
+    <appender name="ERROR" class="ch.qos.logback.core.FileAppender">
+        <File>./logs/error.log</File>
+        <Append>true</Append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
     <root level="DEBUG">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="DEBUG" />
+        <appender-ref ref="ERROR"/>
+        <appender-ref ref="INFO"/>
     </root>
 </configuration>

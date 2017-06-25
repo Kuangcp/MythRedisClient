@@ -48,7 +48,7 @@ public class RedisPools{
                         property.getTimeout());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             logger.error("create JedisPool error : "+e);
         }
     }
@@ -80,7 +80,7 @@ public class RedisPools{
                 logger.info("使用连接池"+jedisPool+"得到连接"+jedis);
             }
         }catch (Exception e){
-            e.printStackTrace();
+//            e.printStackTrace();
             logger.error(ExceptionInfo.POOL_NOT_AVAILABLE,e);
         }finally{
             if (jedis != null) {

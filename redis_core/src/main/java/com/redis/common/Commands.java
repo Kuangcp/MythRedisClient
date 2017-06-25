@@ -130,6 +130,14 @@ public class Commands {
     public long deleteKey(String... key){
         return getJedis().del(key);
     }
+
+    public PoolManagement getManagement() {
+        return management;
+    }
+
+    public void setManagement(PoolManagement management) {
+        this.management = management;
+    }
 }
 // 开启事务
 //Transaction e = jedis.multi();
