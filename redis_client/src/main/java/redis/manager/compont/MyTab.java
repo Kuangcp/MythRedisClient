@@ -1,7 +1,11 @@
 package redis.manager.compont;
 
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.event.Event;
+import javafx.event.EventTarget;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import redis.manager.Main;
 
@@ -24,7 +28,6 @@ public class MyTab extends Tab {
     public void init() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("/views/TabPaneLayout.fxml"));
-
         try {
             AnchorPane tabPane = loader.load();
             // 添加新标签页
@@ -34,5 +37,6 @@ public class MyTab extends Tab {
             e.printStackTrace();
         }
     }
+
 
 }
