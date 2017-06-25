@@ -15,6 +15,7 @@ ext.libraries = [
         "jedis":"redis.clients:jedis:$versions.jedis",
         "mockito-core":"org.mockito:mockito-core:2.7.22",
         "slf4j-api":"org.slf4j:slf4j-api:$versions.slf4j",
+        "openjfx-dialogs":"org.controlsfx:openjfx-dialogs:1.0.2",
 
         // Spring 4.x
         "spring-core":"org.springframework:spring-core:$versions.spring",

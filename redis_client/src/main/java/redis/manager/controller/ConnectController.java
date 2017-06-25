@@ -10,9 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -157,7 +155,7 @@ public class ConnectController {
         }
         try {
             property = (RedisPoolProperty) MythReflect.setFieldsValue(property,maps);
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             //e.printStackTrace();
         }
         return property;
