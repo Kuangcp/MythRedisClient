@@ -1,7 +1,7 @@
 build/
 *.iml
 .gradle/
-*.log
+logs/
 .idea/
 target/
 buildgenerated-src/
