@@ -2,6 +2,7 @@ package redis.manager.controller;
 
 import com.redis.assemble.key.RedisKey;
 import com.redis.common.exception.ClientExceptionInfo;
+import com.redis.common.exception.ExceptionInfo;
 import com.redis.common.exception.NoticeInfo;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.config.Configs;
@@ -19,7 +20,6 @@ import redis.manager.compont.MyContextMenu;
 import redis.manager.compont.MyTab;
 import redis.manager.compont.MyTreeItem;
 
-import javax.sound.midi.Soundbank;
 import java.util.Map;
 import java.util.Set;
 
@@ -185,6 +185,12 @@ public class MainController {
             num= poolManagement.getRedisPool().getDatabaseNum();
         }catch (Exception e){
             logger.error(ClientExceptionInfo.CONNECTION_UNUSABLE);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(ClientExceptionInfo.CONNECTION_UNUSABLE);
+            alert.setHeaderText("");
+            alert.setContentText(ExceptionInfo.GET_POOL_BY_ID_FAILED);
+            alert.show();
+
         }
         // 清除所有的孩子节点
         int childNum = treeItem.getChildren().size();

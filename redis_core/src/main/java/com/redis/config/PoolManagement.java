@@ -73,7 +73,7 @@ public class PoolManagement {
 //        }
         // 如果内存中有就直接返回
         if(poolMap.containsKey(poolId)){
-            logger.info(NoticeInfo.MAP_CONTAIN_POOL +poolId);
+            logger.info(NoticeInfo.MAP_CONTAIN_POOL +poolId+"内存中连接池 : "+poolMap.size());
             return poolMap.get(poolId);
         }
         try {

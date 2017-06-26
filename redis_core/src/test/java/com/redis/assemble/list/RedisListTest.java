@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import redis.clients.jedis.Jedis;
 
 import java.util.Arrays;
 import java.util.List;
@@ -213,5 +214,9 @@ public class RedisListTest {
 //    }
     private void deleteKeyForTest(){
         redisList.deleteKey(testKey);
+    }
+    public void testDeleteKeyindex(){
+        Jedis jedis = redisList.getJedis();
+//        jedis.l
     }
 }
