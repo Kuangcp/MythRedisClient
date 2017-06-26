@@ -11,7 +11,7 @@
 <AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redis.manager.controller.TabPaneController">
    <children>
       <Label layoutX="14.0" layoutY="25.0" text="type:" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="757.0" />
-      <TextField layoutX="51.0" layoutY="20.0" prefWidth="300.0" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="449.0" />
+      <TextField fx:id="typeText" layoutX="51.0" layoutY="20.0" prefWidth="300.0" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="449.0" />
       <Label layoutX="384.0" layoutY="25.0" text="TTL:" AnchorPane.rightAnchor="371.0" AnchorPane.topAnchor="25.0" />
       <Label layoutX="417.0" layoutY="25.0" text="-1" AnchorPane.rightAnchor="355.0" AnchorPane.topAnchor="25.0" />
       <Button layoutX="501.0" layoutY="20.0" mnemonicParsing="false" onAction="#rename" text="Rename" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="20.0" />

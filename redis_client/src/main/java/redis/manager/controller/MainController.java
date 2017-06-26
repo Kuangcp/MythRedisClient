@@ -91,6 +91,13 @@ public class MainController {
                     }
                 }
         );
+
+        // 监听tab选择
+        tabPane.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    TabPaneController.key = newValue.getText();
+                }
+        );
     }
 
     /**
@@ -98,6 +105,9 @@ public class MainController {
      */
     @FXML
     private void addTab(String tabId, String name) {
+
+        TabPaneController.key = name;
+
         // 创建新标签
         MyTab tab = new MyTab(name);
         tab.setId(tabId);
@@ -233,6 +243,7 @@ public class MainController {
         String dbId = treeItem.getParent().getValue().getAccessibleText();
         String poolId = treeItem.getParent().getParent().getValue().getAccessibleText();
         String tabId = poolId + dbId + name;
+        main.setSelectedKey(name);
         for (Tab tab : tabPane.getTabs()) {
             if (tabId.equals(tab.getId())) {
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
@@ -264,5 +275,4 @@ public class MainController {
     public void setMain(Main main) {
         this.main = main;
     }
-
 }

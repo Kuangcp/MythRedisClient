@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 
 import redis.manager.Main;
-
 import java.util.HashMap;
 import java.util.Map;
 

@@ -33,6 +33,8 @@ public class Main extends Application {
     private AnchorPane rootLayout;
     private FXMLLoader rootLoader;
     private Stage primaryStage;
+    /** 选择的键. */
+    private String selectedKey;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -103,10 +105,15 @@ public class Main extends Application {
         return ok;
     }
 
+    public String getSelectedKey() {
+        return selectedKey;
+    }
 
+    public void setSelectedKey(String selectedKey) {
+        this.selectedKey = selectedKey;
+    }
 
-
-    public static void main( String[] args ) throws ReadConfigException {
+    public static void main(String[] args ) throws ReadConfigException {
 
         management.setCurrentPoolId(PropertyFile.getMaxId()+"");
 //        PoolManagement management;

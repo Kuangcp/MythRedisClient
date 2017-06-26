@@ -4,6 +4,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import redis.manager.Main;
+import redis.manager.controller.TabPaneController;
+
 import java.io.IOException;
 
 /**
