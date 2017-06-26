@@ -14,13 +14,13 @@
       <TextField fx:id="typeText" layoutX="51.0" layoutY="20.0" prefWidth="300.0" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="449.0" />
       <Label layoutX="384.0" layoutY="25.0" text="TTL:" AnchorPane.rightAnchor="371.0" AnchorPane.topAnchor="25.0" />
       <Label layoutX="417.0" layoutY="25.0" text="-1" AnchorPane.rightAnchor="355.0" AnchorPane.topAnchor="25.0" />
-      <Button layoutX="501.0" layoutY="20.0" mnemonicParsing="false" onAction="#rename" text="Rename" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="20.0" />
+      <Button layoutX="602.0" layoutY="20.0" mnemonicParsing="false" onAction="#rename" text="Rename" AnchorPane.rightAnchor="132.0" AnchorPane.topAnchor="20.0" />
       <Button layoutX="592.0" layoutY="20.0" mnemonicParsing="false" onAction="#del" text="Delete" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="20.0" />
-      <TableView editable="true" layoutX="14.0" layoutY="73.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="500.0" prefWidth="800.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="70.0">
+      <TableView fx:id="dataTable" editable="true" layoutX="14.0" layoutY="73.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="500.0" prefWidth="800.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="70.0">
         <columns>
-          <TableColumn maxWidth="100.0" minWidth="40.0" prefWidth="45.0" text="row" />
-          <TableColumn prefWidth="210.0" text="key" />
-            <TableColumn prefWidth="239.0" text="value" />
+          <TableColumn fx:id="rowColumn" maxWidth="100.0" minWidth="40.0" prefWidth="45.0" text="row" />
+          <TableColumn fx:id="keyColumn" prefWidth="210.0" text="key" />
+            <TableColumn fx:id="valueColumn" prefWidth="239.0" text="value" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -28,7 +28,7 @@
       </TableView>
       <Button layoutX="636.0" layoutY="79.0" mnemonicParsing="false" onAction="#addRow" prefWidth="100.0" text="Add row" AnchorPane.rightAnchor="50.0" />
       <Button layoutX="636.0" layoutY="117.0" mnemonicParsing="false" onAction="#delRow" prefWidth="100.0" text="Delete row" AnchorPane.rightAnchor="50.0" />
-      <Button layoutX="636.0" layoutY="157.0" mnemonicParsing="false" onAction="#reloadValue" prefWidth="100.0" text=" Reload value" AnchorPane.rightAnchor="50.0" />
+      <Button layoutX="479.0" layoutY="20.0" mnemonicParsing="false" onAction="#reloadValue" prefWidth="100.0" text=" Reload value" AnchorPane.rightAnchor="221.0" />
       <Label layoutX="559.0" layoutY="215.0" text="page" AnchorPane.rightAnchor="190.0" />
       <TextField layoutX="596.0" layoutY="210.0" prefHeight="28.0" prefWidth="78.0" AnchorPane.rightAnchor="105.0" />
       <Label layoutX="678.0" layoutY="215.0" text="of" AnchorPane.rightAnchor="90.0" />
@@ -37,8 +37,9 @@
       <Button layoutX="617.0" layoutY="260.0" mnemonicParsing="false" onAction="#setPage" prefHeight="28.0" prefWidth="66.0" text="Set" AnchorPane.rightAnchor="110.0" />
       <Button layoutX="705.0" layoutY="260.0" mnemonicParsing="false" onAction="#next" prefHeight="28.0" prefWidth="66.0" text="--&gt;" AnchorPane.rightAnchor="20.0" />
       <Label layoutX="13.0" layoutY="324.0" text="key:" AnchorPane.bottomAnchor="158.0" AnchorPane.leftAnchor="5.0" />
-      <TextField layoutX="36.0" layoutY="319.0" prefHeight="20.0" AnchorPane.bottomAnchor="153.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+      <TextField fx:id="keyShowText" layoutX="36.0" layoutY="319.0" prefHeight="20.0" AnchorPane.bottomAnchor="153.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
       <Label layoutX="1.0" layoutY="372.0" text="value:" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="5.0" />
-      <TextArea layoutX="51.0" layoutY="372.0" prefHeight="100.0" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+      <TextArea fx:id="valueShowText" layoutX="51.0" layoutY="372.0" prefHeight="100.0" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+      <Button layoutX="650.0" layoutY="157.0" onAction="#setListValue" mnemonicParsing="false" prefHeight="28.0" prefWidth="100.0" text="Set value" AnchorPane.rightAnchor="50.0" />
    </children>
 </AnchorPane>
