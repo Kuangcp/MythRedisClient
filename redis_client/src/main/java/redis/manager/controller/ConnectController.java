@@ -130,6 +130,7 @@ public class ConnectController {
                 dialogStage.close();
                 return;
             }
+
             resultLabel.setText("配置错误");
         }
 
@@ -255,6 +256,7 @@ public class ConnectController {
             isRight = poolManagement.checkConnection(property);
         } catch (Exception e) {
             // 密码为空时有异常
+            isRight = false;
         }
         if (isRight) {
             resultLabel.setText("成功");

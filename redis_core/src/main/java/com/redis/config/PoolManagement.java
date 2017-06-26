@@ -145,6 +145,9 @@ public class PoolManagement {
      * @return 测试成功与否
      */
     public boolean checkConnection(RedisPoolProperty property){
+        if(!validate(property)){
+            return false;
+        }
         RedisPools pools = new RedisPools();
         pools.setProperty(property);
         Jedis jedis = pools.getJedis();
@@ -156,7 +159,12 @@ public class PoolManagement {
         }else{
             return false;
         }
-
+    }
+    private boolean validate(RedisPoolProperty property){
+        boolean flag;
+        flag = property.getHost().matches("((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))");
+        if(property.getPort()>65535 || property.getPort()<0) flag = false;
+        return flag;
     }
 
     /**

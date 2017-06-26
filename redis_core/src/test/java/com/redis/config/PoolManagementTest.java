@@ -95,6 +95,7 @@ public class PoolManagementTest {
         property.setTimeout(600);//读取超时时间
         boolean result = poolManagement.checkConnection(property);
         System.out.println(result);
+        assert result;
 
     }
     // 进行切换连接池,测试是通过了，测试结果是内存中的会复用的，但是连接池共存数要设置，不能在MAP里共存太多了
