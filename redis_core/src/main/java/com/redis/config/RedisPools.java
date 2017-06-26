@@ -77,11 +77,12 @@ public class RedisPools{
         try{
             if (jedisPool != null) {
                 jedis = jedisPool.getResource();
-                logger.info("使用连接池"+jedisPool+"得到连接"+jedis);
+                logger.debug("使用连接池"+jedisPool+"得到连接"+jedis);
             }
         }catch (Exception e){
 //            e.printStackTrace();
-            logger.error(ExceptionInfo.POOL_NOT_AVAILABLE,e);
+            logger.error(ExceptionInfo.POOL_NOT_AVAILABLE);
+            logger.debug(NoticeInfo.ERROR_INFO,e);
         }finally{
             if (jedis != null) {
                 jedis.close();
@@ -96,12 +97,16 @@ public class RedisPools{
     // 测试当前连接池是否可用
     public boolean available(){
         Jedis jedis = getJedis();
-        jedis.select(0);
-        String key = "myth.kuang@outlook.com";
-        jedis.set(key,"available");
-        if("available".equals(jedis.get(key))){
-            jedis.del(key);
-            return true;
+        if(jedis!=null){
+            jedis.select(0);
+            String key = "myth.kuang@outlook.com";
+            jedis.set(key,"available");
+            if("available".equals(jedis.get(key))){
+                jedis.del(key);
+                return true;
+            }
+        }else{
+            return false;
         }
         return false;
     }
@@ -119,8 +124,8 @@ public class RedisPools{
      * @return 销毁结果
      */
     public boolean destroyPool(){
-        System.out.println("销毁连接池："+jedisPool);
-        logger.info(NoticeInfo.DESTROY_POOL+this.getProperty());
+//        System.out.println("销毁连接池："+jedisPool);
+        logger.debug(NoticeInfo.DESTROY_POOL+this.getProperty());
         if(jedisPool!=null){
             jedisPool.destroy();
             return true;

@@ -6,7 +6,7 @@ package com.redis.common.exception;
  */
 public interface ExceptionInfo {
     String GET_POOL_BY_ID_FAILED = "获取指定id的连接池失败";
-    String NOT_EXIST_CURRENT_POOL = "当前没有活跃的连接池(CurrentId is Null)";
+    String NOT_EXIST_CURRENT_POOL = "当前没有活跃的连接池(Init CurrentId is Null)";
 
 
     String POOL_NOT_AVAILABLE = "该连接池获取连接失败";
@@ -25,4 +25,6 @@ public interface ExceptionInfo {
 
     String KEY_NOT_EXIST = "Key 不存在";
     String TYPE_ERROR = "类型错误";
+
+
 }

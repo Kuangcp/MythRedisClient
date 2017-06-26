@@ -1,6 +1,5 @@
 package com.redis.common.exception;
 
-import com.redis.utils.MythTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +18,11 @@ public class MythException extends Exception{
     public MythException(String message, Class location) {
         super(message);
         logger = LoggerFactory.getLogger(location);
-        logger.error(MythTime.getDate()+" : <"+this.getClass().getSimpleName()+"> : "+message);
+        logger.error(" "+this.getClass().getSimpleName()+" : "+message);
     }
     public MythException(String message,Throwable cause, Class location) {
         super(message,cause);
         logger = LoggerFactory.getLogger(location);
-        logger.error(MythTime.getDate()+" : <"+this.getClass().getSimpleName()+"> :"+message);
+        logger.error(" "+this.getClass().getSimpleName()+" :"+message);
     }
 }

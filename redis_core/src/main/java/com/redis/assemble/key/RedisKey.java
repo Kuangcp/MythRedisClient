@@ -143,6 +143,7 @@ public class RedisKey extends Commands{
      * @return Set 集合
      */
     public Set<String> listAllKeys(int db){
+        logger.debug("RedisKey Management:"+this.getPools());
         setDb(db);
         return getJedis().keys("*");
     }
