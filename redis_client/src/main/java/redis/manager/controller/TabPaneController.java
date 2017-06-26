@@ -1,10 +1,27 @@
 package redis.manager.controller;
 
 import com.redis.assemble.key.RedisKey;
+import com.redis.assemble.list.RedisList;
+import com.redis.common.exception.ActionErrorException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 import redis.manager.Main;
+import redis.manager.controller.operation.DoAction;
+import redis.manager.controller.operation.ListAction;
+import redis.manager.controller.operation.SetAction;
+import redis.manager.entity.TableEntity;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * tab面板的controller.
@@ -17,9 +34,36 @@ public class TabPaneController {
     private RedisKey redisKey = Main.redisKey;
     public static  String key;
 
+    /** 数据显示表格. */
+    @FXML
+    private TableView<TableEntity> dataTable;
+    /** 数据表格行标. */
+    @FXML
+    private TableColumn<TableEntity, String> rowColumn;
+    /** 表格键. */
+    @FXML
+    private TableColumn<TableEntity, String> keyColumn;
+    /** 表格值. */
+    @FXML
+    private TableColumn<TableEntity, String> valueColumn;
     /** 类型显示框. */
     @FXML
     private TextField typeText;
+    /** 选中的键显示. */
+    @FXML
+    private TextField keyShowText;
+    /** 选中的值的显示. */
+    @FXML
+    private TextArea valueShowText;
+    /** 当前选择的行. */
+    private int nowSelectRow;
+    /** 是否选择. */
+    private boolean selected;
+    /** 提示框. */
+    private Alert alert = new Alert(Alert.AlertType.ERROR);
+
+    private ListAddController controller;
+    private DoAction doAction;
 
 
     /**
@@ -27,8 +71,25 @@ public class TabPaneController {
      */
     @FXML
     private void initialize() {
-        //TODO 装载相应的数据.
         setValue();
+
+        // 监听数据的选择
+        dataTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    try {
+                        keyShowText.setText(newValue.getKey());
+                        valueShowText.setText(newValue.getValue());
+                        nowSelectRow = Integer.parseInt(newValue.getRow());
+                        selected = true;
+                    } catch (Exception e) {
+                        keyShowText.setText("");
+                        valueShowText.setText("");
+                        nowSelectRow = 0;
+                        selected = false;
+                    }
+                }
+        );
+
     }
 
     /**
@@ -37,7 +98,7 @@ public class TabPaneController {
     @FXML
     private void rename() {
         // TODO 重置名称.
-        System.out.println(key);
+
     }
 
     /**
@@ -46,6 +107,7 @@ public class TabPaneController {
     @FXML
     private void del() {
         // TODO 删除数据.
+
     }
 
     /**
@@ -53,7 +115,7 @@ public class TabPaneController {
      */
     @FXML
     private void addRow() {
-        // TODO 添加数据.
+        addValue();
     }
 
     /**
@@ -61,7 +123,7 @@ public class TabPaneController {
      */
     @FXML
     private void delRow() {
-        // TODO 删除数据.
+        delValue();
     }
 
     /**
@@ -69,7 +131,7 @@ public class TabPaneController {
      */
     @FXML
     private void reloadValue() {
-        // TODO 重新加载数据.
+        setValue();
     }
 
     /**
@@ -96,6 +158,12 @@ public class TabPaneController {
         // TODO 显示后一页数据.
     }
 
+    /** 设置制定位置的键对应的值. */
+    @FXML
+    private void setListValue() {
+            setValueByIndex();
+    }
+
     public void setKey(String key) {
         this.key = key;
     }
@@ -106,6 +174,54 @@ public class TabPaneController {
     private void setValue() {
         String type = redisKey.type(key);
         typeText.setText(type);
+        switch (type) {
+            case "list" :
+                doAction = new ListAction(dataTable, rowColumn, keyColumn, valueColumn);
+                break;
+
+            case "set" :
+                doAction = new SetAction(dataTable, rowColumn, keyColumn, valueColumn);
+                break;
+
+            default:
+                doAction = new DoAction() {
+                    @Override
+                    public void setValue(String key) {}
+                    @Override
+                    public void setValueByIndex(String key, int nowSelectRow, boolean selected) {}
+                    @Override
+                    public void addValue(String key) {}
+                    @Override
+                    public void delValue(String key) {}
+                };
+                break;
+        }
+
+        doAction.setValue(key);
     }
+
+
+    /**
+     * 修改列表对应键的值.
+     */
+    private void setValueByIndex() {
+        doAction.setValueByIndex(key, nowSelectRow, selected);
+        reloadValue();
+    }
+
+    /**
+     * 添加列表的值.
+     */
+    private void addValue() {
+        doAction.addValue(key);
+        reloadValue();
+    }
+
+    /** 删除值, 删除显示的第一个值. */
+    private void delValue() {
+        doAction.delValue(key);
+        reloadValue();
+    }
+
 
 }

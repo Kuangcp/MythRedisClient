@@ -19,6 +19,7 @@ import redis.manager.compont.MyContextMenu;
 import redis.manager.compont.MyTab;
 import redis.manager.compont.MyTreeItem;
 
+import javax.sound.midi.Soundbank;
 import java.util.Map;
 import java.util.Set;
 
@@ -105,7 +106,6 @@ public class MainController {
      */
     @FXML
     private void addTab(String tabId, String name) {
-
         TabPaneController.key = name;
 
         // 创建新标签
@@ -208,9 +208,11 @@ public class MainController {
      * @param treeItem 数据库节点
      */
     private void createThridNode(MyTreeItem<Label> treeItem) {
+
         String dbId = treeItem.getValue().getAccessibleText();
+        int id = 0;
         try{
-            int id = Integer.parseInt(dbId);
+             id = Integer.parseInt(dbId);
             Set<String> keys = redisKey.listAllKeys(id);
             // 清楚所有的子节点
             int childSize = treeItem.getChildren().size();
@@ -252,6 +254,7 @@ public class MainController {
             }
         }
         if (ok) {
+
             addTab(tabId, name);
         }
     }

@@ -2,6 +2,8 @@ package redis.manager;
 
 import com.redis.SpringInit;
 import com.redis.assemble.key.RedisKey;
+import com.redis.assemble.list.RedisList;
+import com.redis.assemble.set.RedisSet;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.config.PoolManagement;
 import com.redis.config.PropertyFile;
@@ -29,6 +31,8 @@ public class Main extends Application {
     private static ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
     public static PoolManagement management = (PoolManagement)context.getBean("poolManagement");
     public static RedisKey redisKey = (RedisKey) context.getBean("redisKey");
+    public static RedisList redisList = (RedisList) context.getBean("redisList");
+    public static RedisSet redisSet = (RedisSet) context.getBean("redisSet");
 
     private AnchorPane rootLayout;
     private FXMLLoader rootLoader;
