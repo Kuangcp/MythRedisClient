@@ -82,7 +82,7 @@ public class RedisPools{
         }catch (Exception e){
 //            e.printStackTrace();
             logger.error(ExceptionInfo.POOL_NOT_AVAILABLE);
-            logger.debug("",e);
+            logger.debug(NoticeInfo.ERROR_INFO,e);
         }finally{
             if (jedis != null) {
                 jedis.close();
@@ -124,8 +124,8 @@ public class RedisPools{
      * @return 销毁结果
      */
     public boolean destroyPool(){
-        System.out.println("销毁连接池："+jedisPool);
-        logger.info(NoticeInfo.DESTROY_POOL+this.getProperty());
+//        System.out.println("销毁连接池："+jedisPool);
+        logger.debug(NoticeInfo.DESTROY_POOL+this.getProperty());
         if(jedisPool!=null){
             jedisPool.destroy();
             return true;

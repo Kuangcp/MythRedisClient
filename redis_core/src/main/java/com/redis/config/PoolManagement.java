@@ -14,6 +14,7 @@ import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -52,8 +53,8 @@ public class PoolManagement {
             return getRedisPool(currentPoolId);
         } catch (Exception e) {
 //            e.printStackTrace();
-            logger.error(ExceptionInfo.GET_POOL_BY_ID_FAILED);
-            logger.debug("",e);
+            logger.error(e.getMessage());
+            logger.debug(NoticeInfo.ERROR_INFO,e);
             return null;
         }
     }
@@ -85,7 +86,7 @@ public class PoolManagement {
         String pre = poolId+ Configs.SEPARATE;//前缀
         RedisPoolProperty poolProperty;
         // 如果没有这个id的存在,就新建一个
-        if(configFile.getString(pre+ Configs.NAME)==RunStatus.PROPERTY_IS_NULL){
+        if(Objects.equals(configFile.getString(pre + Configs.NAME), RunStatus.PROPERTY_IS_NULL)){
             throw new RedisConnectionException(ExceptionInfo.POOL_NOT_EXIST_CONFIG,PoolManagement.class);
             //@TODO 处理这种连接不存在的情况
             // 一般，连接的显示是从配置文件中加载的，是不会出现面板上有连接，而配置文件中没有的情况 除非是在客户端，删除了连接，没有刷新客户端缓存而导致
@@ -101,7 +102,9 @@ public class PoolManagement {
             poolMap.put(poolId, pool);
             return pool;
         }else{
-            throw new RedisConnectionException(ExceptionInfo.POOL_NOT_AVAILABLE,new Exception("该连接不可用"),PoolManagement.class);
+            // 如果不可用就销毁掉
+            pool.destroyPool();
+            throw new RedisConnectionException(ExceptionInfo.POOL_NOT_AVAILABLE,PoolManagement.class);
         }
     }
 

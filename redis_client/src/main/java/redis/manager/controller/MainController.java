@@ -1,8 +1,13 @@
 package redis.manager.controller;
 
 import com.redis.assemble.key.RedisKey;
+import com.redis.common.exception.ClientExceptionInfo;
+import com.redis.common.exception.NoticeInfo;
 import com.redis.common.exception.ReadConfigException;
-import com.redis.config.*;
+import com.redis.config.Configs;
+import com.redis.config.PoolManagement;
+import com.redis.config.PropertyFile;
+import com.redis.config.RedisPoolProperty;
 import com.redis.utils.MythReflect;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -71,8 +76,8 @@ public class MainController {
                             try {
                                 createSecondNode(selectedItem);
                             } catch (Exception e) {
-                                System.out.println("打开连接失败::::");
                                 logger.error("打开连接失败");
+                                logger.debug(NoticeInfo.ERROR_INFO,e);
                             }
                             break;
 
@@ -165,8 +170,12 @@ public class MainController {
         poolManagement.switchPool(poolId);
 
         treeItem.setContextMenuPoolManager(poolManagement);
-        RedisPools redisPools = poolManagement.getRedisPool();
-        int num = redisPools.getDatabaseNum();
+        int num=0;
+        try {
+            num= poolManagement.getRedisPool().getDatabaseNum();
+        }catch (Exception e){
+            logger.error(ClientExceptionInfo.CONNECTION_UNUSABLE);
+        }
         // 清除所有的孩子节点
         int childNum = treeItem.getChildren().size();
         treeItem.getChildren().remove(0, childNum);
