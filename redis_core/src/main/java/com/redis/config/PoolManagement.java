@@ -76,26 +76,16 @@ public class PoolManagement {
             logger.info(NoticeInfo.MAP_CONTAIN_POOL +poolId+"内存中连接池 : "+poolMap.size());
             return poolMap.get(poolId);
         }
-        try {
-            configFile = PropertyFile.getProperties(propertyFile);
-        } catch (IOException e) {
-//            e.printStackTrace();
-           throw new ReadConfigException(ExceptionInfo.OPEN_CONFIG_FAILED+propertyFile,e,PoolManagement.class);
-        }
-
-        String pre = poolId+ Configs.SEPARATE;//前缀
-        RedisPoolProperty poolProperty;
+        configFile = PropertyFile.getProperties(propertyFile);
         // 如果没有这个id的存在,就新建一个
-        if(Objects.equals(configFile.getString(pre + Configs.NAME), RunStatus.PROPERTY_IS_NULL)){
+        if(Objects.equals(configFile.getString(poolId+ Configs.SEPARATE + Configs.NAME), RunStatus.PROPERTY_IS_NULL)){
             throw new RedisConnectionException(ExceptionInfo.POOL_NOT_EXIST_CONFIG,PoolManagement.class);
             //@TODO 处理这种连接不存在的情况
             // 一般，连接的显示是从配置文件中加载的，是不会出现面板上有连接，而配置文件中没有的情况 除非是在客户端，删除了连接，没有刷新客户端缓存而导致
-        }else {
-            pool = new RedisPools();//新建连接池对象
-            poolProperty = RedisPoolProperty.initByIdFromConfig(poolId);
-            pool.setProperty(poolProperty);
         }
-        pool.initialPool();
+        pool = new RedisPools();//新建连接池对象
+        RedisPoolProperty poolProperty = RedisPoolProperty.initByIdFromConfig(poolId);
+        pool.initialPool(poolProperty);
         logger.info("实例化连接池 "+poolId+" - "+pool.toString());
         logger.debug("实例化的配置："+poolProperty.toString());
         if(pool.available()) {

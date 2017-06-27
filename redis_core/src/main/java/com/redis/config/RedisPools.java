@@ -53,6 +53,15 @@ public class RedisPools{
         }
     }
 
+    /**
+     * 初始化连接池
+     * @param property 属性对象
+     */
+    protected void initialPool(RedisPoolProperty property){
+        setProperty(property);
+        initialPool();
+    }
+
 //    /**
 //     * 在多线程环境同步初始化
 //     * 关于这个加锁的问题要考虑，目前还没有合适的场景

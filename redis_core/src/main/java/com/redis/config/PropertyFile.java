@@ -1,6 +1,7 @@
 package com.redis.config;
 
 import com.redis.common.exception.ExceptionInfo;
+import com.redis.common.exception.NoticeInfo;
 import com.redis.common.exception.ReadConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,8 @@ public class PropertyFile {
         try {
             is = new BufferedInputStream(new FileInputStream(propertyFile));
         } catch (FileNotFoundException e) {
+            logger.error(ExceptionInfo.OPEN_CONFIG_FAILED+propertyFile);
+            logger.debug(NoticeInfo.ERROR_INFO,e);
             throw new IllegalArgumentException();
         }
         props.load(is);
