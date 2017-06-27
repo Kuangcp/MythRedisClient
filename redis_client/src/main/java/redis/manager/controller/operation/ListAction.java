@@ -3,19 +3,10 @@ package redis.manager.controller.operation;
 import com.redis.common.exception.ActionErrorException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import redis.manager.controller.ListAddController;
+import javafx.scene.control.*;
+import redis.manager.compont.alert.MyAlert;
 import redis.manager.controller.operation.panel.ShowPanel;
 import redis.manager.entity.TableEntity;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import static redis.manager.Main.redisList;
@@ -79,7 +70,7 @@ public class ListAction extends ShowPanel implements DoAction {
                 try {
                     redisList.setByIndex(key, nowSelectRow, value);
                 } catch (ActionErrorException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
                     alert.setTitle("错误");
                     alert.setHeaderText("");
                     alert.setContentText("设置失败");
@@ -88,7 +79,7 @@ public class ListAction extends ShowPanel implements DoAction {
                 controller = null;
             }
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
             alert.setTitle("错误");
             alert.setHeaderText("");
             alert.setContentText("请选择一个键");
@@ -115,7 +106,41 @@ public class ListAction extends ShowPanel implements DoAction {
      */
     @Override
     public void delValue(String key) {
-        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert confirmAlert = MyAlert.getInstance(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("提示");
+        confirmAlert.setHeaderText("");
+        confirmAlert.setContentText("将删除显示的最后一个数据");
+        Optional<ButtonType> opt = confirmAlert.showAndWait();
+        ButtonType rtn = opt.get();
+        if (rtn == ButtonType.OK) {
+            // 确定
+            redisList.rPop(key);
+        }
+    }
+
+    /**
+     * 左添加值.
+     *
+     * @param key 数据库中的键
+     */
+    @Override
+    public void leftAddValue(String key) {
+        boolean ok = showValuePanel();
+        if (ok) {
+            String value = controller.getValue();
+            redisList.lPush(key, value);
+        }
+        controller = null;
+    }
+
+    /**
+     * 左删除值.
+     *
+     * @param key 数据库中的键
+     */
+    @Override
+    public void leftDelValue(String key) {
+        Alert confirmAlert = MyAlert.getInstance(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("提示");
         confirmAlert.setHeaderText("");
         confirmAlert.setContentText("将删除显示的第一个数据");

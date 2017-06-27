@@ -1,24 +1,25 @@
 package redis.manager.controller.operation;
 
+import com.redis.common.exception.ActionErrorException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import redis.manager.compont.alert.MyAlert;
 import redis.manager.controller.operation.panel.ShowPanel;
 import redis.manager.entity.TableEntity;
-import java.util.Optional;
-import java.util.Set;
-import static redis.manager.Main.redisSet;
+
+import java.util.List;
+
+import static redis.manager.Main.redisList;
 
 /**
- * 集合操作.
+ * String类型的操作.
  * User: huang
- * Date: 17-6-26
+ * Date: 17-6-27
  */
-public class SetAction extends ShowPanel implements DoAction {
+public class StringAction extends ShowPanel implements DoAction {
 
     /** 数据显示表格. */
     private TableView<TableEntity> dataTable;
@@ -29,7 +30,7 @@ public class SetAction extends ShowPanel implements DoAction {
     /** 表格值. */
     private TableColumn<TableEntity, String> valueColumn;
 
-    public SetAction(TableView dataTable,
+    public StringAction(TableView dataTable,
                       TableColumn rowColumn, TableColumn keyColumn, TableColumn valueColumn) {
         this.dataTable = dataTable;
         this.rowColumn = rowColumn;
@@ -45,13 +46,9 @@ public class SetAction extends ShowPanel implements DoAction {
     @Override
     public void setValue(String key) {
         ObservableList<TableEntity> values = FXCollections.observableArrayList();
-        Set<String> sets = redisSet.getMembersSet(key);
-        int i = 0;
-        for (String set : sets) {
-            TableEntity value = new TableEntity("" + i, key, set);
-            values.add(value);
-            i++;
-        }
+        String value = redisKey.getJedis().get(key);
+        TableEntity tableValue = new TableEntity("" + 1, key, value);
+        values.add(tableValue);
         this.dataTable.setItems(values);
         this.rowColumn.setCellValueFactory(cellData -> cellData.getValue().rowProperty());
         this.keyColumn.setCellValueFactory(cellData -> cellData.getValue().keyProperty());
@@ -59,19 +56,20 @@ public class SetAction extends ShowPanel implements DoAction {
     }
 
     /**
-     * 修改数据.
+     * 修改值.
      *
      * @param key          数据库中的键
-     * @param nowSelectRow 当前选择的行
+     * @param nowSelectRow 当前选择的值
      * @param selected     是否选择值
      */
     @Override
     public void setValueByIndex(String key, int nowSelectRow, boolean selected) {
-        Alert alert = MyAlert.getInstance(Alert.AlertType.WARNING);
-        alert.setTitle("提示");
-        alert.setHeaderText("");
-        alert.setContentText("集合不支持此操作");
-        alert.showAndWait();
+        boolean ok = showValuePanel();
+        if (ok) {
+            String value = controller.getValue();
+            redisKey.getJedis().set(key, value);
+            controller = null;
+        }
     }
 
     /**
@@ -81,12 +79,7 @@ public class SetAction extends ShowPanel implements DoAction {
      */
     @Override
     public void addValue(String key) {
-        boolean ok = showValuePanel();
-        if (ok) {
-            String value = controller.getValue();
-            redisSet.add(key, value);
-        }
-        controller = null;
+
     }
 
     /**
@@ -96,16 +89,7 @@ public class SetAction extends ShowPanel implements DoAction {
      */
     @Override
     public void delValue(String key) {
-        Alert confirmAlert = MyAlert.getInstance(Alert.AlertType.CONFIRMATION);
-        confirmAlert.setTitle("提示");
-        confirmAlert.setHeaderText("");
-        confirmAlert.setContentText("将随机删除一个值");
-        Optional<ButtonType> opt = confirmAlert.showAndWait();
-        ButtonType rtn = opt.get();
-        if (rtn == ButtonType.OK) {
-            // 确定
-            redisSet.pop(key);
-        }
+
     }
 
     /**
@@ -127,5 +111,4 @@ public class SetAction extends ShowPanel implements DoAction {
     public void leftDelValue(String key) {
 
     }
-
 }

@@ -9,10 +9,8 @@ import com.redis.config.PoolManagement;
 import com.redis.config.PropertyFile;
 import com.redis.config.RedisPoolProperty;
 import com.redis.utils.MythReflect;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,8 +18,7 @@ import redis.manager.Main;
 import redis.manager.compont.MyContextMenu;
 import redis.manager.compont.MyTab;
 import redis.manager.compont.MyTreeItem;
-
-import javax.sound.midi.Soundbank;
+import redis.manager.compont.alert.MyAlert;
 import java.util.Map;
 import java.util.Set;
 
@@ -54,11 +51,11 @@ public class MainController {
         try {
             setTreeView();
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
             alert.setTitle("错误");
             alert.setHeaderText("");
             alert.setContentText("连接显示错误");
-            alert.show();
+            alert.showAndWait();
         }
 
         // 监听选择的节点
@@ -239,7 +236,7 @@ public class MainController {
                 treeItem.addSecondChild(childThrid);
             }
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
             alert.setTitle("错误");
             alert.setHeaderText("");
             alert.setContentText("数据库定位出错");

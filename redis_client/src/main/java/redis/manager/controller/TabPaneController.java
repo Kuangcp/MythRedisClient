@@ -17,6 +17,7 @@ import redis.manager.Main;
 import redis.manager.controller.operation.DoAction;
 import redis.manager.controller.operation.ListAction;
 import redis.manager.controller.operation.SetAction;
+import redis.manager.controller.operation.StringAction;
 import redis.manager.entity.TableEntity;
 
 import java.io.IOException;
@@ -56,6 +57,21 @@ public class TabPaneController {
     /** 选中的值的显示. */
     @FXML
     private TextArea valueShowText;
+    /** 左添加按钮. */
+    @FXML
+    private Button leftAddBtn;
+    /** 添加按钮. */
+    @FXML
+    private Button addRowBtn;
+    /** 删除一行数据. */
+    @FXML
+    private Button delRowBtn;
+    /** 左删除按钮. */
+    @FXML
+    private Button leftDelBtn;
+    /** 修改值按钮. */
+    @FXML
+    private Button setValueBtn;
     /** 当前选择的行. */
     private int nowSelectRow;
     /** 是否选择. */
@@ -112,7 +128,8 @@ public class TabPaneController {
      */
     @FXML
     private void addRow() {
-        addValue();
+        doAction.addValue(key);
+        reloadValue();
     }
 
     /**
@@ -120,7 +137,8 @@ public class TabPaneController {
      */
     @FXML
     private void delRow() {
-        delValue();
+        doAction.delValue(key);
+        reloadValue();
     }
 
     /**
@@ -129,6 +147,24 @@ public class TabPaneController {
     @FXML
     public void reloadValue() {
         setValue();
+    }
+
+    /**
+     * 左添加数据.
+     */
+    @FXML
+    private void leftAddValue() {
+        doAction.leftAddValue(key);
+        reloadValue();
+    }
+
+    /**
+     * 左删除数据.
+     */
+    @FXML
+    private void leftDelValue() {
+        doAction.leftDelValue(key);
+        reloadValue();
     }
 
     /**
@@ -158,7 +194,8 @@ public class TabPaneController {
     /** 设置制定位置的键对应的值. */
     @FXML
     private void setListValue() {
-            setValueByIndex();
+        doAction.setValueByIndex(key, nowSelectRow, selected);
+        reloadValue();
     }
 
     public void setKey(String key) {
@@ -174,11 +211,24 @@ public class TabPaneController {
         typeText.setText(type);
         switch (type) {
             case "list" :
+                addRowBtn.setText("Right Add");
+                delRowBtn.setText("Right Del");
                 doAction = new ListAction(dataTable, rowColumn, keyColumn, valueColumn);
                 break;
 
             case "set" :
+                leftAddBtn.setDisable(true);
+                leftDelBtn.setDisable(true);
+                setValueBtn.setDisable(true);
                 doAction = new SetAction(dataTable, rowColumn, keyColumn, valueColumn);
+                break;
+
+            case "string" :
+                leftDelBtn.setDisable(true);
+                leftAddBtn.setDisable(true);
+                addRowBtn.setDisable(true);
+                delRowBtn.setDisable(true);
+                doAction = new StringAction(dataTable, rowColumn, keyColumn, valueColumn);
                 break;
 
             default:
@@ -191,35 +241,15 @@ public class TabPaneController {
                     public void addValue(String key) {}
                     @Override
                     public void delValue(String key) {}
+                    @Override
+                    public void leftAddValue(String key) {}
+                    @Override
+                    public void leftDelValue(String key) {}
                 };
                 break;
         }
 
         doAction.setValue(key);
     }
-
-
-    /**
-     * 修改列表对应键的值.
-     */
-    private void setValueByIndex() {
-        doAction.setValueByIndex(key, nowSelectRow, selected);
-        reloadValue();
-    }
-
-    /**
-     * 添加列表的值.
-     */
-    private void addValue() {
-        doAction.addValue(key);
-        reloadValue();
-    }
-
-    /** 删除值, 删除显示的第一个值. */
-    private void delValue() {
-        doAction.delValue(key);
-        reloadValue();
-    }
-
 
 }
