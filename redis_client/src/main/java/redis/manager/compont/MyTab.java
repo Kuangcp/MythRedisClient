@@ -14,6 +14,7 @@ import java.io.IOException;
  * Date: 17-6-9
  */
 public class MyTab extends Tab {
+    private FXMLLoader loader;
 
     public MyTab(String title) {
         super(title);
@@ -23,7 +24,7 @@ public class MyTab extends Tab {
      * 初始化设置, 添加一个特定的Pane.
      */
     public void init() {
-        FXMLLoader loader = new FXMLLoader();
+        loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("/views/TabPaneLayout.fxml"));
         try {
             AnchorPane tabPane = loader.load();
@@ -35,5 +36,7 @@ public class MyTab extends Tab {
         }
     }
 
-
+    public FXMLLoader getLoader() {
+        return loader;
+    }
 }

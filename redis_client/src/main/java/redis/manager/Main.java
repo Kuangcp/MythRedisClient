@@ -55,6 +55,9 @@ public class Main extends Application {
 
         Scene scene = new Scene(rootLayout);
         this.primaryStage.setScene(scene);
+        this.primaryStage.setWidth(1300);
+        this.primaryStage.setHeight(700);
+        this.primaryStage.setResizable(false);
         this.primaryStage.show();
 
     }

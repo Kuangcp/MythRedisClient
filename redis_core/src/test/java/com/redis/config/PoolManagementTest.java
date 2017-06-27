@@ -33,16 +33,16 @@ public class PoolManagementTest {
         poolManagement.setCurrentPoolId(PropertyFile.getMaxId()+"");
 
         property = new RedisPoolProperty();
-        property.setHost("127.0.0.1");
-//        property.setHost("120.25.203.47");
+//        property.setHost("127.0.0.1");
+        property.setHost("120.25.203.47");
         property.setMaxActive(400);
         property.setMaxIdle(100);
         property.setMaxWaitMills(10000);//等待连接超时时间
-//        property.setTestOnBorrow(false);// 如果设置密码就必须是false
-        property.setTestOnBorrow(true);// 没有密码就最好使用true
-        property.setName("6379 本地");
-        property.setPort(6379);
-//        property.setPassword("myth");
+        property.setTestOnBorrow(false);// 如果设置密码就必须是false
+//        property.setTestOnBorrow(true);// 没有密码就最好使用true
+        property.setName("6380 远程 1 ");
+        property.setPort(6380);
+        property.setPassword("myth");
         property.setTimeout(600);//读取超时时间
     }
 

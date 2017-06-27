@@ -9,8 +9,10 @@ import com.redis.config.PoolManagement;
 import com.redis.config.PropertyFile;
 import com.redis.config.RedisPoolProperty;
 import com.redis.utils.MythReflect;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -54,7 +56,9 @@ public class MainController {
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("错误");
-            alert.setHeaderText("连接显示错误");
+            alert.setHeaderText("");
+            alert.setContentText("连接显示错误");
+            alert.show();
         }
 
         // 监听选择的节点
@@ -96,7 +100,13 @@ public class MainController {
         // 监听tab选择
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    TabPaneController.key = newValue.getText();
+                    if (newValue != null) {
+                        TabPaneController.key = newValue.getText();
+                        String poolId = newValue.getId();
+                        poolId = poolId.substring(0, poolId.indexOf("."));
+                        TabPaneController.poolId = poolId;
+                        ((TabPaneController)((MyTab) newValue).getLoader().getController()).reloadValue();
+                    }
                 }
         );
     }
@@ -105,9 +115,9 @@ public class MainController {
      * 添加标签页.
      */
     @FXML
-    private void addTab(String tabId, String name) {
+    private void addTab(String tabId, String name, int dbId) {
         TabPaneController.key = name;
-
+        redisKey.setDb(dbId);
         // 创建新标签
         MyTab tab = new MyTab(name);
         tab.setId(tabId);
@@ -208,6 +218,8 @@ public class MainController {
      * @param treeItem 数据库节点
      */
     private void createThridNode(MyTreeItem<Label> treeItem) {
+        String poolId = treeItem.getParent().getValue().getAccessibleText();
+        poolManagement.switchPool(poolId);
 
         String dbId = treeItem.getValue().getAccessibleText();
         int id = 0;
@@ -218,7 +230,6 @@ public class MainController {
             int childSize = treeItem.getChildren().size();
             treeItem.getChildren().remove(0, childSize);
             for (String key : keys) {
-//                logger.debug(" 每个键 ：  "+key);
                 Label thridLabel = new Label(key);
                 thridLabel.setAccessibleHelp("key");
                 MyTreeItem<Label> childThrid = new MyTreeItem<>(thridLabel);
@@ -230,7 +241,8 @@ public class MainController {
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("错误");
-            alert.setHeaderText("数据库定位出错");
+            alert.setHeaderText("");
+            alert.setContentText("数据库定位出错");
             alert.show();
         }
     }
@@ -244,8 +256,10 @@ public class MainController {
         String name = treeItem.getValue().getText();
         String dbId = treeItem.getParent().getValue().getAccessibleText();
         String poolId = treeItem.getParent().getParent().getValue().getAccessibleText();
-        String tabId = poolId + dbId + name;
+        String tabId = poolId + "." + dbId + name;
         main.setSelectedKey(name);
+        poolManagement.switchPool(poolId);
+        TabPaneController.poolId = poolId;
         for (Tab tab : tabPane.getTabs()) {
             if (tabId.equals(tab.getId())) {
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
@@ -254,8 +268,8 @@ public class MainController {
             }
         }
         if (ok) {
-
-            addTab(tabId, name);
+            int id = Integer.parseInt(dbId);
+            addTab(tabId, name, id);
         }
     }
 

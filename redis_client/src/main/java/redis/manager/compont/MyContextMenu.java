@@ -5,6 +5,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeView;
 import redis.manager.compont.menu.ConnectDelMenu;
+import redis.manager.compont.menu.DestroyMenu;
 import redis.manager.compont.menu.MyMenuItem;
 
 /**
@@ -38,6 +39,7 @@ public class MyContextMenu extends ContextMenu {
 
         // TODO 添加一级节点的上下文菜单内容
         this.getItems().add(new ConnectDelMenu(treeView));
+        this.getItems().add(new DestroyMenu(treeView));
     }
 
     /**

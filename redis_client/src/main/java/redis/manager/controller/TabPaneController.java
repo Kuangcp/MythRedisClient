@@ -33,6 +33,7 @@ public class TabPaneController {
 
     private RedisKey redisKey = Main.redisKey;
     public static  String key;
+    public static String poolId;
 
     /** 数据显示表格. */
     @FXML
@@ -59,10 +60,6 @@ public class TabPaneController {
     private int nowSelectRow;
     /** 是否选择. */
     private boolean selected;
-    /** 提示框. */
-    private Alert alert = new Alert(Alert.AlertType.ERROR);
-
-    private ListAddController controller;
     private DoAction doAction;
 
 
@@ -130,7 +127,7 @@ public class TabPaneController {
      * 重新加载数据.
      */
     @FXML
-    private void reloadValue() {
+    public void reloadValue() {
         setValue();
     }
 
@@ -172,6 +169,7 @@ public class TabPaneController {
      * 装载面板数据.
      */
     private void setValue() {
+        redisKey.getManagement().switchPool(poolId);
         String type = redisKey.type(key);
         typeText.setText(type);
         switch (type) {
