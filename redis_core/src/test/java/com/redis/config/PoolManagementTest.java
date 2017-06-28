@@ -40,8 +40,8 @@ public class PoolManagementTest {
         property.setMaxWaitMills(10000);//等待连接超时时间
         property.setTestOnBorrow(false);// 如果设置密码就必须是false
 //        property.setTestOnBorrow(true);// 没有密码就最好使用true
-        property.setName("6378 远程 3");
-        property.setPort(6378);
+        property.setName("6380 远程 1 ");
+        property.setPort(6380);
         property.setPassword("myth");
         property.setTimeout(600);//读取超时时间
     }

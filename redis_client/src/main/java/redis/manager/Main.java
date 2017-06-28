@@ -55,6 +55,9 @@ public class Main extends Application {
 
         Scene scene = new Scene(rootLayout);
         this.primaryStage.setScene(scene);
+        this.primaryStage.setWidth(1300);
+        this.primaryStage.setHeight(700);
+        this.primaryStage.setResizable(false);
         this.primaryStage.show();
 
     }
@@ -118,15 +121,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args ) throws ReadConfigException {
-
         management.setCurrentPoolId(PropertyFile.getMaxId()+"");
-//        PoolManagement management;
-//        management = (PoolManagement)context.getBean("poolManagement");
-//        System.out.println("Spring : "+management);
-        //management.getRedisPool().getJedis().keys("*");
-//        new RedisKey().getJedis().keys("*");
-
-//        ConnectController d = (ConnectController) context.getBean("connectController");
         launch(args);
 
     }

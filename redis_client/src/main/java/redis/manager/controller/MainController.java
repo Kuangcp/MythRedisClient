@@ -10,6 +10,7 @@ import com.redis.config.PoolManagement;
 import com.redis.config.PropertyFile;
 import com.redis.config.RedisPoolProperty;
 import com.redis.utils.MythReflect;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.slf4j.Logger;
@@ -19,7 +20,10 @@ import redis.manager.Main;
 import redis.manager.compont.MyContextMenu;
 import redis.manager.compont.MyTab;
 import redis.manager.compont.MyTreeItem;
-
+import redis.manager.compont.alert.MyAlert;
+import redis.manager.compont.menu.DelMenu;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,17 +35,15 @@ import java.util.Set;
 @Component
 public class MainController {
     private static Logger logger = LoggerFactory.getLogger(MainController.class);
-
     private PoolManagement poolManagement = Main.management;
-
     private RedisKey redisKey = Main.redisKey;
-
+    public static List<String> allKeys = new ArrayList<>();
+    public static ObservableList<Tab> tabs;
     @FXML
     private TabPane tabPane;
     /** 左侧树. */
     @FXML
     private TreeView<Label> treeView;
-
     private Main main;
 
     /**
@@ -49,14 +51,15 @@ public class MainController {
      */
     @FXML
     private void initialize() {
+        treeView.setStyle("-fx-font-size: 12px");
         try {
             setTreeView();
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
             alert.setTitle("错误");
-            alert.setHeaderText("连接显示错误");
+            alert.setContentText("连接显示错误");
+            alert.showAndWait();
         }
-
         // 监听选择的节点
         treeView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -96,7 +99,15 @@ public class MainController {
         // 监听tab选择
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    TabPaneController.key = newValue.getText();
+                    if (newValue != null) {
+                        TabPaneController.key = newValue.getText();
+                        String id = newValue.getId();
+                        String poolId = id.substring(0, id.indexOf("."));
+                        TabPaneController.poolId = poolId;
+                        int dbId = Integer.parseInt(id.substring(id.indexOf(".") + 1, id.lastIndexOf(".")));
+                        redisKey.setDb(dbId);
+                        ((TabPaneController)((MyTab) newValue).getLoader().getController()).reloadValue();
+                    }
                 }
         );
     }
@@ -105,13 +116,11 @@ public class MainController {
      * 添加标签页.
      */
     @FXML
-    private void addTab(String tabId, String name) {
+    private void addTab(String tabId, String name, int dbId) {
         TabPaneController.key = name;
-
         // 创建新标签
         MyTab tab = new MyTab(name);
         tab.setId(tabId);
-
         tab.init();
         // 设置tab的关闭按钮
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
@@ -142,7 +151,6 @@ public class MainController {
      * 设置面板左侧树状图.
      */
     private void setTreeView() throws ReadConfigException, IllegalAccessException {
-
         MyTreeItem<Label> root = new MyTreeItem<>(new Label("连接"));
         // 默认展开
         root.setExpanded(true);
@@ -154,7 +162,6 @@ public class MainController {
             // 创建一级子节点
             Label firstLabel = new Label((String) lists.get(Configs.NAME));
             firstLabel.setAccessibleHelp("link");
-//            System.out.println(firstLabel.getAccessibleHelp());
             // 将连接的ID保存
             firstLabel.setAccessibleText((String) lists.get(Configs.POOL_ID));
 //            System.out.println((String) lists.get(Configs.POOL_ID));
@@ -178,8 +185,6 @@ public class MainController {
 
         String poolId = treeItem.getValue().getAccessibleText();
         poolManagement.switchPool(poolId);
-
-        treeItem.setContextMenuPoolManager(poolManagement);
         int num=0;
         try {
             num= poolManagement.getRedisPool().getDatabaseNum();
@@ -194,6 +199,7 @@ public class MainController {
         }
         // 清除所有的孩子节点
         int childNum = treeItem.getChildren().size();
+        System.out.println(childNum);
         treeItem.getChildren().remove(0, childNum);
         for (int i = 0; i < num; i++) {
             Label secondLable = new Label("数据库 " + i);
@@ -214,17 +220,22 @@ public class MainController {
      * @param treeItem 数据库节点
      */
     private void createThridNode(MyTreeItem<Label> treeItem) {
-
+        String poolId = treeItem.getParent().getValue().getAccessibleText();
+        poolManagement.switchPool(poolId);
+        for (int i = 0; i < allKeys.size(); i++) {
+            allKeys.remove(i);
+        }
+        tabs = tabPane.getTabs();
         String dbId = treeItem.getValue().getAccessibleText();
         int id = 0;
         try{
-             id = Integer.parseInt(dbId);
+            id = Integer.parseInt(dbId);
             Set<String> keys = redisKey.listAllKeys(id);
             // 清楚所有的子节点
             int childSize = treeItem.getChildren().size();
+            System.out.println("SIZRE::" + childSize);
             treeItem.getChildren().remove(0, childSize);
             for (String key : keys) {
-//                logger.debug(" 每个键 ：  "+key);
                 Label thridLabel = new Label(key);
                 thridLabel.setAccessibleHelp("key");
                 MyTreeItem<Label> childThrid = new MyTreeItem<>(thridLabel);
@@ -232,12 +243,13 @@ public class MainController {
                 thridMenu.setThirdChildMenu();
                 childThrid.setContextMenu(thridMenu);
                 treeItem.addSecondChild(childThrid);
+                allKeys.add(key);
             }
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
             alert.setTitle("错误");
-            alert.setHeaderText("数据库定位出错");
-            alert.show();
+            alert.setContentText("数据库定位出错");
+            alert.showAndWait();
         }
     }
 
@@ -250,8 +262,12 @@ public class MainController {
         String name = treeItem.getValue().getText();
         String dbId = treeItem.getParent().getValue().getAccessibleText();
         String poolId = treeItem.getParent().getParent().getValue().getAccessibleText();
-        String tabId = poolId + dbId + name;
+        String tabId = poolId + "." + dbId + "." + name;
         main.setSelectedKey(name);
+        poolManagement.switchPool(poolId);
+        TabPaneController.poolId = poolId;
+        int id = Integer.parseInt(dbId);
+        redisKey.setDb(id);
         for (Tab tab : tabPane.getTabs()) {
             if (tabId.equals(tab.getId())) {
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
@@ -260,8 +276,7 @@ public class MainController {
             }
         }
         if (ok) {
-
-            addTab(tabId, name);
+            addTab(tabId, name, id);
         }
     }
 

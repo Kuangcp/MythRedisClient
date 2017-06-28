@@ -56,12 +56,5 @@ public class MyTreeItem<T> extends TreeItem<T> {
         }
     }
 
-    /**
-     * 设置上下文菜单的PoolManager.
-     * @param menuPoolManager PoolManager
-     */
-    public void setContextMenuPoolManager(PoolManagement menuPoolManager) {
-        ((MyContextMenu)((Label)this.getValue()).getContextMenu()).setPoolManagement(menuPoolManager);
-    }
 
 }

@@ -14,7 +14,6 @@ public class ListAddController {
 
     private Stage dialogStage;
     private boolean okChecked = false;
-
     /** 值输入框. */
     @FXML
     private TextField valueText;
