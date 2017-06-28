@@ -9,6 +9,7 @@ import com.redis.config.PoolManagement;
 import com.redis.config.PropertyFile;
 import com.redis.config.RedisPoolProperty;
 import com.redis.utils.MythReflect;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.slf4j.Logger;
@@ -21,6 +22,8 @@ import redis.manager.compont.MyTreeItem;
 import redis.manager.compont.alert.MyAlert;
 import redis.manager.compont.menu.DelMenu;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,8 +37,9 @@ public class MainController {
     private static Logger logger = LoggerFactory.getLogger(MainController.class);
 
     private PoolManagement poolManagement = Main.management;
-
     private RedisKey redisKey = Main.redisKey;
+    public static List<String> allKeys = new ArrayList<>();
+    public static ObservableList<Tab> tabs;
 
     @FXML
     private TabPane tabPane;
@@ -221,7 +225,10 @@ public class MainController {
     private void createThridNode(MyTreeItem<Label> treeItem) {
         String poolId = treeItem.getParent().getValue().getAccessibleText();
         poolManagement.switchPool(poolId);
-
+        for (int i = 0; i < allKeys.size(); i++) {
+            allKeys.remove(i);
+        }
+        tabs = tabPane.getTabs();
         String dbId = treeItem.getValue().getAccessibleText();
         int id = 0;
         try{
@@ -239,13 +246,13 @@ public class MainController {
                 thridMenu.setThirdChildMenu();
                 childThrid.setContextMenu(thridMenu);
                 treeItem.addSecondChild(childThrid);
+                allKeys.add(key);
             }
         } catch (Exception e) {
-            /*Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
+            Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
             alert.setTitle("错误");
             alert.setContentText("数据库定位出错");
-            alert.showAndWait();*/
-            e.printStackTrace();
+            alert.showAndWait();
         }
     }
 

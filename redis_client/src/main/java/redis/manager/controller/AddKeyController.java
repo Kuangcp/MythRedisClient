@@ -121,6 +121,13 @@ public class AddKeyController {
             alert.showAndWait();
             return false;
         }
+        for (String key : MainController.allKeys) {
+            if (nameText.getText().trim().equals(key)) {
+                alert.setContentText("已存在该键");
+                alert.showAndWait();
+                return false;
+            }
+        }
         return true;
     }
 
