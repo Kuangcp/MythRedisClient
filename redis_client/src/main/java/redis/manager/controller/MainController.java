@@ -35,18 +35,15 @@ import java.util.Set;
 @Component
 public class MainController {
     private static Logger logger = LoggerFactory.getLogger(MainController.class);
-
     private PoolManagement poolManagement = Main.management;
     private RedisKey redisKey = Main.redisKey;
     public static List<String> allKeys = new ArrayList<>();
     public static ObservableList<Tab> tabs;
-
     @FXML
     private TabPane tabPane;
     /** 左侧树. */
     @FXML
     private TreeView<Label> treeView;
-
     private Main main;
 
     /**
@@ -60,11 +57,9 @@ public class MainController {
         } catch (Exception e) {
             Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
             alert.setTitle("错误");
-            alert.setHeaderText("");
             alert.setContentText("连接显示错误");
             alert.showAndWait();
         }
-
         // 监听选择的节点
         treeView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -123,11 +118,9 @@ public class MainController {
     @FXML
     private void addTab(String tabId, String name, int dbId) {
         TabPaneController.key = name;
-
         // 创建新标签
         MyTab tab = new MyTab(name);
         tab.setId(tabId);
-
         tab.init();
         // 设置tab的关闭按钮
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
@@ -158,7 +151,6 @@ public class MainController {
      * 设置面板左侧树状图.
      */
     private void setTreeView() throws ReadConfigException, IllegalAccessException {
-
         MyTreeItem<Label> root = new MyTreeItem<>(new Label("连接"));
         // 默认展开
         root.setExpanded(true);
@@ -193,7 +185,6 @@ public class MainController {
 
         String poolId = treeItem.getValue().getAccessibleText();
         poolManagement.switchPool(poolId);
-
         int num=0;
         try {
             num= poolManagement.getRedisPool().getDatabaseNum();

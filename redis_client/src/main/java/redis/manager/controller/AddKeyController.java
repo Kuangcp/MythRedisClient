@@ -40,12 +40,12 @@ public class AddKeyController {
     @FXML
     private void initialize() {
         typeBox.setValue("STRING");
-
         // 监听类型的输入
         typeBox.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     String type = typeBox.getValue().trim();
-                    if ("HASH".equals(type) || "hash".equals(type) || "ZSET".equals(type) || "zset".equals(type)) {
+                    if ("HASH".equals(type) || "hash".equals(type)
+                            || "ZSET".equals(type) || "zset".equals(type)) {
                         hashKeyText.setDisable(false);
                         return;
                     }

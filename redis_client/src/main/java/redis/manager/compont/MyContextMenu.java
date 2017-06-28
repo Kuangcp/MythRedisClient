@@ -17,7 +17,6 @@ import redis.manager.compont.menu.MyMenuItem;
 public class MyContextMenu extends ContextMenu {
 
     private TreeView treeView;
-    private PoolManagement poolManagement;
 
     public MyContextMenu() {
 
@@ -38,7 +37,6 @@ public class MyContextMenu extends ContextMenu {
     public void setFirstChileMenu() {
         setEmpty();
 
-        // TODO 添加一级节点的上下文菜单内容
         this.getItems().add(new DelMenu(treeView));
         this.getItems().add(new DestroyMenu(treeView));
     }
@@ -48,7 +46,7 @@ public class MyContextMenu extends ContextMenu {
      */
     public void setSecondChildMenu() {
         setEmpty();
-        // TODO 添加二级节点的上下文菜单内容
+
         this.getItems().add(new CreateKeyMenu(treeView));
 
     }
@@ -59,7 +57,6 @@ public class MyContextMenu extends ContextMenu {
     public void setThirdChildMenu() {
         setEmpty();
 
-        // TODO 添加三级节点的上下文菜单内容
         this.getItems().add(new DelMenu(treeView));
     }
 

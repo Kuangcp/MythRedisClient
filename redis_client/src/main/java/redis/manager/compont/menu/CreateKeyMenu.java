@@ -40,7 +40,6 @@ public class CreateKeyMenu extends MyMenuItem {
                     TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
                     String flag = item.getValue().getAccessibleHelp();
                     if ("db".equals(flag)) {
-                        String dbId = item.getValue().getAccessibleText();
                         showPanel(treeView, item);
                     }
                 }

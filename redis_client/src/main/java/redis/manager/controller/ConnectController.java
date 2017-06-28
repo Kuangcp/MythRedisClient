@@ -27,7 +27,6 @@ public class ConnectController {
     private PoolManagement poolManagement = Main.management;
     private Stage dialogStage;
     private boolean okChecked = false;
-
     /** 最大连接数输入框. */
     @FXML
     private TextField maxActiveText;
@@ -52,7 +51,6 @@ public class ConnectController {
     /** 密码确认框. */
     @FXML
     private PasswordField repasswordText;
-
     /** 最大连接数输入提醒. */
     @FXML
     private Label maxActiveLabel;
@@ -73,7 +71,6 @@ public class ConnectController {
     private Label resultLabel;
     @FXML
     private TreeView<Label> treeView;
-
     /** 最大连接数输入是否为数字. */
     private final boolean[] isNumActive = {false};
     /** 最大闲置数输入是否为数字. */
@@ -93,7 +90,6 @@ public class ConnectController {
     @FXML
     private void initialize() {
         resultLabel.setTextFill(Color.RED);
-
         // 监听最大连接数输入
         textChangeListener(maxActiveText, maxActiveLabel, isNumActive);
         // 监听最大闲置数输入
@@ -130,7 +126,6 @@ public class ConnectController {
                 dialogStage.close();
                 return;
             }
-
             resultLabel.setText("配置错误");
         }
 
@@ -236,14 +231,6 @@ public class ConnectController {
                     ok[0] = true;
                 }
         );
-    }
-
-    public PoolManagement getPoolManagement() {
-        return poolManagement;
-    }
-
-    public void setPoolManagement(PoolManagement poolManagement) {
-        this.poolManagement = poolManagement;
     }
 
     /**
