@@ -12,7 +12,7 @@ import java.util.Set;
  */
 @Component
 public class RedisSortSet extends Commands {
-    // TODO 有序的set
+
 
     /**
      *
@@ -21,7 +21,7 @@ public class RedisSortSet extends Commands {
      * @param member 成员，当已存在时，更新对应的分数
      * @return 1/0 成功/失败
      */
-    public Long add(String key, Double score, String member){
+    public Long save(String key, Double score, String member){
         return getJedis().zadd(key, score,member);
     }
     /**按小到大排序，相同时，先插入在前*/
@@ -32,9 +32,30 @@ public class RedisSortSet extends Commands {
     public Double score(String key, String member){
         return getJedis().zscore(key, member);
     }
+    // rev 代表逆序
+
+
     /**得到成员的下标 大到小排序 相同的分数时，先插入在后*/
     public Long rank(String key, String member){
         return getJedis().zrevrank(key, member);
+    }
+    /**
+     * 得到 范围内的成员,排序是按分数来的，小到大
+     * @param start 起
+     * @param end 终
+     * @return 集合
+     */
+    public Set<String> range(String key, long start, long end){
+        return getJedis().zrange(key, start, end);
+    }
+    /**
+     * 得到成员和分数的集合
+     * @param start 起
+     * @param end 终
+     * @return  Tuple集合
+     */
+    public Set<Tuple> rangeWithScores(String key, long start, long end){
+        return getJedis().zrangeWithScores(key, start, end);
     }
     /**得到相应索引范围的元素  大到小排序*/
     public Set<String> rangeByIndex(String key, long start, long end){
@@ -63,16 +84,7 @@ public class RedisSortSet extends Commands {
         return getJedis().zlexcount(key,min,max);
     }
 
-    /**
-     * 得到 范围内的成员,排序是按分数来的，小到大
-     * @param key 键
-     * @param start 起
-     * @param end 终
-     * @return 集合
-     */
-    public Set<String> range(String key, long start, long end){
-        return getJedis().zrange(key, start, end);
-    }
+
     /**得到所有成员 小到大排序*/
     public Set<String> getMemberSet(String key){
         return range(key,0,-1);
@@ -86,15 +98,7 @@ public class RedisSortSet extends Commands {
     public Set<Tuple> getMemberSetWithScore(String key){
         return rangeWithScores(key, 0, -1);
     }
-    /**
-     * 得到成员和分数的集合
-     * @param start 起
-     * @param end 终
-     * @return  Tuple集合
-     */
-    public Set<Tuple> rangeWithScores(String key, long start, long end){
-        return getJedis().zrangeWithScores(key, start, end);
-    }
+
 
     /**
      * 交集运算，存入目标键中

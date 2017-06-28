@@ -25,7 +25,7 @@ public class RedisSet extends Commands{
      * @param member 元素
      * @return set长度
      */
-    public Long add(String key, String... member){
+    public Long save(String key, String... member){
         return getJedis().sadd(key,member);
     }
 

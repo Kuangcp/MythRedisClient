@@ -48,7 +48,7 @@ public class RedisSetTest {
     @Test
     public void testAdd() throws Exception {
         deleteKey();
-        Long result = redisSet.add(key, "member","12","12");
+        Long result = redisSet.save(key, "member","12","12");
         Assert.assertEquals((Long)2L, result);
         showKey();
         deleteKey();
@@ -56,7 +56,7 @@ public class RedisSetTest {
 
     @Test
     public void testRemove() throws Exception {
-        redisSet.add(key,"2","23","3434","343223");
+        redisSet.save(key,"2","23","3434","343223");
         Long result = redisSet.remove(key, "2","23");
         Assert.assertEquals((Long)2L, result);
         deleteKey();
@@ -65,7 +65,7 @@ public class RedisSetTest {
     // 获取所有
     @Test
     public void testGetMembersSet() throws Exception {
-        redisSet.add(key,"2","23");
+        redisSet.save(key,"2","23");
         Set<String> result = redisSet.getMembersSet(key);
         Assert.assertEquals(new HashSet<String>(Arrays.asList("2","23")), result);
         deleteKey();
@@ -73,7 +73,7 @@ public class RedisSetTest {
     // 随机删除，因为set的无序性
     @Test
     public void testPop() throws Exception {
-        redisSet.add(key,"1","2","3");
+        redisSet.save(key,"1","2","3");
         String result = redisSet.pop(key);
         System.out.println("随机删除："+result);
         Long results = redisSet.size(key);
@@ -84,7 +84,7 @@ public class RedisSetTest {
     @Test
     public void testPop2() throws Exception {
 
-        redisSet.add(key,"1","2","3","4");
+        redisSet.save(key,"1","2","3","4");
         Set<String> result = redisSet.pop(key, 2L);
         System.out.println("随机删除："+result);
         Long results = redisSet.size(key);
@@ -95,7 +95,7 @@ public class RedisSetTest {
 
     @Test
     public void testContain() throws Exception {
-        redisSet.add(key,"member");
+        redisSet.save(key,"member");
         boolean result = redisSet.contain(key, "member");
         Assert.assertEquals(true, result);
         deleteKey();
@@ -103,7 +103,7 @@ public class RedisSetTest {
 
     @Test
     public void testRandomMember() throws Exception {
-        redisSet.add(key,"sa");
+        redisSet.save(key,"sa");
         String result = redisSet.randomMember(key);
         assert result!=null;
         deleteKey();
@@ -111,15 +111,15 @@ public class RedisSetTest {
 
     @Test
     public void testRandomMember2() throws Exception {
-        redisSet.add(key,"sa");
+        redisSet.save(key,"sa");
         List<String> result = redisSet.randomMember(key, 2);
         Assert.assertEquals(Arrays.<String>asList("sa"), result);
     }
 
     @Test
     public void testInter() throws Exception {
-        redisSet.add(key,"1","2","3");
-        redisSet.add("1","2","4");
+        redisSet.save(key,"1","2","3");
+        redisSet.save("1","2","4");
 
         Set<String> result = redisSet.inter(key,"1");
         Assert.assertEquals(new HashSet<String>(Arrays.asList("2")), result);
@@ -128,10 +128,10 @@ public class RedisSetTest {
 
     @Test
     public void testInterStore() throws Exception {
-        redisSet.add("store","1","23","45");
+        redisSet.save("store","1","23","45");
         System.out.println(redisSet.getMembersSet("store"));
-        redisSet.add(key,"1","2","3");
-        redisSet.add("1","2","4");
+        redisSet.save(key,"1","2","3");
+        redisSet.save("1","2","4");
 
         Long f = redisSet.interStore("store",key,"1");
         System.out.println(f+" : "+redisSet.getMembersSet("store").toString());
@@ -143,8 +143,8 @@ public class RedisSetTest {
 
     @Test
     public void testUnion() throws Exception {
-        redisSet.add("1","1","2","3");
-        redisSet.add("2","2","3","4");
+        redisSet.save("1","1","2","3");
+        redisSet.save("2","2","3","4");
         Set<String> result = redisSet.union("1","2");
         Assert.assertEquals(new HashSet<String>(Arrays.asList("1","2","3","4")), result);
         redisSet.deleteKey("1","2");
@@ -152,8 +152,8 @@ public class RedisSetTest {
 
     @Test
     public void testUnionStore() throws Exception {
-        redisSet.add("1","1","2","3");
-        redisSet.add("2","2","3","4");
+        redisSet.save("1","1","2","3");
+        redisSet.save("2","2","3","4");
         Long num = redisSet.unionStore("store","1","2");
         System.out.println(num);
         Set<String> result = redisSet.getMembersSet("store");
@@ -164,9 +164,9 @@ public class RedisSetTest {
 
     @Test
     public void testDiff() throws Exception {
-        redisSet.add("1","1","2","3","5");
-        redisSet.add("2","2","3","4","6");
-        redisSet.add("3","1","4");
+        redisSet.save("1","1","2","3","5");
+        redisSet.save("2","2","3","4","6");
+        redisSet.save("3","1","4");
         Set<String> result = redisSet.diff("1","2","3");
         Assert.assertEquals(new HashSet<String>(Arrays.asList("5")), result);
         redisSet.deleteKey("1","2");
@@ -174,9 +174,9 @@ public class RedisSetTest {
 
     @Test
     public void testDiffStore() throws Exception {
-        redisSet.add("1","1","2","3","5");
-        redisSet.add("2","2","3","4","6");
-        redisSet.add("3","1","4");
+        redisSet.save("1","1","2","3","5");
+        redisSet.save("2","2","3","4","6");
+        redisSet.save("3","1","4");
          Long num = redisSet.diffStore("store","1","2","3");
         System.out.println(num);
         Set<String> result = redisSet.getMembersSet("store");
@@ -186,8 +186,8 @@ public class RedisSetTest {
 
     @Test
     public void testMoveMember() throws Exception {
-        redisSet.add("1","2","3");
-        redisSet.add("2","2");
+        redisSet.save("1","2","3");
+        redisSet.save("2","2");
 
         Long re = redisSet.moveMember("1", "2", "3");
         System.out.println(re);
