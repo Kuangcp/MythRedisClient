@@ -201,30 +201,26 @@ public class PoolManagement {
     /**
      * 删除所有配置，文件中
      * @return 删除结果
+     * @throws Exception 配置文件不可用的异常
      */
-    public  boolean clearAllPools(){
-        try {
-            int maxId = PropertyFile.getMaxId();
-            for(int i=Configs.START_ID;i<=maxId;i++){
-                String result = deleteRedisPool(i+"");
-                if(result!=null){
-                    logger.info(NoticeInfo.DELETE_POOL_SUCCESS+i);
-                }else{
-                    logger.info(NoticeInfo.DELETE_POOL_FAILED+i);
-                }
+    public  boolean clearAllPools() throws Exception{
+        int maxId = PropertyFile.getMaxId();
+        for(int i=Configs.START_ID;i<=maxId;i++){
+            String result = deleteRedisPool(i+"");
+            if(result!=null){
+                logger.info(NoticeInfo.DELETE_POOL_SUCCESS+i);
+            }else{
+                logger.info(NoticeInfo.DELETE_POOL_FAILED+i);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return true;
     }
     // map集合中删除,断开连接的时候调用
-    // TODO 销毁指定id的连接池,似乎没有起作用，有就销毁，返回结果，没有就返回false
-
+    // TODO 销毁指定id的连接池,似乎没有起作用，没看到内存的下降
     /**
      * 销毁 配置文件中存在，并加载到了内存Map中的连接池实例
      * @param poolId 连接池配置文件的id
-     * @return 销毁状态 true false
+     * @return 销毁结果 true false
      */
     public  boolean destroyRedisPool(String poolId){
         if(poolMap.containsKey(poolId)) {

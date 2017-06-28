@@ -40,10 +40,8 @@ public class Commands {
      * @return 得到当前数据库的连接
      */
     public Jedis getJedis(){
-//        if(jedis==null){
-            pools = management.getRedisPool();
-            jedis = pools.getJedis();
-//        }
+        pools = management.getRedisPool();
+        jedis = pools.getJedis();
         jedis.select(db);
         return jedis;
     }
