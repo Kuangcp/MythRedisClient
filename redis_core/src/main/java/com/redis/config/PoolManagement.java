@@ -73,29 +73,19 @@ public class PoolManagement {
 //        }
         // 如果内存中有就直接返回
         if(poolMap.containsKey(poolId)){
-            logger.info(NoticeInfo.MAP_CONTAIN_POOL +poolId);
+            logger.info(NoticeInfo.MAP_CONTAIN_POOL +poolId+"内存中连接池 : "+poolMap.size());
             return poolMap.get(poolId);
         }
-        try {
-            configFile = PropertyFile.getProperties(propertyFile);
-        } catch (IOException e) {
-//            e.printStackTrace();
-           throw new ReadConfigException(ExceptionInfo.OPEN_CONFIG_FAILED+propertyFile,e,PoolManagement.class);
-        }
-
-        String pre = poolId+ Configs.SEPARATE;//前缀
-        RedisPoolProperty poolProperty;
+        configFile = PropertyFile.getProperties(propertyFile);
         // 如果没有这个id的存在,就新建一个
-        if(Objects.equals(configFile.getString(pre + Configs.NAME), RunStatus.PROPERTY_IS_NULL)){
+        if(Objects.equals(configFile.getString(poolId+ Configs.SEPARATE + Configs.NAME), RunStatus.PROPERTY_IS_NULL)){
             throw new RedisConnectionException(ExceptionInfo.POOL_NOT_EXIST_CONFIG,PoolManagement.class);
             //@TODO 处理这种连接不存在的情况
             // 一般，连接的显示是从配置文件中加载的，是不会出现面板上有连接，而配置文件中没有的情况 除非是在客户端，删除了连接，没有刷新客户端缓存而导致
-        }else {
-            pool = new RedisPools();//新建连接池对象
-            poolProperty = RedisPoolProperty.initByIdFromConfig(poolId);
-            pool.setProperty(poolProperty);
         }
-        pool.initialPool();
+        pool = new RedisPools();//新建连接池对象
+        RedisPoolProperty poolProperty = RedisPoolProperty.initByIdFromConfig(poolId);
+        pool.initialPool(poolProperty);
         logger.info("实例化连接池 "+poolId+" - "+pool.toString());
         logger.debug("实例化的配置："+poolProperty.toString());
         if(pool.available()) {
@@ -211,30 +201,26 @@ public class PoolManagement {
     /**
      * 删除所有配置，文件中
      * @return 删除结果
+     * @throws Exception 配置文件不可用的异常
      */
-    public  boolean clearAllPools(){
-        try {
-            int maxId = PropertyFile.getMaxId();
-            for(int i=Configs.START_ID;i<=maxId;i++){
-                String result = deleteRedisPool(i+"");
-                if(result!=null){
-                    logger.info(NoticeInfo.DELETE_POOL_SUCCESS+i);
-                }else{
-                    logger.info(NoticeInfo.DELETE_POOL_FAILED+i);
-                }
+    public  boolean clearAllPools() throws Exception{
+        int maxId = PropertyFile.getMaxId();
+        for(int i=Configs.START_ID;i<=maxId;i++){
+            String result = deleteRedisPool(i+"");
+            if(result!=null){
+                logger.info(NoticeInfo.DELETE_POOL_SUCCESS+i);
+            }else{
+                logger.info(NoticeInfo.DELETE_POOL_FAILED+i);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return true;
     }
     // map集合中删除,断开连接的时候调用
-    // TODO 销毁指定id的连接池,似乎没有起作用，有就销毁，返回结果，没有就返回false
-
+    // TODO 销毁指定id的连接池,似乎没有起作用，没看到内存的下降
     /**
      * 销毁 配置文件中存在，并加载到了内存Map中的连接池实例
      * @param poolId 连接池配置文件的id
-     * @return 销毁状态 true false
+     * @return 销毁结果 true false
      */
     public  boolean destroyRedisPool(String poolId){
         if(poolMap.containsKey(poolId)) {

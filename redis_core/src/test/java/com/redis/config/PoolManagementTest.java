@@ -124,7 +124,7 @@ public class PoolManagementTest {
 //        List<RedisPools> list = new ArrayList<>();
 //        for(int i=0;i<5;i++){
 //            RedisPools pool = poolManagement.getRedisPool("1025");
-//            list.add(pool);
+//            list.save(pool);
 //        }
 //        RedisPools pool2 = poolManagement.getRedisPool("1024");
 //        Jedis jedis1 = pool1.getJedis();
