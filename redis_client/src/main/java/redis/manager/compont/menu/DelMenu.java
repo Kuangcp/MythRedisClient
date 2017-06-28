@@ -1,10 +1,7 @@
 package redis.manager.compont.menu;
 
 import com.redis.config.PoolManagement;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -14,9 +11,9 @@ import java.io.IOException;
  * User: huang
  * Date: 17-6-24
  */
-public class ConnectDelMenu extends MyMenuItem {
+public class DelMenu extends MyMenuItem {
 
-    public ConnectDelMenu(TreeView treeView) {
+    public DelMenu(TreeView treeView) {
         super("删除");
         setAction(treeView);
     }
@@ -31,16 +28,22 @@ public class ConnectDelMenu extends MyMenuItem {
         super.setOnAction(
                 (event) -> {
                     TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
-                    item.getParent().getChildren().remove(item);
                     String flag = item.getValue().getAccessibleHelp();
-                    System.out.println("测试:: " + flag);
                     if ("link".equals(flag)) {
+                        item.getParent().getChildren().remove(item);
                         String id = item.getValue().getAccessibleText();
                         try {
                             poolManagement.deleteRedisPool(id);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    }
+                    if ("key".equals(flag)) {
+                        String key = item.getValue().getText().trim();
+                        redisKey.deleteKey(key);
+                        MultipleSelectionModel msm = treeView.getSelectionModel();
+                        int row = treeView.getRow( item.getParent() );
+                        msm.select(row);
                     }
                 }
         );

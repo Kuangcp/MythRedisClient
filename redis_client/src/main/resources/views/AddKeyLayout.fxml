@@ -11,7 +11,7 @@
 <AnchorPane prefHeight="237.9998779296875" prefWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="redis.manager.controller.AddKeyController">
   <children>
     <Label layoutX="14.0" layoutY="25.0" text="类型:" />
-    <ComboBox fx:id="typeBox" editable="true" layoutX="59.0" layoutY="23.0" prefHeight="23.0" prefWidth="200.0">
+    <ComboBox fx:id="typeBox"  layoutX="59.0" layoutY="23.0" prefHeight="23.0" prefWidth="200.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="STRING" />

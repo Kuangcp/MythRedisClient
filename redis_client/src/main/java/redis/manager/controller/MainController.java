@@ -19,6 +19,8 @@ import redis.manager.compont.MyContextMenu;
 import redis.manager.compont.MyTab;
 import redis.manager.compont.MyTreeItem;
 import redis.manager.compont.alert.MyAlert;
+import redis.manager.compont.menu.DelMenu;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -188,7 +190,6 @@ public class MainController {
         String poolId = treeItem.getValue().getAccessibleText();
         poolManagement.switchPool(poolId);
 
-        treeItem.setContextMenuPoolManager(poolManagement);
         int num=0;
         try {
             num= poolManagement.getRedisPool().getDatabaseNum();
@@ -197,6 +198,7 @@ public class MainController {
         }
         // 清除所有的孩子节点
         int childNum = treeItem.getChildren().size();
+        System.out.println(childNum);
         treeItem.getChildren().remove(0, childNum);
         for (int i = 0; i < num; i++) {
             Label secondLable = new Label("数据库 " + i);
@@ -223,10 +225,11 @@ public class MainController {
         String dbId = treeItem.getValue().getAccessibleText();
         int id = 0;
         try{
-             id = Integer.parseInt(dbId);
+            id = Integer.parseInt(dbId);
             Set<String> keys = redisKey.listAllKeys(id);
             // 清楚所有的子节点
             int childSize = treeItem.getChildren().size();
+            System.out.println("SIZRE::" + childSize);
             treeItem.getChildren().remove(0, childSize);
             for (String key : keys) {
                 Label thridLabel = new Label(key);
@@ -238,11 +241,11 @@ public class MainController {
                 treeItem.addSecondChild(childThrid);
             }
         } catch (Exception e) {
-            Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
+            /*Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
             alert.setTitle("错误");
-            alert.setHeaderText("");
             alert.setContentText("数据库定位出错");
-            alert.show();
+            alert.showAndWait();*/
+            e.printStackTrace();
         }
     }
 

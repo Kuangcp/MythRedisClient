@@ -1,8 +1,10 @@
 package redis.manager.compont.menu;
 
+import com.redis.assemble.key.RedisKey;
 import com.redis.config.PoolManagement;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeView;
+import redis.manager.Main;
 
 /**
  * 上下文菜单的抽象类, 所有上下文菜单的基类.
@@ -11,7 +13,8 @@ import javafx.scene.control.TreeView;
  */
 public abstract class MyMenuItem extends MenuItem {
 
-    protected PoolManagement poolManagement;
+    protected PoolManagement poolManagement = Main.management;
+    protected RedisKey redisKey = Main.redisKey;
 
     protected MyMenuItem(String label) {
         super(label);
@@ -23,11 +26,4 @@ public abstract class MyMenuItem extends MenuItem {
      */
     protected abstract void setAction(TreeView treeView);
 
-    /**
-     * 设置PoolManagement.
-     * @param poolManagement PoolManagement
-     */
-    public void setPoolManagement(PoolManagement poolManagement) {
-        this.poolManagement = poolManagement;
-    }
 }

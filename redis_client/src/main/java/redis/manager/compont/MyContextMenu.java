@@ -4,7 +4,7 @@ import com.redis.config.PoolManagement;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeView;
-import redis.manager.compont.menu.ConnectDelMenu;
+import redis.manager.compont.menu.DelMenu;
 import redis.manager.compont.menu.CreateKeyMenu;
 import redis.manager.compont.menu.DestroyMenu;
 import redis.manager.compont.menu.MyMenuItem;
@@ -39,7 +39,7 @@ public class MyContextMenu extends ContextMenu {
         setEmpty();
 
         // TODO 添加一级节点的上下文菜单内容
-        this.getItems().add(new ConnectDelMenu(treeView));
+        this.getItems().add(new DelMenu(treeView));
         this.getItems().add(new DestroyMenu(treeView));
     }
 
@@ -60,7 +60,7 @@ public class MyContextMenu extends ContextMenu {
         setEmpty();
 
         // TODO 添加三级节点的上下文菜单内容
-        this.getItems().add(new ConnectDelMenu(treeView));
+        this.getItems().add(new DelMenu(treeView));
     }
 
     /**
@@ -70,16 +70,4 @@ public class MyContextMenu extends ContextMenu {
         this.getItems().remove(0, this.getItems().size());
     }
 
-    /**
-     * 设置子节点的PoolManager.
-     * @param poolManagement PoolManagement
-     */
-    public void setPoolManagement(PoolManagement poolManagement) {
-        this.poolManagement = poolManagement;
-        for (MenuItem item : this.getItems()) {
-            if (item instanceof MyMenuItem) {
-                ((MyMenuItem)item).setPoolManagement(poolManagement);
-            }
-        }
-    }
 }
