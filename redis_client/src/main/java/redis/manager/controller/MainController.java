@@ -48,6 +48,7 @@ public class MainController {
      */
     @FXML
     private void initialize() {
+        treeView.setStyle("-fx-font-size: 12px");
         try {
             setTreeView();
         } catch (Exception e) {
@@ -99,9 +100,11 @@ public class MainController {
                 (observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         TabPaneController.key = newValue.getText();
-                        String poolId = newValue.getId();
-                        poolId = poolId.substring(0, poolId.indexOf("."));
+                        String id = newValue.getId();
+                        String poolId = id.substring(0, id.indexOf("."));
                         TabPaneController.poolId = poolId;
+                        int dbId = Integer.parseInt(id.substring(id.indexOf(".") + 1, id.lastIndexOf(".")));
+                        redisKey.setDb(dbId);
                         ((TabPaneController)((MyTab) newValue).getLoader().getController()).reloadValue();
                     }
                 }
@@ -114,7 +117,7 @@ public class MainController {
     @FXML
     private void addTab(String tabId, String name, int dbId) {
         TabPaneController.key = name;
-        redisKey.setDb(dbId);
+
         // 创建新标签
         MyTab tab = new MyTab(name);
         tab.setId(tabId);
@@ -161,7 +164,6 @@ public class MainController {
             // 创建一级子节点
             Label firstLabel = new Label((String) lists.get(Configs.NAME));
             firstLabel.setAccessibleHelp("link");
-//            System.out.println(firstLabel.getAccessibleHelp());
             // 将连接的ID保存
             firstLabel.setAccessibleText((String) lists.get(Configs.POOL_ID));
 //            System.out.println((String) lists.get(Configs.POOL_ID));
@@ -253,10 +255,12 @@ public class MainController {
         String name = treeItem.getValue().getText();
         String dbId = treeItem.getParent().getValue().getAccessibleText();
         String poolId = treeItem.getParent().getParent().getValue().getAccessibleText();
-        String tabId = poolId + "." + dbId + name;
+        String tabId = poolId + "." + dbId + "." + name;
         main.setSelectedKey(name);
         poolManagement.switchPool(poolId);
         TabPaneController.poolId = poolId;
+        int id = Integer.parseInt(dbId);
+        redisKey.setDb(id);
         for (Tab tab : tabPane.getTabs()) {
             if (tabId.equals(tab.getId())) {
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
@@ -265,7 +269,6 @@ public class MainController {
             }
         }
         if (ok) {
-            int id = Integer.parseInt(dbId);
             addTab(tabId, name, id);
         }
     }

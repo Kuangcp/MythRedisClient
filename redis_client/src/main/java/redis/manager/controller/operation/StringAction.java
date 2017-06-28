@@ -71,7 +71,6 @@ public class StringAction extends ShowPanel implements DoAction {
             controller = null;
         }
     }
-
     /**
      * 添加值.
      *

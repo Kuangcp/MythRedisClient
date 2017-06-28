@@ -21,12 +21,14 @@ public class MyAlert {
             synchronized (MyAlert.class) {
                 if (warningAlert == null) {
                     warningAlert = new Alert(alertType);
+                    warningAlert.setHeaderText("");
                 }
             }
             return warningAlert;
         }
         synchronized (MyAlert.class) {
             warningAlert.setAlertType(alertType);
+            warningAlert.setHeaderText("");
             return warningAlert;
         }
     }
