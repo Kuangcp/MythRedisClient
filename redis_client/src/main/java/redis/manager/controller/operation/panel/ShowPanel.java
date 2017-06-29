@@ -52,11 +52,12 @@ public class ShowPanel {
     }
 
     /**
-     * 获取输入内容.
+     * 获取值输入框输入内容.
      * @return 输入的内容
      */
     public String getValueText() {
         return controller.getValue();
     }
+
 
 }

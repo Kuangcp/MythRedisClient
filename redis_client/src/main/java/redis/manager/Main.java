@@ -18,6 +18,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import redis.manager.controller.ConnectController;
 import redis.manager.controller.MainController;
+import redis.manager.controller.operation.panel.ConnectPanel;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -70,41 +72,15 @@ public class Main extends Application {
      */
     public boolean showConnectPanel() {
         boolean ok = false;
+        // 显示面板
+        ConnectPanel connectPanel = new ConnectPanel();
+        connectPanel.isNewLink(true);
+        ok = connectPanel.showConnectPanel();
 
-        // 创建 FXMLLoader 对象
-        FXMLLoader loader = new FXMLLoader();
-        // 加载文件
-        loader.setLocation(this.getClass().getResource("/views/ConnectLayout.fxml"));
-        AnchorPane pane = null;
-        try {
-            pane = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // 创建对话框
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle("创建连接");
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.initOwner(primaryStage);
-        Scene scene = new Scene(pane);
-        dialogStage.setScene(scene);
-
-
-        ConnectController connectController = loader.getController();
-        connectController.setDialogStage(dialogStage);
-
-
-        //connectController.setPoolManagement(management);
-
-        // 显示对话框, 并等待, 直到用户关闭
-        dialogStage.showAndWait();
-
-        ok = connectController.isOkChecked();
         if (ok) {
             // 更新连接信息
             MainController mainController = rootLoader.getController();
-            Map<String, String> map = connectController.getConnectMessage();
+            Map<String, String> map = ConnectController.getConnectMessage();
             String name = map.get("name");
             String id = map.get("id");
             mainController.updateTree(name, id);

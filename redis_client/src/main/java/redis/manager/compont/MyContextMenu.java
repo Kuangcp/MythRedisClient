@@ -3,6 +3,7 @@ package redis.manager.compont;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeView;
+import redis.manager.compont.menu.AttributeSetMenu;
 import redis.manager.compont.menu.DelMenu;
 import redis.manager.compont.menu.CreateKeyMenu;
 import redis.manager.compont.menu.DestroyMenu;
@@ -37,6 +38,7 @@ public class MyContextMenu extends ContextMenu {
 
         this.getItems().add(new DelMenu(treeView));
         this.getItems().add(new DestroyMenu(treeView));
+        this.getItems().add(new AttributeSetMenu(treeView));
     }
 
     /**
