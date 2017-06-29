@@ -8,20 +8,89 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
+//plugins {
+//    id "nebula.deb" version "4.4.0"
+//}
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+//        classpath "gradle.plugin.com.ewerk.gradle.plugins:artifactory-deb-publish-plugin:1.0.2"
+//        classpath "com.netflix.nebula:gradle-ospackage-plugin:4.4.0"
+//        classpath "gradle.plugin.de.inetsoftware:SetupBuilder:1.8.0"
     }
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
+//apply plugin: "com.ewerk.gradle.plugins.artifactory-deb-publish"
+//apply plugin: "nebula.deb"
+//apply plugin: "de.inetsoftware.setupbuilder"
 
 jar {
     manifest {
         attributes 'Main-Class': 'redis.manager.Main'
     }
 }
+
+//task fooDeb(type: Deb) {
+//    packageName = 'foo'
+//    version = '1.2.3'
+//    release = 1
+//
+//    configurationFile('/etc/defaults/myapp')
+//    installUtils file('scripts/deb/utils.sh')
+//    preInstall file('scripts/deb/preInstall.sh')
+//    postInstall file('scripts/deb/postInstall.sh')
+//    preUninstall file('scripts/deb/preUninstall.sh')
+//    postUninstall file('scripts/deb/postUninstall.sh')
+//
+//    requires('bar', '2.2')
+//    requires('baz', '1.0.1')
+//    requires('qux')
+//
+//    into '/opt/foo'
+//
+//    from(jar.outputs.files) {
+//        into 'lib'
+//    }
+//    from(configurations.runtime) {
+//        into 'lib'
+//    }
+//    from('lib') {
+//        into 'lib'
+//    }
+//    from('scripts') {
+//        into 'bin'
+//        exclude 'database'
+//        fileMode 0550
+//    }
+//    from('src/main/resources') {
+//        fileType CONFIG
+//        into 'conf'
+//    }
+//    from('home') {
+//        createDirectoryEntry = true
+//        fileMode 0500
+//        into 'home'
+//    }
+//    from('endorsed') {
+//        into '/usr/share/tomcat/endorsed'
+//    }
+//
+//    link('/etc/init.d/foo', '/opt/foo/bin/foo.init')
+//
+//    customField 'Build-Host', 'http://mycihost'
+//    customField([
+//            'Commit-ID': 'deadbeef',
+//            'Owner': 'John Doe <johndoe@sweetdomain.io>'
+//    ])
+//    customFields << [
+//            'Build-Job': 'FooProject'
+//    ]
+//}
 

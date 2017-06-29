@@ -66,7 +66,8 @@ public class RedisSortSet extends Commands {
         return getJedis().zrevrangeByScore(key, max, min);
     }
     /**
-     *根据字典来排序的
+     * 根据字典来排序的  不要在分数不一致的SortSet集合中去使用 ZREVRANGEBYLEX 指令,因为获取的结果并不准确。
+     * 这个是在分数一致时，进行匹配的元素
      * @param key 键
      * @param max 匹配的max [/( 开头
      * @param min 匹配的min [/( 开头
