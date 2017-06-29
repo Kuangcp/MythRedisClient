@@ -17,8 +17,10 @@ import java.io.IOException;
 public class ShowPanel {
     protected ListAddController controller;
 
-    /** 显示值输入窗口. */
-    protected boolean showValuePanel() {
+    /** 显示值输入窗口.
+     *  @param isNum 是否选择整数类型, true为整数, false为字符串
+     */
+    public boolean showValuePanel(boolean isNum) {
         // 创建 FXMLLoader 对象
         FXMLLoader loader = new FXMLLoader();
         // 加载文件
@@ -38,11 +40,24 @@ public class ShowPanel {
 
         controller = loader.getController();
         controller.setDialogStage(dialogStage);
+        if (isNum) {
+            controller.setTipText("输入0便立即删除\n-1 则永久存活 \n-2 则不存在");
+            controller.setFlag("number");
+        }
 
         // 显示对话框, 并等待, 直到用户关闭
         dialogStage.showAndWait();
 
         return controller.isOkChecked();
     }
+
+    /**
+     * 获取值输入框输入内容.
+     * @return 输入的内容
+     */
+    public String getValueText() {
+        return controller.getValue();
+    }
+
 
 }

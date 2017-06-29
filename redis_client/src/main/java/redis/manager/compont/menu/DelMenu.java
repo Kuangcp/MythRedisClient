@@ -26,29 +26,28 @@ public class DelMenu extends MyMenuItem {
     @Override
     protected void setAction(TreeView treeView) {
         super.setOnAction(
-                (event) -> {
-                    TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
-                    String flag = item.getValue().getAccessibleHelp();
-                    if ("link".equals(flag)) {
-                        // 删除连接
-                        item.getParent().getChildren().remove(item);
-                        String id = item.getValue().getAccessibleText();
-
-                        try {
-                            if (showPanel("将删除连接")) {
-                                poolManagement.deleteRedisPool(id);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+            (event) -> {
+                TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
+                String flag = item.getValue().getAccessibleHelp();
+                if ("link".equals(flag)) {
+                    try {
+                        if (showPanel("将删除连接")) {
+                            // 删除连接
+                            item.getParent().getChildren().remove(item);
+                            String id = item.getValue().getAccessibleText();
+                            poolManagement.deleteRedisPool(id);
                         }
-                    }
-                    if ("key".equals(flag)) {
-                        // 删除键
-                        if (showPanel("将删除键")) {
-                            delKey(treeView, item);
-                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
+                if ("key".equals(flag)) {
+                    // 删除键
+                    if (showPanel("将删除键")) {
+                        delKey(treeView, item);
+                    }
+                }
+            }
         );
     }
 
@@ -58,10 +57,10 @@ public class DelMenu extends MyMenuItem {
      */
     private void delTab(String tabId) {
         try {
-            for (Tab tab : MainController.tabs) {
+            for (Tab tab : MainController.getTabs()) {
                 String id = tab.getId();
                 if (tabId.equals(id)) {
-                    MainController.tabs.remove(tab);
+                    MainController.getTabs().remove(tab);
                 }
             }
         } catch (Exception e) {

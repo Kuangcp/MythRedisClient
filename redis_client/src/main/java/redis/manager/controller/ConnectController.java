@@ -24,9 +24,11 @@ import java.util.Map;
 @Component
 public class ConnectController {
 
-    private PoolManagement poolManagement = Main.management;
+    private PoolManagement poolManagement = Main.getManagement();
     private Stage dialogStage;
     private boolean okChecked = false;
+    /** 标志是否是新建连接. */
+    private static boolean flag = true;
     /** 最大连接数输入框. */
     @FXML
     private TextField maxActiveText;
@@ -83,6 +85,8 @@ public class ConnectController {
     private final boolean[] isEqPassword = {false};
     /** 输入的配置是否正确. */
     private boolean isRight = false;
+    /** 连接名称. */
+    private static String linkName = "默认连接";
 
     /**
      * 初始化.
@@ -100,6 +104,11 @@ public class ConnectController {
         textChangeListener(portText, portLabel, isNumPort);
         // 监听密码确认
         confirmPassword(passwordText, repasswordText, passwordLabel, isEqPassword);
+
+        // 修改属性时
+        if (!flag) {
+            setPoolAttribute();
+        }
     }
 
 
@@ -116,17 +125,27 @@ public class ConnectController {
      */
     @FXML
     private void handleOk() {
-        System.out.println(treeView);
         // 是否符合输入规则
         if (isNumActive[0] && isNumIdle[0] && isNumWait[0] && isNumPort[0] && isEqPassword[0]) {
-            RedisPools pools = inputPoolManagement();
-            // 输入的配置可用
-            if (pools != null) {
+            if (flag) {
+                // 新建连接
+
+                RedisPools pools = inputPoolManagement();
+                // 输入的配置可用
+                if (pools != null) {
+                    linkName = nameText.getText();
+                    okChecked = true;
+                    dialogStage.close();
+                    return;
+                }
+                resultLabel.setText("配置错误");
+            } else {
+                // 修改连接
+                System.out.println("修改");
                 okChecked = true;
                 dialogStage.close();
-                return;
             }
-            resultLabel.setText("配置错误");
+
         }
 
     }
@@ -199,16 +218,16 @@ public class ConnectController {
      */
     private void textChangeListener(TextField field, Label label, boolean[] ok) {
         field.focusedProperty().addListener(
-                (observable, oldValue, newValue) -> {
-                    if (!field.getText().matches("[0-9]*")) {
-                        label.setText("请输入数字");
-                        label.setTextFill(Color.rgb(255, 0, 0));
-                        ok[0] = false;
-                        return;
-                    }
-                    label.setText("");
-                    ok[0] = true;
+            (observable, oldValue, newValue) -> {
+                if (!field.getText().matches("[0-9]*")) {
+                    label.setText("请输入数字");
+                    label.setTextFill(Color.rgb(255, 0, 0));
+                    ok[0] = false;
+                    return;
                 }
+                label.setText("");
+                ok[0] = true;
+            }
         );
     }
 
@@ -220,16 +239,16 @@ public class ConnectController {
     private void confirmPassword(PasswordField password, PasswordField rePassword,
                                  Label label, boolean[] ok) {
         rePassword.focusedProperty().addListener(
-                (observable, oldValue, newValue) -> {
-                    if (!rePassword.getText().equals(password.getText())) {
-                        label.setText("两次密码不一致");
-                        label.setTextFill(Color.rgb(255, 0, 0));
-                        ok[0] = false;
-                        return;
-                    }
-                    label.setText("");
-                    ok[0] = true;
+            (observable, oldValue, newValue) -> {
+                if (!rePassword.getText().equals(password.getText())) {
+                    label.setText("两次密码不一致");
+                    label.setTextFill(Color.rgb(255, 0, 0));
+                    ok[0] = false;
+                    return;
                 }
+                label.setText("");
+                ok[0] = true;
+            }
         );
     }
 
@@ -256,9 +275,9 @@ public class ConnectController {
      * 获取新连接的名称和id.
      * @return map
      */
-    public Map<String, String> getConnectMessage() {
+    public static Map<String, String> getConnectMessage() {
         Map<String, String> map = new HashMap<>();
-        map.put("name", nameText.getText());
+        map.put("name", linkName);
         String id = null;
         try {
             id = String.valueOf(PropertyFile.getMaxId());
@@ -267,5 +286,33 @@ public class ConnectController {
         }
         map.put("id", id);
         return map;
+    }
+
+    public static boolean isFlag() {
+        return flag;
+    }
+
+    /**
+     * 设置是否为新建连接.
+     * @param flag true为新建连接
+     */
+    public static void setFlag(boolean flag) {
+        ConnectController.flag = flag;
+    }
+
+    /**
+     * 显示连接属性.
+     */
+    private void setPoolAttribute() {
+        String poolId = poolManagement.getCurrentPoolId();
+        RedisPoolProperty property = RedisPoolProperty.initByIdFromConfig(poolId);
+        maxActiveText.setText(String.valueOf(property.getMaxActive()));
+        maxIdleText.setText(String.valueOf(property.getMaxIdle()));
+        maxWaitMillsText.setText(String.valueOf(property.getMaxWaitMills()));
+        portText.setText(String.valueOf(property.getPort()));
+        hostText.setText(property.getHost());
+        nameText.setText(property.getName());
+        passwordText.setText(property.getPassword());
+        repasswordText.setText(property.getPassword());
     }
 }

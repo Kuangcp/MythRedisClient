@@ -1,15 +1,16 @@
 package redis.manager.controller.operation;
 
+import com.redis.assemble.list.RedisList;
 import com.redis.common.exception.ActionErrorException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import redis.manager.Main;
 import redis.manager.compont.alert.MyAlert;
 import redis.manager.controller.operation.panel.ShowPanel;
 import redis.manager.entity.TableEntity;
 import java.util.List;
 import java.util.Optional;
-import static redis.manager.Main.redisList;
 
 /**
  * 列表操作.
@@ -17,6 +18,8 @@ import static redis.manager.Main.redisList;
  * Date: 17-6-26
  */
 public class ListAction extends ShowPanel implements DoAction {
+
+    private RedisList redisList = Main.getRedisList();
 
     /** 数据显示表格. */
     private TableView<TableEntity> dataTable;
@@ -64,7 +67,7 @@ public class ListAction extends ShowPanel implements DoAction {
     @Override
     public void setValueByIndex(String key, int nowSelectRow, boolean selected) {
         if (selected) {
-            boolean ok = showValuePanel();
+            boolean ok = showValuePanel(false);
             if (ok) {
                 String value = controller.getValue();
                 try {
@@ -78,7 +81,8 @@ public class ListAction extends ShowPanel implements DoAction {
                 }
                 controller = null;
             }
-        } else {
+        }
+        else {
             Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
             alert.setTitle("错误");
             alert.setHeaderText("");
@@ -92,7 +96,7 @@ public class ListAction extends ShowPanel implements DoAction {
      */
     @Override
     public void addValue(String key) {
-        boolean ok = showValuePanel();
+        boolean ok = showValuePanel(false);
         if (ok) {
             String value = controller.getValue();
             redisList.rPush(key, value);
@@ -125,7 +129,7 @@ public class ListAction extends ShowPanel implements DoAction {
      */
     @Override
     public void leftAddValue(String key) {
-        boolean ok = showValuePanel();
+        boolean ok = showValuePanel(false);
         if (ok) {
             String value = controller.getValue();
             redisList.lPush(key, value);

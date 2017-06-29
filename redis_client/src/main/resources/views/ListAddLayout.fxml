@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="120.0" prefWidth="350.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="redis.manager.controller.ListAddController">
+<AnchorPane prefHeight="120.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redis.manager.controller.ListAddController">
   <children>
     <Label layoutX="14.0" layoutY="34.0" text="Value:" />
     <TextField fx:id="valueText" layoutX="61.0" layoutY="34.0" prefWidth="265.0" />
@@ -21,5 +21,6 @@
         </Button>
       </children>
     </HBox>
+      <Label fx:id="tipLabel" layoutX="14.0" layoutY="68.0" />
   </children>
 </AnchorPane>

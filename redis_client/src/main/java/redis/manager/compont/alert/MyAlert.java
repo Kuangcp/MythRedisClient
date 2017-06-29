@@ -8,7 +8,7 @@ import javafx.scene.control.Alert;
  * User: huang
  * Date: 17-6-27
  */
-public class MyAlert {
+public final class MyAlert {
 
     private static Alert warningAlert;
 
@@ -16,6 +16,11 @@ public class MyAlert {
 
     }
 
+    /**
+     * 获取提示框实例.
+     * @param alertType 类型
+     * @return 提示框实例
+     */
     public synchronized static Alert getInstance(@NamedArg("alertType") Alert.AlertType alertType) {
         if (warningAlert == null) {
             synchronized (MyAlert.class) {

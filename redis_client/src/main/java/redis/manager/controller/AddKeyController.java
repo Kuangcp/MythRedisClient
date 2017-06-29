@@ -17,7 +17,7 @@ import redis.manager.compont.alert.MyAlert;
  */
 public class AddKeyController {
 
-    private RedisKey redisKey = Main.redisKey;
+    private RedisKey redisKey = Main.getRedisKey();
 
     private Stage dialogStage;
     private boolean okChecked = false;
@@ -42,15 +42,15 @@ public class AddKeyController {
         typeBox.setValue("STRING");
         // 监听类型的输入
         typeBox.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> {
-                    String type = typeBox.getValue().trim();
-                    if ("HASH".equals(type) || "hash".equals(type)
-                            || "ZSET".equals(type) || "zset".equals(type)) {
-                        hashKeyText.setDisable(false);
-                        return;
-                    }
-                    hashKeyText.setDisable(true);
+            (observable, oldValue, newValue) -> {
+                String type = typeBox.getValue().trim();
+                if ("HASH".equals(type) || "hash".equals(type)
+                        || "ZSET".equals(type) || "zset".equals(type)) {
+                    hashKeyText.setDisable(false);
+                    return;
                 }
+                hashKeyText.setDisable(true);
+            }
         );
     }
 
@@ -121,7 +121,7 @@ public class AddKeyController {
             alert.showAndWait();
             return false;
         }
-        for (String key : MainController.allKeys) {
+        for (String key : MainController.getAllKeys()) {
             if (nameText.getText().trim().equals(key)) {
                 alert.setContentText("已存在该键");
                 alert.showAndWait();

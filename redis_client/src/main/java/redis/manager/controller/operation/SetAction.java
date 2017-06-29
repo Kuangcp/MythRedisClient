@@ -1,17 +1,18 @@
 package redis.manager.controller.operation;
 
+import com.redis.assemble.set.RedisSet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import redis.manager.Main;
 import redis.manager.compont.alert.MyAlert;
 import redis.manager.controller.operation.panel.ShowPanel;
 import redis.manager.entity.TableEntity;
 import java.util.Optional;
 import java.util.Set;
-import static redis.manager.Main.redisSet;
 
 /**
  * 集合操作.
@@ -19,6 +20,8 @@ import static redis.manager.Main.redisSet;
  * Date: 17-6-26
  */
 public class SetAction extends ShowPanel implements DoAction {
+
+    private RedisSet redisSet = Main.getRedisSet();
 
     /** 数据显示表格. */
     private TableView<TableEntity> dataTable;
@@ -81,7 +84,7 @@ public class SetAction extends ShowPanel implements DoAction {
      */
     @Override
     public void addValue(String key) {
-        boolean ok = showValuePanel();
+        boolean ok = showValuePanel(false);
         if (ok) {
             String value = controller.getValue();
             redisSet.save(key, value);

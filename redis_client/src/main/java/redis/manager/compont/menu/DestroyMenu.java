@@ -24,15 +24,15 @@ public class DestroyMenu extends MyMenuItem {
     @Override
     protected void setAction(TreeView treeView) {
         super.setOnAction(
-                (event) -> {
-                    TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
-                    String flag = item.getValue().getAccessibleHelp();
-                    item.getChildren().remove(0, item.getChildren().size());
-                    if ("link".equals(flag)) {
-                        String id = item.getValue().getAccessibleText();
-                        poolManagement.destroyRedisPool(id);
-                    }
+            (event) -> {
+                TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
+                String flag = item.getValue().getAccessibleHelp();
+                item.getChildren().remove(0, item.getChildren().size());
+                if ("link".equals(flag)) {
+                    String id = item.getValue().getAccessibleText();
+                    poolManagement.destroyRedisPool(id);
                 }
+            }
         );
     }
 }

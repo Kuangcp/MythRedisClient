@@ -1,18 +1,11 @@
 package redis.manager.controller.operation;
 
-import com.redis.common.exception.ActionErrorException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import redis.manager.compont.alert.MyAlert;
 import redis.manager.controller.operation.panel.ShowPanel;
 import redis.manager.entity.TableEntity;
-
-import java.util.List;
-
-import static redis.manager.Main.redisList;
 
 /**
  * String类型的操作.
@@ -46,7 +39,7 @@ public class StringAction extends ShowPanel implements DoAction {
     @Override
     public void setValue(String key) {
         ObservableList<TableEntity> values = FXCollections.observableArrayList();
-        String value = redisKey.getJedis().get(key);
+        String value = REDIS_KEY.getJedis().get(key);
         TableEntity tableValue = new TableEntity("" + 1, key, value);
         values.add(tableValue);
         this.dataTable.setItems(values);
@@ -64,10 +57,10 @@ public class StringAction extends ShowPanel implements DoAction {
      */
     @Override
     public void setValueByIndex(String key, int nowSelectRow, boolean selected) {
-        boolean ok = showValuePanel();
+        boolean ok = showValuePanel(false);
         if (ok) {
             String value = controller.getValue();
-            redisKey.getJedis().set(key, value);
+            REDIS_KEY.getJedis().set(key, value);
             controller = null;
         }
     }
