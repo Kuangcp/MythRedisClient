@@ -10,7 +10,6 @@ import java.util.Set;
  * Created by https://github.com/kuangcp on 17-6-23  上午9:24
  */
 public class RedisHash extends Commands {
-    // TODO Hash操作
 
     public Long save(String key, String member, String value){
         return getJedis().hset(key, member, value);
@@ -36,8 +35,11 @@ public class RedisHash extends Commands {
     public Boolean exist(String key){
         return getJedis().exists(key);
     }
-    public Long increase(String key, long value){
-        return getJedis().incrBy(key, value);
+    public Long increase(String key, String member, long value){
+        return getJedis().hincrBy(key, member, value);
+    }
+    public Double increaseByFloat(String key, String member, double value){
+        return getJedis().hincrByFloat(key, member, value);
     }
     public Long decrease(String key, long value){
         return getJedis().decrBy(key,value);
@@ -45,7 +47,7 @@ public class RedisHash extends Commands {
     public Long length(String key){
         return getJedis().hlen(key);
     }
-    public Long delete(String key, String... values){
+    public Long remove(String key, String... values){
         return getJedis().hdel(key,values);
     }
 

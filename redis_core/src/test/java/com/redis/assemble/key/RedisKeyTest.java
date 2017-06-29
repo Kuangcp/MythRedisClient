@@ -13,6 +13,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-20  下午8:02
@@ -38,6 +39,24 @@ public class RedisKeyTest {
         PoolManagement management = (PoolManagement) context.getBean("poolManagement");
         management.setCurrentPoolId(PropertyFile.getMaxId()+"");
         redisKey = (RedisKey) context.getBean("redisKey");
+    }
+    @Test
+    public void createData1(){
+        for(int i=0;i<5000;i++){
+            redisKey.set("aaa"+i,"dfdfdfdf");
+        }
+    }
+    @Test
+    public void createData2(){
+        for(int i=0;i<5000;i++){
+            redisKey.set("qq"+i,"dfdfdfdf");
+        }
+    }
+    @Test
+    public void createData3(){
+        for(int i=0;i<5000;i++){
+            redisKey.set("pp"+i,"dfdfdfdf");
+        }
     }
 
     // 测试了set get delete
@@ -120,6 +139,14 @@ public class RedisKeyTest {
         String result = redisKey.getEncoding(key);
         Assert.assertEquals("embstr", result);
         testDeleteKey();
+    }
+    @Test
+    public void testListKey(){
+        Set<String> sets = redisKey.listAllKeys(redisKey.getDb());
+        for(String d:sets){
+            System.out.println(d);
+        }
+        System.out.println(sets.size());
     }
 
 //     TODO ???? 差这个方法没有测试,测试没有通过

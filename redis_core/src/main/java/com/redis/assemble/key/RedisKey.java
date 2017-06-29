@@ -111,7 +111,7 @@ public class RedisKey extends Commands{
 
     /**
      * set多个key
-     * @param keys key-value 顺序，偶数个参数
+     * @param keys [key-value] 顺序，偶数个参数
      * @return Status code reply Basically +OK as MSET can't fail
      */
     public String setMultiKey(String... keys){
