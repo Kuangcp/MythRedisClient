@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import redis.manager.controller.ConnectController;
@@ -88,6 +89,7 @@ public class Main extends Application {
         dialogStage.initOwner(primaryStage);
         Scene scene = new Scene(pane);
         dialogStage.setScene(scene);
+
 
         ConnectController connectController = loader.getController();
         connectController.setDialogStage(dialogStage);

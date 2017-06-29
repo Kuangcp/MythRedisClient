@@ -84,7 +84,7 @@ public class SetAction extends ShowPanel implements DoAction {
      */
     @Override
     public void addValue(String key) {
-        boolean ok = showValuePanel();
+        boolean ok = showValuePanel(false);
         if (ok) {
             String value = controller.getValue();
             redisSet.save(key, value);

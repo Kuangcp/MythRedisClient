@@ -67,7 +67,7 @@ public class ListAction extends ShowPanel implements DoAction {
     @Override
     public void setValueByIndex(String key, int nowSelectRow, boolean selected) {
         if (selected) {
-            boolean ok = showValuePanel();
+            boolean ok = showValuePanel(false);
             if (ok) {
                 String value = controller.getValue();
                 try {
@@ -96,7 +96,7 @@ public class ListAction extends ShowPanel implements DoAction {
      */
     @Override
     public void addValue(String key) {
-        boolean ok = showValuePanel();
+        boolean ok = showValuePanel(false);
         if (ok) {
             String value = controller.getValue();
             redisList.rPush(key, value);
@@ -129,7 +129,7 @@ public class ListAction extends ShowPanel implements DoAction {
      */
     @Override
     public void leftAddValue(String key) {
-        boolean ok = showValuePanel();
+        boolean ok = showValuePanel(false);
         if (ok) {
             String value = controller.getValue();
             redisList.lPush(key, value);

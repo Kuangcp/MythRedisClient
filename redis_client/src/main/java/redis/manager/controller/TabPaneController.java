@@ -9,6 +9,7 @@ import redis.manager.controller.operation.DoAction;
 import redis.manager.controller.operation.ListAction;
 import redis.manager.controller.operation.SetAction;
 import redis.manager.controller.operation.StringAction;
+import redis.manager.controller.operation.panel.ShowPanel;
 import redis.manager.entity.TableEntity;
 
 /**
@@ -60,6 +61,9 @@ public class TabPaneController {
     /** 修改值按钮. */
     @FXML
     private Button setValueBtn;
+    /** TTL值显示. */
+    @FXML
+    private Label ttlValue;
     /** 当前选择的行. */
     private int nowSelectRow;
     /** 是否选择. */
@@ -73,6 +77,8 @@ public class TabPaneController {
     @FXML
     private void initialize() {
         setValue();
+
+        ttlValue.setText(" " + redisKey.getJedis().ttl(key));
 
         // 监听数据的选择
         dataTable.getSelectionModel().selectedItemProperty().addListener(
@@ -153,6 +159,20 @@ public class TabPaneController {
     private void leftDelValue() {
         doAction.leftDelValue(key);
         reloadValue();
+    }
+
+    /**
+     * 设置TTL.
+     */
+    @FXML
+    private void setTTL() {
+        ShowPanel showPanel = new ShowPanel();
+        boolean ok = showPanel.showValuePanel(true);
+        if (ok) {
+            int ttl = Integer.parseInt(showPanel.getValueText());
+            redisKey.expire(key, ttl);
+        }
+        ttlValue.setText(" " + redisKey.getJedis().ttl(key));
     }
 
     /**

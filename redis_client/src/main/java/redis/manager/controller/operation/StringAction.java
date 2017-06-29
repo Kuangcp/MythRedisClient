@@ -57,7 +57,7 @@ public class StringAction extends ShowPanel implements DoAction {
      */
     @Override
     public void setValueByIndex(String key, int nowSelectRow, boolean selected) {
-        boolean ok = showValuePanel();
+        boolean ok = showValuePanel(false);
         if (ok) {
             String value = controller.getValue();
             REDIS_KEY.getJedis().set(key, value);
