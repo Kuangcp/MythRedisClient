@@ -10,7 +10,7 @@ import redis.manager.Main;
  */
 public interface DoAction {
 
-    RedisKey redisKey = Main.redisKey;
+    RedisKey REDIS_KEY = Main.getRedisKey();
 
     /**
      * 装载面板数据.

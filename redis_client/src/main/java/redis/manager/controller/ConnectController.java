@@ -24,7 +24,7 @@ import java.util.Map;
 @Component
 public class ConnectController {
 
-    private PoolManagement poolManagement = Main.management;
+    private PoolManagement poolManagement = Main.getManagement();
     private Stage dialogStage;
     private boolean okChecked = false;
     /** 最大连接数输入框. */
@@ -199,16 +199,16 @@ public class ConnectController {
      */
     private void textChangeListener(TextField field, Label label, boolean[] ok) {
         field.focusedProperty().addListener(
-                (observable, oldValue, newValue) -> {
-                    if (!field.getText().matches("[0-9]*")) {
-                        label.setText("请输入数字");
-                        label.setTextFill(Color.rgb(255, 0, 0));
-                        ok[0] = false;
-                        return;
-                    }
-                    label.setText("");
-                    ok[0] = true;
+            (observable, oldValue, newValue) -> {
+                if (!field.getText().matches("[0-9]*")) {
+                    label.setText("请输入数字");
+                    label.setTextFill(Color.rgb(255, 0, 0));
+                    ok[0] = false;
+                    return;
                 }
+                label.setText("");
+                ok[0] = true;
+            }
         );
     }
 
@@ -220,16 +220,16 @@ public class ConnectController {
     private void confirmPassword(PasswordField password, PasswordField rePassword,
                                  Label label, boolean[] ok) {
         rePassword.focusedProperty().addListener(
-                (observable, oldValue, newValue) -> {
-                    if (!rePassword.getText().equals(password.getText())) {
-                        label.setText("两次密码不一致");
-                        label.setTextFill(Color.rgb(255, 0, 0));
-                        ok[0] = false;
-                        return;
-                    }
-                    label.setText("");
-                    ok[0] = true;
+            (observable, oldValue, newValue) -> {
+                if (!rePassword.getText().equals(password.getText())) {
+                    label.setText("两次密码不一致");
+                    label.setTextFill(Color.rgb(255, 0, 0));
+                    ok[0] = false;
+                    return;
                 }
+                label.setText("");
+                ok[0] = true;
+            }
         );
     }
 

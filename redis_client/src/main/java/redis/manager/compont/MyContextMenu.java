@@ -1,13 +1,11 @@
 package redis.manager.compont;
 
-import com.redis.config.PoolManagement;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeView;
 import redis.manager.compont.menu.DelMenu;
 import redis.manager.compont.menu.CreateKeyMenu;
 import redis.manager.compont.menu.DestroyMenu;
-import redis.manager.compont.menu.MyMenuItem;
 
 /**
  * 左侧树状上下文菜单.

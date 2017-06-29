@@ -29,10 +29,10 @@ import java.util.Map;
 public class Main extends Application {
 
     private static ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
-    public static PoolManagement management = (PoolManagement)context.getBean("poolManagement");
-    public static RedisKey redisKey = (RedisKey) context.getBean("redisKey");
-    public static RedisList redisList = (RedisList) context.getBean("redisList");
-    public static RedisSet redisSet = (RedisSet) context.getBean("redisSet");
+    private static PoolManagement management = (PoolManagement)context.getBean("poolManagement");
+    private static RedisKey redisKey = (RedisKey) context.getBean("redisKey");
+    private static RedisList redisList = (RedisList) context.getBean("redisList");
+    private static RedisSet redisSet = (RedisSet) context.getBean("redisSet");
 
     private AnchorPane rootLayout;
     private FXMLLoader rootLoader;
@@ -124,5 +124,37 @@ public class Main extends Application {
         management.setCurrentPoolId(PropertyFile.getMaxId()+"");
         launch(args);
 
+    }
+
+    public static PoolManagement getManagement() {
+        return management;
+    }
+
+    public static void setManagement(PoolManagement management) {
+        Main.management = management;
+    }
+
+    public static RedisKey getRedisKey() {
+        return redisKey;
+    }
+
+    public static void setRedisKey(RedisKey redisKey) {
+        Main.redisKey = redisKey;
+    }
+
+    public static RedisList getRedisList() {
+        return redisList;
+    }
+
+    public static void setRedisList(RedisList redisList) {
+        Main.redisList = redisList;
+    }
+
+    public static RedisSet getRedisSet() {
+        return redisSet;
+    }
+
+    public static void setRedisSet(RedisSet redisSet) {
+        Main.redisSet = redisSet;
     }
 }

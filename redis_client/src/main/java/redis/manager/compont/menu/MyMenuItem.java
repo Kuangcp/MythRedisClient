@@ -13,8 +13,8 @@ import redis.manager.Main;
  */
 public abstract class MyMenuItem extends MenuItem {
 
-    protected PoolManagement poolManagement = Main.management;
-    protected RedisKey redisKey = Main.redisKey;
+    protected PoolManagement poolManagement = Main.getManagement();
+    protected RedisKey redisKey = Main.getRedisKey();
 
     protected MyMenuItem(String label) {
         super(label);

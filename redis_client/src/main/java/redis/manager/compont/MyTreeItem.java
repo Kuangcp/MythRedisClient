@@ -1,6 +1,5 @@
 package redis.manager.compont;
 
-import com.redis.config.PoolManagement;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;

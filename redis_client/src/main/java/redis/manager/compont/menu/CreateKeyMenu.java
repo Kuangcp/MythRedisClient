@@ -36,13 +36,13 @@ public class CreateKeyMenu extends MyMenuItem {
     @Override
     protected void setAction(TreeView treeView) {
         super.setOnAction(
-                (event) -> {
-                    TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
-                    String flag = item.getValue().getAccessibleHelp();
-                    if ("db".equals(flag)) {
-                        showPanel(treeView, item);
-                    }
+            (event) -> {
+                TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
+                String flag = item.getValue().getAccessibleHelp();
+                if ("db".equals(flag)) {
+                    showPanel(treeView, item);
                 }
+            }
         );
     }
 

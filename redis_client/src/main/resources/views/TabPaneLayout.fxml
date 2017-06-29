@@ -14,7 +14,6 @@
       <TextField fx:id="typeText" layoutX="51.0" layoutY="20.0" prefWidth="300.0" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="449.0" />
       <Label layoutX="384.0" layoutY="25.0" text="TTL:" AnchorPane.rightAnchor="371.0" AnchorPane.topAnchor="25.0" />
       <Label layoutX="417.0" layoutY="25.0" text="-1" AnchorPane.rightAnchor="355.0" AnchorPane.topAnchor="25.0" />
-      <Button layoutX="602.0" layoutY="20.0" mnemonicParsing="false" onAction="#rename" text="Rename" AnchorPane.rightAnchor="132.0" AnchorPane.topAnchor="20.0" />
       <Button layoutX="592.0" layoutY="20.0" mnemonicParsing="false" onAction="#del" text="Delete" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="20.0" />
       <TableView fx:id="dataTable" editable="true" layoutX="14.0" layoutY="73.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="500.0" prefWidth="800.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="70.0">
         <columns>
@@ -28,7 +27,7 @@
       </TableView>
       <Button fx:id="addRowBtn" layoutX="636.0" layoutY="79.0" mnemonicParsing="false" onAction="#addRow" prefWidth="100.0" text="Add row" AnchorPane.rightAnchor="50.0" />
       <Button fx:id="delRowBtn" layoutX="636.0" layoutY="117.0" mnemonicParsing="false" onAction="#delRow" prefWidth="100.0" text="Delete row" AnchorPane.rightAnchor="50.0" />
-      <Button layoutX="479.0" layoutY="20.0" mnemonicParsing="false" onAction="#reloadValue" prefWidth="100.0" text=" Reload value" AnchorPane.rightAnchor="221.0" />
+      <Button layoutX="570.0" layoutY="20.0" mnemonicParsing="false" onAction="#reloadValue" prefWidth="100.0" text=" Reload value" AnchorPane.rightAnchor="130.0" />
       <Label layoutX="559.0" layoutY="215.0" text="page" AnchorPane.rightAnchor="190.0" />
       <TextField layoutX="596.0" layoutY="210.0" prefHeight="28.0" prefWidth="78.0" AnchorPane.rightAnchor="105.0" />
       <Label layoutX="678.0" layoutY="215.0" text="of" AnchorPane.rightAnchor="90.0" />
@@ -42,6 +41,6 @@
       <TextArea fx:id="valueShowText" layoutX="51.0" layoutY="372.0" prefHeight="100.0" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
       <Button fx:id="setValueBtn" layoutX="650.0" layoutY="157.0" mnemonicParsing="false" onAction="#setListValue" prefHeight="28.0" prefWidth="100.0" text="Set value" AnchorPane.rightAnchor="50.0" />
       <Button fx:id="leftAddBtn" layoutX="548.0" layoutY="79.0" mnemonicParsing="false" onAction="#leftAddValue" prefWidth="100.0" text="Left Add" AnchorPane.rightAnchor="180.0" />
-      <Button fx:id="leftDelBtn" layoutX="520.0" layoutY="117.0" mnemonicParsing="false" onAction="#leftDelValue" text="Left Del" prefWidth="100.0" AnchorPane.rightAnchor="180.0" />
+      <Button fx:id="leftDelBtn" layoutX="520.0" layoutY="117.0" mnemonicParsing="false" onAction="#leftDelValue" prefWidth="100.0" text="Left Del" AnchorPane.rightAnchor="180.0" />
    </children>
 </AnchorPane>

@@ -1,17 +1,8 @@
 package redis.manager.controller;
 
 import com.redis.assemble.key.RedisKey;
-import com.redis.assemble.list.RedisList;
-import com.redis.common.exception.ActionErrorException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 import redis.manager.Main;
 import redis.manager.controller.operation.DoAction;
@@ -19,10 +10,6 @@ import redis.manager.controller.operation.ListAction;
 import redis.manager.controller.operation.SetAction;
 import redis.manager.controller.operation.StringAction;
 import redis.manager.entity.TableEntity;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * tab面板的controller.
@@ -32,9 +19,10 @@ import java.util.Optional;
 @Component
 public class TabPaneController {
 
-    private RedisKey redisKey = Main.redisKey;
-    public static  String key;
-    public static String poolId;
+    private RedisKey redisKey = Main.getRedisKey();
+    private static  String key;
+    private static String poolId;
+    private static int dbId;
 
     /** 数据显示表格. */
     @FXML
@@ -88,19 +76,19 @@ public class TabPaneController {
 
         // 监听数据的选择
         dataTable.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> {
-                    try {
-                        keyShowText.setText(newValue.getKey());
-                        valueShowText.setText(newValue.getValue());
-                        nowSelectRow = Integer.parseInt(newValue.getRow());
-                        selected = true;
-                    } catch (Exception e) {
-                        keyShowText.setText("");
-                        valueShowText.setText("");
-                        nowSelectRow = 0;
-                        selected = false;
-                    }
+            (observable, oldValue, newValue) -> {
+                try {
+                    keyShowText.setText(newValue.getKey());
+                    valueShowText.setText(newValue.getValue());
+                    nowSelectRow = Integer.parseInt(newValue.getRow());
+                    selected = true;
+                } catch (Exception e) {
+                    keyShowText.setText("");
+                    valueShowText.setText("");
+                    nowSelectRow = 0;
+                    selected = false;
                 }
+            }
         );
 
     }
@@ -198,15 +186,13 @@ public class TabPaneController {
         reloadValue();
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     /**
      * 装载面板数据.
      */
     private void setValue() {
         redisKey.getManagement().switchPool(poolId);
+        redisKey.setDb(dbId);
         String type = redisKey.type(key);
         typeText.setText(type);
         switch (type) {
@@ -252,4 +238,27 @@ public class TabPaneController {
         doAction.setValue(key);
     }
 
+    public static String getKey() {
+        return key;
+    }
+
+    public static void setKey(String key) {
+        TabPaneController.key = key;
+    }
+
+    public static String getPoolId() {
+        return poolId;
+    }
+
+    public static void setPoolId(String poolId) {
+        TabPaneController.poolId = poolId;
+    }
+
+    public static int getDbId() {
+        return dbId;
+    }
+
+    public static void setDbId(int dbId) {
+        TabPaneController.dbId = dbId;
+    }
 }
