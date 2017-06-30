@@ -158,7 +158,15 @@ public class TabPaneController {
         ShowPanel showPanel = new ShowPanel();
         boolean ok = showPanel.showValuePanel(true);
         if (ok) {
-            int ttl = Integer.parseInt(showPanel.getValueText());
+            int ttl;
+            try {
+                ttl = Integer.parseInt(showPanel.getValueText());
+            } catch (Exception e) {
+                String t = showPanel.getValueText();
+                t = t.substring(0, t.lastIndexOf("."));
+                ttl = Integer.parseInt(t);
+            }
+
             redisKey.expire(key, ttl);
         }
         ttlValue.setText(" " + redisKey.getJedis().ttl(key));
@@ -231,6 +239,12 @@ public class TabPaneController {
                 leftAddBtn.setDisable(true);
                 leftDelBtn.setDisable(true);
                 doAction = new HashAction(dataTable, rowColumn, keyColumn, valueColumn);
+                break;
+
+            case "zset" :
+                leftAddBtn.setDisable(true);
+                leftDelBtn.setDisable(true);
+                doAction = new ZsetAction(dataTable, rowColumn, keyColumn, valueColumn);
                 break;
 
             default:

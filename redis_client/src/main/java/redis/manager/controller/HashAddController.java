@@ -1,6 +1,7 @@
 package redis.manager.controller;
 
 import com.redis.assemble.hash.RedisHash;
+import com.redis.assemble.set.sort.RedisSortSet;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -17,6 +18,7 @@ import redis.manager.compont.alert.MyAlert;
 public class HashAddController {
 
     private RedisHash redisHash = Main.getRedisHash();
+    private RedisSortSet redisSortSet = Main.getRedisSortSet();
     private boolean okChecked = false;
     private Stage dialogStage;
     private String addKey;
@@ -41,7 +43,6 @@ public class HashAddController {
      */
     @FXML
     private void handlerOk() {
-        System.out.println(flag);
         // Hash
         if (flag) {
             long result = redisHash.saveWhenNotExist(addKey, getKey(), getVlaue());
@@ -54,6 +55,19 @@ public class HashAddController {
             }
             okChecked = true;
             dialogStage.close();
+        } else {
+            // 有序集合
+            if (isDouble()) {
+                Double v = Double.parseDouble(getVlaue());
+                redisSortSet.save(addKey, v, getKey());
+                okChecked = true;
+                dialogStage.close();
+            } else {
+                Alert alert = MyAlert.getInstance(Alert.AlertType.WARNING);
+                alert.setTitle("提示");
+                alert.setContentText("值请输入数字");
+                alert.showAndWait();
+            }
         }
     }
 
@@ -111,5 +125,19 @@ public class HashAddController {
 
     public void setAddKey(String addKey) {
         this.addKey = addKey;
+    }
+
+    /**
+     * 判断输入的值是否为数字.
+     * @return true为是数字
+     */
+    private boolean isDouble() {
+        String v = getVlaue();
+        try {
+            Double.parseDouble(v);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

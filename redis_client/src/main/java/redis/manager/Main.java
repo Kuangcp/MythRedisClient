@@ -5,6 +5,7 @@ import com.redis.assemble.hash.RedisHash;
 import com.redis.assemble.key.RedisKey;
 import com.redis.assemble.list.RedisList;
 import com.redis.assemble.set.RedisSet;
+import com.redis.assemble.set.sort.RedisSortSet;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.config.PoolManagement;
 import com.redis.config.PropertyFile;
@@ -38,6 +39,7 @@ public class Main extends Application {
     private static RedisList redisList = (RedisList) context.getBean("redisList");
     private static RedisSet redisSet = (RedisSet) context.getBean("redisSet");
     private static RedisHash redisHash = (RedisHash) context.getBean("redisHash");
+    private static RedisSortSet redisSortSet = (RedisSortSet) context.getBean("redisSortSet");
 
     private AnchorPane rootLayout;
     private FXMLLoader rootLoader;
@@ -124,5 +126,9 @@ public class Main extends Application {
 
     public static RedisHash getRedisHash() {
         return redisHash;
+    }
+
+    public static RedisSortSet getRedisSortSet() {
+        return redisSortSet;
     }
 }
