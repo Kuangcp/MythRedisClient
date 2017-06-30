@@ -109,7 +109,7 @@ public class ListAction extends ShowPanel implements DoAction {
      * @param key 数据库中的键
      */
     @Override
-    public void delValue(String key) {
+    public void delValue(String key, boolean selected) {
         Alert confirmAlert = MyAlert.getInstance(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("提示");
         confirmAlert.setHeaderText("");

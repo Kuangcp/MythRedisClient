@@ -36,8 +36,9 @@ public interface DoAction {
     /**
      * 删除值.
      * @param key 数据库中的键
+     * @param selected 是否选择值
      */
-    void delValue(String key);
+    void delValue(String key, boolean selected);
 
     /**
      * 左添加值.
