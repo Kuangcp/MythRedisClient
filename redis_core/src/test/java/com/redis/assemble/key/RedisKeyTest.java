@@ -13,6 +13,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -57,6 +58,14 @@ public class RedisKeyTest {
         for(int i=0;i<5000;i++){
             redisKey.set("pp"+i,"dfdfdfdf");
         }
+    }
+    @Test
+    public void testStatus(){
+        Map<String,String> map = redisKey.getStatus();
+//        for(String key:map.keySet()){
+//            System.out.println(key+"_______"+map.get(key));
+//        }
+        System.out.println(map.get("db0"));
     }
 
     // 测试了set get delete
