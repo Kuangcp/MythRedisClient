@@ -61,7 +61,7 @@ public class PropertyFile {
      * @throws ReadConfigException 文件异常
      * @return 旧值
      */
-    public static String  save(String key, String value) throws ReadConfigException {
+    public static String save(String key, String value) throws ReadConfigException {
         String result;
         try {
             getFromFile();

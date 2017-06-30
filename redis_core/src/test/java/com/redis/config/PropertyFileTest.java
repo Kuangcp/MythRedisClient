@@ -48,8 +48,11 @@ public class PropertyFileTest {
     @Test
     public void testUpdate() throws Exception {
         PropertyFile.delete(testKey);
+        propertyFile.save(testKey,"df");
         String result = PropertyFile.update(testKey, "value");
+        PropertyFile.delete(testKey);
         Assert.assertEquals(null, result);
+
     }
     @Test
     public void testMaxId() throws ReadConfigException {

@@ -20,7 +20,7 @@ public class ConnectPanel {
      * 显示连接属性面板.
      * @return 是否点击确认
      */
-    public boolean showConnectPanel() {
+    public boolean showConnectPanel(String poolId) {
         boolean ok = false;
 
         // 创建 FXMLLoader 对象
@@ -44,6 +44,7 @@ public class ConnectPanel {
 
         connectController = loader.getController();
         connectController.setDialogStage(dialogStage);
+        connectController.setPoolId(poolId);
 
         // 显示对话框, 并等待, 直到用户关闭
         dialogStage.showAndWait();
@@ -60,4 +61,5 @@ public class ConnectPanel {
     public void isNewLink(boolean flag) {
         ConnectController.setFlag(flag);
     }
+
 }
