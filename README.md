@@ -3,11 +3,14 @@
 [![codebeat badge](https://codebeat.co/badges/894d2da8-5926-4c74-9e25-664a424beff7)](https://codebeat.co/projects/github-com-kuangcp-mythredisclient-master)
 
 ### Introduction
-使用JavaFx和Spring技术做的redis客户端，具有常见的CRUD操作
+- 使用JavaFx和Spring技术做的redis客户端，具有常见的CRUD操作
+- 后续功能完善ing
+
 
 *****
 
-- [API Doc](https://kuangcp.github.io/Docs/MythRedisClient/javadoc/) | [How to Install](https://github.com/Kuangcp/MythRedisClient/wiki)
+
+[API Doc](https://kuangcp.github.io/Docs/MythRedisClient/javadoc/) | [How to Install](https://github.com/Kuangcp/MythRedisClient/wiki)
 
 
 ### Members:
