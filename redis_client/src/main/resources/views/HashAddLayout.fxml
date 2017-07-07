@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="180.0" prefWidth="280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="redis.manager.controller.HashAddController">
+  <children>
+    <Label layoutX="15.0" layoutY="35.0" text="键:" />
+    <TextField fx:id="keyText" layoutX="50.0" layoutY="32.0" prefWidth="200.0" />
+    <Label layoutX="15.0" layoutY="81.0" text="值:" />
+    <TextField fx:id="valueText" layoutX="50.0" layoutY="81.0" prefWidth="200.0" />
+    <HBox id="HBox" alignment="CENTER" layoutX="139.0" layoutY="134.0" spacing="5.0">
+      <children>
+        <Button onAction="#handlerOk" mnemonicParsing="false" text="确定" />
+        <Button onAction="#handlerCancel" mnemonicParsing="false" text="取消">
+          <HBox.margin>
+            <Insets left="10.0" />
+          </HBox.margin>
+        </Button>
+      </children>
+    </HBox>
+  </children>
+</AnchorPane>

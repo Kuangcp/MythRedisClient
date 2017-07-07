@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.springframework.stereotype.Component;
 import redis.manager.Main;
-import redis.manager.controller.operation.DoAction;
-import redis.manager.controller.operation.ListAction;
-import redis.manager.controller.operation.SetAction;
-import redis.manager.controller.operation.StringAction;
+import redis.manager.controller.operation.*;
 import redis.manager.controller.operation.panel.ShowPanel;
 import redis.manager.entity.TableEntity;
 
@@ -108,14 +105,6 @@ public class TabPaneController {
 
     }
 
-    /**
-     * 删除数据.
-     */
-    @FXML
-    private void del() {
-        // TODO 删除数据.
-
-    }
 
     /**
      * 添加一行数据.
@@ -131,7 +120,7 @@ public class TabPaneController {
      */
     @FXML
     private void delRow() {
-        doAction.delValue(key);
+        doAction.delValue(key, selected);
         reloadValue();
     }
 
@@ -169,7 +158,15 @@ public class TabPaneController {
         ShowPanel showPanel = new ShowPanel();
         boolean ok = showPanel.showValuePanel(true);
         if (ok) {
-            int ttl = Integer.parseInt(showPanel.getValueText());
+            int ttl;
+            try {
+                ttl = Integer.parseInt(showPanel.getValueText());
+            } catch (Exception e) {
+                String t = showPanel.getValueText();
+                t = t.substring(0, t.lastIndexOf("."));
+                ttl = Integer.parseInt(t);
+            }
+
             redisKey.expire(key, ttl);
         }
         ttlValue.setText(" " + redisKey.getJedis().ttl(key));
@@ -215,6 +212,7 @@ public class TabPaneController {
         redisKey.setDb(dbId);
         String type = redisKey.type(key);
         typeText.setText(type);
+        ttlValue.setText(" " + redisKey.getJedis().ttl(key));
         switch (type) {
             case "list" :
                 addRowBtn.setText("Right Add");
@@ -237,6 +235,18 @@ public class TabPaneController {
                 doAction = new StringAction(dataTable, rowColumn, keyColumn, valueColumn);
                 break;
 
+            case "hash" :
+                leftAddBtn.setDisable(true);
+                leftDelBtn.setDisable(true);
+                doAction = new HashAction(dataTable, rowColumn, keyColumn, valueColumn);
+                break;
+
+            case "zset" :
+                leftAddBtn.setDisable(true);
+                leftDelBtn.setDisable(true);
+                doAction = new ZsetAction(dataTable, rowColumn, keyColumn, valueColumn);
+                break;
+
             default:
                 doAction = new DoAction() {
                     @Override
@@ -246,7 +256,7 @@ public class TabPaneController {
                     @Override
                     public void addValue(String key) {}
                     @Override
-                    public void delValue(String key) {}
+                    public void delValue(String key, boolean selected) {}
                     @Override
                     public void leftAddValue(String key) {}
                     @Override

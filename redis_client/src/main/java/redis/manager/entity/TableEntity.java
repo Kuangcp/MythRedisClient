@@ -23,6 +23,7 @@ public class TableEntity {
         this.value = new SimpleStringProperty(value);
     }
 
+
     public String getRow() {
         return row.get();
     }
@@ -58,4 +59,5 @@ public class TableEntity {
     public void setValue(String value) {
         this.value.set(value);
     }
+
 }

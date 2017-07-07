@@ -3,6 +3,7 @@ package redis.manager.controller;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.config.*;
 import com.redis.utils.MythReflect;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -110,6 +111,7 @@ public class ConnectController {
         if (!flag) {
             setPoolAttribute();
         }
+
     }
 
 
@@ -141,6 +143,9 @@ public class ConnectController {
                 }
                 resultLabel.setText("配置错误");
             } else {
+
+                // 修改连接
+                System.out.println("修改: " + portText.getText());
                 RedisPoolProperty property = getProperty();
                 property.setPoolId(poolId);
                 System.out.println("uiuiuiuiuiiiui"+property.toString());

@@ -80,12 +80,12 @@ public class ListAddController {
         boolean ok = false;
         String input = valueText.getText();
         try {
-            Integer.parseInt(input);
+            Double.parseDouble(input);
             ok = true;
         } catch (Exception e) {
             Alert alert = MyAlert.getInstance(Alert.AlertType.ERROR);
             alert.setTitle("错误");
-            alert.setContentText("请输入整数");
+            alert.setContentText("请输入数字");
             alert.showAndWait();
         }
         return ok;

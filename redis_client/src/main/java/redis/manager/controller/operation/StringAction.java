@@ -80,7 +80,7 @@ public class StringAction extends ShowPanel implements DoAction {
      * @param key 数据库中的键
      */
     @Override
-    public void delValue(String key) {
+    public void delValue(String key, boolean selected) {
 
     }
 
