@@ -7,6 +7,7 @@
 - 后续功能完善ing
 
 
+
 *****
 
 
@@ -18,7 +19,12 @@
 - [@dragonhht](https://github.com/dragonhht)
 - [@Kuangcp](https://github.com/kuangcp)
 
+******
 
+`主界面`
+![main](https://gitlab.com/Kuangcp/ImageRepo/raw/master/Image/MythRedis/main.png)
 
+`新建连接界面`
+![add](https://gitlab.com/Kuangcp/ImageRepo/raw/master/Image/MythRedis/add.png)
 
 
