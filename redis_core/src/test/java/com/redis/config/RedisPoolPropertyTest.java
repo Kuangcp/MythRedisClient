@@ -9,7 +9,7 @@ import org.junit.Test;
  */
 public class RedisPoolPropertyTest {
     private RedisPoolProperty redisPoolProperty = new RedisPoolProperty(400, 100, 10000, false,
-            6381, 600, "120.25.203.47", "myth", "1002", "myth");
+            6381, 600, "120.25.203.47", "myth", "1010", "myth");
 
 //    @Test
 //    public void testInitByIdFromFile() throws Exception {
@@ -23,6 +23,19 @@ public class RedisPoolPropertyTest {
     public void testInitByIdFromConfig() throws Exception {
 //        RedisPoolProperty result = RedisPoolProperty.initByIdFromConfig("1002");
 //        Assert.assertEquals(redisPoolProperty.toString(), result.toString());
+    }
+    // 测试成功  为了构建注释
+    @Test
+    public void testUpdate() throws Exception{
+//        RedisPoolProperty property = RedisPoolProperty.initByIdFromConfig("1010");
+//        System.out.println(property.toString());
+//        property.setHost("127.0.0.1");
+//        property.setName("本地 6379");
+//        property.setPort(6379);
+//        System.out.println(property.toString());
+//        RedisPoolProperty.updateConfigFile(property);
+//        property = RedisPoolProperty.initByIdFromConfig("1010");
+//        System.out.println(property.toString());
     }
 
 }

@@ -34,9 +34,10 @@ public class AttributeSetMenu extends MyMenuItem {
                 TreeItem<Label> item = (TreeItem) treeView.getSelectionModel().getSelectedItem();
                 String flag = item.getValue().getAccessibleHelp();
                 if ("link".equals(flag)) {
+                    String poolId = item.getValue().getAccessibleText();
                     ConnectPanel connectPanel = new ConnectPanel();
                     connectPanel.isNewLink(false);
-                    connectPanel.showConnectPanel();
+                    connectPanel.showConnectPanel(poolId);
                 }
             }
         );

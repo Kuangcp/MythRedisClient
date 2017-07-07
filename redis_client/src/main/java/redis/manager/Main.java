@@ -13,16 +13,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import redis.manager.controller.ConnectController;
 import redis.manager.controller.MainController;
 import redis.manager.controller.operation.panel.ConnectPanel;
 
-import java.io.IOException;
 import java.util.Map;
 
 
@@ -79,7 +76,7 @@ public class Main extends Application {
         // 显示面板
         ConnectPanel connectPanel = new ConnectPanel();
         connectPanel.isNewLink(true);
-        ok = connectPanel.showConnectPanel();
+        ok = connectPanel.showConnectPanel(null);
 
         if (ok) {
             // 更新连接信息

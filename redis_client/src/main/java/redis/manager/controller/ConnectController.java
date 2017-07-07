@@ -88,6 +88,7 @@ public class ConnectController {
     private boolean isRight = false;
     /** 连接名称. */
     private static String linkName = "默认连接";
+    private String poolId;
 
     /**
      * 初始化.
@@ -142,8 +143,13 @@ public class ConnectController {
                 }
                 resultLabel.setText("配置错误");
             } else {
+
                 // 修改连接
                 System.out.println("修改: " + portText.getText());
+                RedisPoolProperty property = getProperty();
+                property.setPoolId(poolId);
+                System.out.println("uiuiuiuiuiiiui"+property.toString());
+                RedisPoolProperty.updateConfigFile(property);
                 okChecked = true;
                 dialogStage.close();
             }
@@ -316,5 +322,9 @@ public class ConnectController {
         nameText.setText(property.getName());
         passwordText.setText(property.getPassword());
         repasswordText.setText(property.getPassword());
+    }
+
+    public void setPoolId(String poolId) {
+        this.poolId = poolId;
     }
 }

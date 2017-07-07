@@ -48,7 +48,7 @@ public class PoolManagement {
             logger.error(ExceptionInfo.NOT_EXIST_CURRENT_POOL);
             return null;
         }
-        logger.info(NoticeInfo.CONFIG_CONTAIN_POOL +currentPoolId);
+//        logger.info(NoticeInfo.CONFIG_CONTAIN_POOL +currentPoolId);
         try {
             return getRedisPool(currentPoolId);
         } catch (Exception e) {

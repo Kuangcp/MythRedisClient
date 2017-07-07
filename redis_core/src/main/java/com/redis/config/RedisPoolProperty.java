@@ -1,10 +1,15 @@
 package com.redis.config;
 
+import com.redis.common.exception.ExceptionInfo;
+import com.redis.common.exception.NoticeInfo;
+import com.redis.common.exception.ReadConfigException;
 import com.redis.utils.MythReflect;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +37,7 @@ public class RedisPoolProperty {
     private String name;
     private String poolId;
     private String password="";//设定默认值为空字符串而不是null，因为后面的机制是要把null转String的
+    private static Logger logger = LoggerFactory.getLogger(RedisPoolProperty.class);
 
 //    /**
 //     * 根据id从配置文件中加载配置对象
@@ -61,12 +67,17 @@ public class RedisPoolProperty {
 //        return this;
 //    }
 
+    /**
+     * 从配置文件中加载一个配置对象
+     * @param id id
+     * @return 配置对象
+     */
     public static RedisPoolProperty initByIdFromConfig(String id){
         RedisPoolProperty property = new RedisPoolProperty();
         String pre = id+Configs.SEPARATE;
         List<String> lists = MythReflect.getFieldByClass(RedisPoolProperty.class);
         Map<String ,Object> map = new HashMap<>();
-        MythProperties config = null;
+        MythProperties config;
         try {
             config = PropertyFile.getProperties(Configs.PROPERTY_FILE);
             for (String field:lists){
@@ -77,6 +88,29 @@ public class RedisPoolProperty {
             e.printStackTrace();
         }
         return property;
+    }
+
+    /**
+     * 根据传入的对象更新配置文件
+     * @param property 原有配置对象
+     */
+    public static void updateConfigFile(RedisPoolProperty property){
+        try {
+            Map<String,Object> maps = MythReflect.getFieldsValue(property);
+            for(String key:maps.keySet()){
+                System.out.println(key+"-------"+maps.get(key));
+                if("poolId".equals(key)){
+                    continue;
+                }
+                PropertyFile.update(property.getPoolId()+Configs.SEPARATE+key,maps.get(key).toString());
+                System.out.println(property.getPoolId()+Configs.SEPARATE+key);
+                System.out.println(maps.get(key).toString());
+            }
+        } catch (IllegalAccessException | ReadConfigException e) {
+            logger.info(ExceptionInfo.UPDATE_CONFIG_KEY_FAILED);
+            logger.debug(NoticeInfo.ERROR_INFO,e,RedisPoolProperty.class);
+        }
+
     }
 
     @Override

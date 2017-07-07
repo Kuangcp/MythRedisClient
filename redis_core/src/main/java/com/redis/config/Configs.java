@@ -31,4 +31,8 @@ public interface Configs {
     int EXPIRE_DAY = 60*60*24;        //一天
     int EXPIRE_MONTH = 60*60*24*30;   //一个月
 
+    String[] REDIS_INFO = {"Server","Clients","Memory","Persistence","Stats","Replication","CPU","Cluster","Keyspace"};
+    String REDIS_INFO_TITLE="#";
+    String REDIS_INFO_END="\n";
+    String REDIS_INFO_SEPARATE=":";
 }

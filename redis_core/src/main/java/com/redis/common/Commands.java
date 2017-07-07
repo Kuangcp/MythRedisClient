@@ -1,10 +1,14 @@
 package com.redis.common;
 
+import com.redis.config.Configs;
 import com.redis.config.PoolManagement;
 import com.redis.config.RedisPools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-11  下午10:57
@@ -95,6 +99,23 @@ public class Commands {
     public String flushDB(int db){
         setDb(db);
         return getJedis().flushDB();
+    }
+    public Map<String,String> getStatus(){
+        Map<String,String> map = new HashMap<>();
+        Jedis jedis = getJedis();
+//        System.out.println(jedis.info());
+
+        String[] lists = Configs.REDIS_INFO;
+        for(String key:lists){
+            String[] infos = jedis.info(key).split(Configs.REDIS_INFO_END);
+            for(String s:infos){
+                if(!s.startsWith(Configs.REDIS_INFO_TITLE)){
+                    String[] temp = s.split(Configs.REDIS_INFO_SEPARATE);
+                    map.put(temp[0],temp[1]);
+                }
+            }
+        }
+        return map;
     }
     /**
      * @param key 键
