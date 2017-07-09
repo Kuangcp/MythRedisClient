@@ -3,8 +3,6 @@ package com.redis.common;
 import com.redis.config.Configs;
 import com.redis.config.PoolManagement;
 import com.redis.config.RedisPools;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
@@ -16,10 +14,8 @@ import java.util.Map;
  * 如果使用切面的话，对于日志记录功能的添加会比较方便，但是Spring框架还是没有到非用不可的地步
  * 如果使用Spring，是否是考虑注入Manager那个类
  */
-@Component
 public class Commands {
-    @Autowired
-    private PoolManagement management;
+    public static PoolManagement management = PoolManagement.getInstance();
     // 当前所有的操作都是共享这个参数的： 当前连接池，当前的数据库
     private int db = 0;
     private RedisPools pools;
@@ -34,30 +30,10 @@ public class Commands {
         jedis.select(db);
         return jedis;
     }
-//    /**
-//     *
-//     * @param db 数据库下标0开始
-//     * @return 获取指定了数据库的jedis连接
-//     */
-//    public Jedis getJedisByDb(int db){
-//        Jedis jedis = getJedis();
-//        jedis.select(db);
-//        return jedis;
-//    }
-
 
     public String type(String key){
         return getJedis().type(key);
     }
-    // 切换到指定的id的配置下的连接池
-//    public void setPools(String id){
-//        try {
-//            this.pools = management.getRedisPool(id);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            logger.error(ExceptionInfo.GET_POOL_BY_ID_FAILED);
-//        }
-//    }
 
     /**
      * 修改已经存在的键的存活时间,适用于所有key
@@ -104,7 +80,6 @@ public class Commands {
         Map<String,String> map = new HashMap<>();
         Jedis jedis = getJedis();
 //        System.out.println(jedis.info());
-
         String[] lists = Configs.REDIS_INFO;
         for(String key:lists){
             String[] infos = jedis.info(key).split(Configs.REDIS_INFO_END);
@@ -128,13 +103,6 @@ public class Commands {
         return getJedis().del(key);
     }
 
-    public PoolManagement getManagement() {
-        return management;
-    }
-
-    public void setManagement(PoolManagement management) {
-        this.management = management;
-    }
 }
 // 开启事务
 //Transaction e = jedis.multi();

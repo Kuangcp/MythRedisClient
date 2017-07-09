@@ -26,12 +26,12 @@ subprojects {
 //                libraries.'common-logging',
                 libraries.'slf4j-api',
                 libraries.'logback-classic',
-                libraries.'spring-core',
-                libraries.'spring-context',
-                libraries.'spring-beans',
+//                libraries.'spring-core',
+//                libraries.'spring-context',
+//                libraries.'spring-beans',
         )
         testCompile(
-                libraries.'spring-test',
+//                libraries.'spring-test',
                 libraries.'junit',
 
         )
@@ -41,7 +41,7 @@ project(':redis_core') {
     dependencies {
         compile(
                 libraries.'jedis',
-                libraries.'common-logging'
+//                libraries.'common-logging'
         )
         testCompile(
                 libraries.'mockito-core',
@@ -57,7 +57,7 @@ project(':redis_client'){
         )
         testCompile(
                 libraries.'junit',
-                libraries.'spring-test'
+//                libraries.'spring-test'
         )
     }
 }

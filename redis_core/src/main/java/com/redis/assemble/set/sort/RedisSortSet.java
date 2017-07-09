@@ -1,7 +1,6 @@
 package com.redis.assemble.set.sort;
 
 import com.redis.common.Commands;
-import org.springframework.stereotype.Component;
 import redis.clients.jedis.Tuple;
 
 import java.util.Set;
@@ -10,9 +9,19 @@ import java.util.Set;
  * Created by https://github.com/kuangcp on 17-6-23  下午9:51
  * @author kuangcp
  */
-@Component
 public class RedisSortSet extends Commands {
-
+    private static RedisSortSet redisSortSet;
+    private RedisSortSet(){}
+    public synchronized static RedisSortSet getInstance(){
+        if (redisSortSet == null){
+            synchronized (RedisSortSet.class){
+                if (redisSortSet == null){
+                    redisSortSet = new RedisSortSet();
+                }
+            }
+        }
+        return redisSortSet;
+    }
 
     /**
      *

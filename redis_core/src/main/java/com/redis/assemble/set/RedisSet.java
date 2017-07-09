@@ -3,7 +3,6 @@ package com.redis.assemble.set;
 import com.redis.common.Commands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
@@ -14,11 +13,21 @@ import java.util.Set;
  * Redis 中的无序集合 set 特点：无序，不允许重复，set元素最大可以包含2的32次方-1个元素。
  * 利用set集合类型，我们可以快速取出n个key之间的并集、交集、差集等，从而轻松解决mysql等数据库不容易实现这种运算的缺陷。
  */
-@Component
 public class RedisSet extends Commands{
     private static Logger logger = LoggerFactory.getLogger(RedisSet.class);
+    private static RedisSet redisSet;
+    private RedisSet(){}
+    public synchronized static RedisSet getInstance(){
+        if (redisSet == null){
+            synchronized (RedisSet.class){
+                if(redisSet == null){
+                    redisSet = new RedisSet();
+                }
+            }
+        }
+        return redisSet;
+    }
 
-    // TODO 测试完所有的方法
     /**
      * 往set追加成员，如果set不存在就新建，如果set已经存在，且追加的成员有重复，重复的忽略操作，头插法
      * @param key 键

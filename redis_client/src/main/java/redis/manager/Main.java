@@ -1,6 +1,5 @@
 package redis.manager;
 
-import com.redis.SpringInit;
 import com.redis.assemble.hash.RedisHash;
 import com.redis.assemble.key.RedisKey;
 import com.redis.assemble.list.RedisList;
@@ -14,8 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import redis.manager.controller.ConnectController;
 import redis.manager.controller.MainController;
 import redis.manager.controller.operation.panel.ConnectPanel;
@@ -30,13 +27,12 @@ import java.util.Map;
 
 public class Main extends Application {
 
-    private static ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
-    private static PoolManagement management = (PoolManagement)context.getBean("poolManagement");
-    private static RedisKey redisKey = (RedisKey) context.getBean("redisKey");
-    private static RedisList redisList = (RedisList) context.getBean("redisList");
-    private static RedisSet redisSet = (RedisSet) context.getBean("redisSet");
-    private static RedisHash redisHash = (RedisHash) context.getBean("redisHash");
-    private static RedisSortSet redisSortSet = (RedisSortSet) context.getBean("redisSortSet");
+    private static PoolManagement management = PoolManagement.getInstance();
+    private static RedisKey redisKey = RedisKey.getInstance();
+    private static RedisList redisList = RedisList.getInstance();
+    private static RedisSet redisSet = RedisSet.getInstance();
+    private static RedisHash redisHash = RedisHash.getInstance();
+    private static RedisSortSet redisSortSet = RedisSortSet.getInstance();
 
     private AnchorPane rootLayout;
     private FXMLLoader rootLoader;

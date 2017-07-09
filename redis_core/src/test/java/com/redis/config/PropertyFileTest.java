@@ -3,38 +3,23 @@ package com.redis.config;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.utils.MythReflect;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
 
 import java.util.Map;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-21  下午1:50
- * 全部测试成功，虽然还是没有理解Mock注解的意义，但是大致就是自动注入类似
+ * 2017-07-08 21:38:57 ： mock就是模拟一个虚拟的环境，但是因为我使用的是正确的配置，所以就没有必要使用Mock了
  */
 public class PropertyFileTest {
-    @Mock
-    Logger logger;
-    @InjectMocks
-    PropertyFile propertyFile;
-    String testKey = "test.key";
-
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
+    private String testKey = "test.key";
 
     @Test
     public void testSave() throws Exception {
         PropertyFile.delete(testKey);
         String result = PropertyFile.save(testKey, "value");
-        Assert.assertEquals(null, result);
         PropertyFile.delete(testKey);
+        Assert.assertEquals(null, result);
     }
 
     // 成功
@@ -47,11 +32,10 @@ public class PropertyFileTest {
 
     @Test
     public void testUpdate() throws Exception {
-        PropertyFile.delete(testKey);
-        propertyFile.save(testKey,"df");
+        PropertyFile.save(testKey,"origin");
         String result = PropertyFile.update(testKey, "value");
         PropertyFile.delete(testKey);
-        Assert.assertEquals(null, result);
+        Assert.assertEquals("origin", result);
 
     }
     @Test
@@ -71,7 +55,7 @@ public class PropertyFileTest {
             for(Object keys:lists.keySet()){
                 System.out.println(keys.toString()+":"+lists.get(keys));
             }
-            System.out.println("--------");
+            System.out.println("----------------------------------------------------");
         }
     }
 }

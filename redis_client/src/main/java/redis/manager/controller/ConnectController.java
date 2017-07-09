@@ -3,7 +3,6 @@ package redis.manager.controller;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.config.*;
 import com.redis.utils.MythReflect;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -11,9 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.springframework.stereotype.Component;
-
 import redis.manager.Main;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +20,6 @@ import java.util.Map;
  * User: huang
  * Date: 17-6-22
  */
-@Component
 public class ConnectController {
 
     private PoolManagement poolManagement = Main.getManagement();

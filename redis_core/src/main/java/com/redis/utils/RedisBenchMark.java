@@ -11,7 +11,7 @@ import redis.clients.jedis.Jedis;
  */
 public class RedisBenchMark {
     public static void checkSet() throws ReadConfigException {
-        PoolManagement management = new PoolManagement();
+        PoolManagement management = PoolManagement.getInstance();
         management.setCurrentPoolId("1010");
         Jedis jedis = management.getRedisPool().getJedis();
 

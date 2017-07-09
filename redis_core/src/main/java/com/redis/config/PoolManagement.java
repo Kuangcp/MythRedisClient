@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.util.Map;
@@ -26,17 +24,30 @@ import java.util.concurrent.ConcurrentMap;
  * 因为其他工具类使用的是直接获取当前id然后得到池，，，一般会先使用id得到Pool放在内存中，然后其他工具类就可以用来
  * 测试类 自己加上一个方法
  */
-@Component
 @Setter
 @Getter
 public class PoolManagement {
     // 所有的连接池,不知道为什么，明明集合里有，却还是要新建，新建出来的还是同一个内存地址？
-    private  ConcurrentMap<String,RedisPools> poolMap = new ConcurrentHashMap<>();
-    private  Logger logger= LoggerFactory.getLogger(PoolManagement.class);
-    private  String propertyFile = Configs.PROPERTY_FILE;
-    private  MythProperties configFile = null;
-    private  String currentPoolId;
-    // 获取指定id的连接池，断言id是存在的 TODO 这个得到的Bean会不会影响到依赖于他的bean
+    private ConcurrentMap<String,RedisPools> poolMap = new ConcurrentHashMap<>();
+    private Logger logger= LoggerFactory.getLogger(PoolManagement.class);
+    private String propertyFile = Configs.PROPERTY_FILE;
+    private MythProperties configFile = null;
+    private String currentPoolId;
+    private static PoolManagement management;
+
+    // TODO 去除 Spring 框架
+    private PoolManagement(){}
+    public synchronized static PoolManagement getInstance(){
+        if(management == null) {
+            synchronized (PoolManagement.class){
+                if(management == null){
+                    management = new PoolManagement();
+                }
+            }
+
+        }
+        return management;
+    }
 
     /**
      * 获取连接池,得到currentId指定的连接池，可以通过更改currentId切换连接池
@@ -140,16 +151,11 @@ public class PoolManagement {
         }
         RedisPools pools = new RedisPools();
         pools.setProperty(property);
-        Jedis jedis = pools.getJedis();
-        jedis.set("testConnection","90");
-        if("90".equals(jedis.get("testConnection"))){
-            jedis.del("testConnection");
-            pools.destroyPool();
-            return true;
-        }else{
-            return false;
-        }
+        boolean flag = pools.available();
+        pools.destroyPool();
+        return flag;
     }
+    // 校验输入的数据
     private boolean validate(RedisPoolProperty property){
         boolean flag;
         flag = property.getHost().matches("((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))");

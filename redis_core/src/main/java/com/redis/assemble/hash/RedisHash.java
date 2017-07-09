@@ -3,7 +3,6 @@ package com.redis.assemble.hash;
 import com.redis.common.Commands;
 import com.redis.common.exception.ExceptionInfo;
 import com.redis.common.exception.TypeErrorException;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -12,8 +11,20 @@ import java.util.Set;
 /**
  * Created by https://github.com/kuangcp on 17-6-23  上午9:24
  */
-@Component
 public class RedisHash extends Commands {
+    private static RedisHash redisHash;
+
+    private RedisHash(){}
+    public synchronized static RedisHash getInstance(){
+        if(redisHash == null){
+            synchronized (RedisHash.class){
+                if(redisHash == null){
+                    redisHash = new RedisHash();
+                }
+            }
+        }
+        return redisHash;
+    }
 
     /**
      * 保存，键已存在就更新

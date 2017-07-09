@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * Created by https://github.com/kuangcp on 17-6-9  下午9:09
- * RedisPool 的必要的非必要的所有连接属性
+ * @author kcp RedisPool 的必要的非必要的所有连接属性
  */
 @Getter
 @Setter
@@ -38,34 +38,6 @@ public class RedisPoolProperty {
     private String poolId;
     private String password="";//设定默认值为空字符串而不是null，因为后面的机制是要把null转String的
     private static Logger logger = LoggerFactory.getLogger(RedisPoolProperty.class);
-
-//    /**
-//     * 根据id从配置文件中加载配置对象
-//     * @param poolId id
-//     * @return 返回从配置文件中装载好数据的property对象
-//     */
-//    public RedisPoolProperty initByIdFromFile(String poolId) throws ReadConfigException {
-//        String pre = poolId+ Configs.SEPARATE;
-//        MythProperties config = null;
-//
-//        try {
-//            config = PropertyFile.getProperties(Configs.PROPERTY_FILE);
-//            setPoolId(poolId);
-//            setMaxActive(config.getInt(pre + Configs.MAX_ACTIVE));
-//            setMaxIdle(config.getInt(pre + Configs.MAX_IDLE));
-//            setMaxWaitMills(config.getInt(pre + Configs.MAX_WAIT_MILLIS));
-//            setTimeout(config.getInt(pre + Configs.TIMEOUT));
-//            setTestOnBorrow(config.getBoolean(pre + Configs.TEST_ON_BORROW));
-//            setName(config.getString(pre + Configs.NAME));
-//            setHost(config.getString(pre + Configs.HOST));
-//            setPort(config.getInt(pre + Configs.PORT));
-//            setPassword(config.getString(pre+Configs.PASSWORD));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            throw new ReadConfigException("打开"+Configs.PROPERTY_FILE+"配置文件失败",e,RedisPoolProperty.class);
-//        }
-//        return this;
-//    }
 
     /**
      * 从配置文件中加载一个配置对象

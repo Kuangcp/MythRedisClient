@@ -27,7 +27,7 @@ public class PropertyFile {
      * @throws IOException 文件异常
      */
     public static MythProperties getProperties(String propertyFile) throws IOException {
-        MythProperties props = new MythProperties();
+        props = new MythProperties();
         File file = new File(propertyFile);
         if(!file.exists()) {
             if (file.createNewFile()) {
@@ -103,7 +103,7 @@ public class PropertyFile {
     public static String update(String key,String value) throws ReadConfigException {
         String result;
         try {
-            MythProperties props = getProperties(Configs.PROPERTY_FILE);
+            props = getProperties(Configs.PROPERTY_FILE);
             OutputStream fos = new FileOutputStream(Configs.PROPERTY_FILE);
             result = (String)props.replace(key,value);
             props.store(fos, "Update '" + key + "' value");
@@ -123,7 +123,7 @@ public class PropertyFile {
     public static int getMaxId() throws  ReadConfigException {
         String maxId;
         try {
-            MythProperties props = getProperties(Configs.PROPERTY_FILE);
+            props = getProperties(Configs.PROPERTY_FILE);
             maxId = props.getString(Configs.MAX_POOL_ID);
             if (maxId == null) {
                 save(Configs.MAX_POOL_ID, Configs.START_ID + "");
@@ -144,17 +144,16 @@ public class PropertyFile {
     public static Map<String,RedisPoolProperty> getAllPoolConfig() throws ReadConfigException {
         Map<String,RedisPoolProperty> map = new HashMap<>();
         int maxId;
-        MythProperties properties;
         try {
             maxId = getMaxId();
-            properties = getProperties(Configs.PROPERTY_FILE);
+            props = getProperties(Configs.PROPERTY_FILE);
         } catch (IOException e) {
             e.printStackTrace();
             logger.error(ExceptionInfo.OPEN_CONFIG_FAILED,e);
             return map;
         }
         for(int i=Configs.START_ID;i<=maxId;i++){
-            String poolId = properties.getString(i+Configs.SEPARATE+Configs.POOL_ID);
+            String poolId = props.getString(i+Configs.SEPARATE+Configs.POOL_ID);
             if(poolId==null) continue;
             RedisPoolProperty property = RedisPoolProperty.initByIdFromConfig(poolId);
             map.put(poolId,property);

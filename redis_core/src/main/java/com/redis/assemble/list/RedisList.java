@@ -5,7 +5,6 @@ import com.redis.common.exception.ActionErrorException;
 import com.redis.common.exception.ExceptionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import redis.clients.jedis.BinaryClient;
 
 import java.util.List;
@@ -14,11 +13,21 @@ import java.util.List;
 /**
  * Created by https://github.com/kuangcp on 17-6-18  上午10:29
  */
-@Component
 public class RedisList extends Commands{
 
     private static Logger logger = LoggerFactory.getLogger(RedisList.class);
-    // TODO 类型的判断 交给中间层
+    private static RedisList redisList;
+    private RedisList(){}
+    public synchronized static RedisList getInstance(){
+        if(redisList == null){
+            synchronized (RedisList.class){
+                if(redisList == null){
+                    redisList = new RedisList();
+                }
+            }
+        }
+        return redisList;
+    }
 
     /**
      * 右/尾部插入，如果不存在就新建然后插入

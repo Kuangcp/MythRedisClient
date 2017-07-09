@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import redis.manager.Main;
 import redis.manager.compont.MyContextMenu;
 import redis.manager.compont.MyTab;
@@ -31,7 +30,6 @@ import java.util.Set;
  * User: huang
  * Date: 17-6-7
  */
-@Component
 public class MainController {
     private static Logger logger = LoggerFactory.getLogger(MainController.class);
     private PoolManagement poolManagement = Main.getManagement();

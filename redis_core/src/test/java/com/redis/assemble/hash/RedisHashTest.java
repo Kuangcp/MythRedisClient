@@ -1,6 +1,5 @@
 package com.redis.assemble.hash;
 
-import com.redis.SpringInit;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.config.PoolManagement;
 import com.redis.config.PropertyFile;
@@ -8,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.*;
 
@@ -35,10 +32,9 @@ public class RedisHashTest {
     public void setUp() throws ReadConfigException {
         MockitoAnnotations.initMocks(this);
 
-        ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
-        PoolManagement management = (PoolManagement) context.getBean("poolManagement");
+        PoolManagement management = PoolManagement.getInstance();
         management.setCurrentPoolId(PropertyFile.getMaxId()+"");
-        redisHash = (RedisHash) context.getBean("redisHash");
+        redisHash = RedisHash.getInstance();
     }
 
     @Test

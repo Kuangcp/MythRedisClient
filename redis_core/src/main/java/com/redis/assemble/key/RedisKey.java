@@ -5,7 +5,6 @@ import com.redis.common.exception.ExceptionInfo;
 import com.redis.common.exception.TypeErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
 import java.util.List;
@@ -15,10 +14,21 @@ import java.util.Set;
  * Created by https://github.com/kuangcp on 17-6-12  上午10:45
  * 不需要对当前数据库id进行时刻的监控，前端操作切换了数据库就把db换掉即可，共享db
  */
-@Component
 public class RedisKey extends Commands{
     private static Logger logger = LoggerFactory.getLogger(RedisKey.class);
-    // 判断类型，并不是所有的类型都可以用这个,类型检查交给中间层
+    private static RedisKey redisKey;
+    private RedisKey(){}
+    public synchronized static RedisKey getInstance(){
+        if(redisKey ==null){
+            synchronized (RedisKey.class){
+                if(redisKey == null){
+                    redisKey = new RedisKey();
+                }
+            }
+        }
+        return redisKey;
+    }
+
     /**
      *
      * @param key 键
@@ -54,7 +64,6 @@ public class RedisKey extends Commands{
         Jedis jedis = getJedis();
         jedis.set(key,value);
         return expire(key,second);
-
     }
 
     /**

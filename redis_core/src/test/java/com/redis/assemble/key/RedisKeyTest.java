@@ -1,6 +1,5 @@
 package com.redis.assemble.key;
 
-import com.redis.SpringInit;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.config.PoolManagement;
 import com.redis.config.PropertyFile;
@@ -8,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,10 +33,9 @@ public class RedisKeyTest {
     public void setUp() throws ReadConfigException {
         // TODO 理解JMockit 原理，这里写这个和自己写的测试类都没差了，测试花费的时间是个问题
         MockitoAnnotations.initMocks(this);
-        ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
-        PoolManagement management = (PoolManagement) context.getBean("poolManagement");
+        PoolManagement management = PoolManagement.getInstance();
         management.setCurrentPoolId(PropertyFile.getMaxId()+"");
-        redisKey = (RedisKey) context.getBean("redisKey");
+        redisKey = RedisKey.getInstance();
     }
     @Test
     public void createData1(){
@@ -71,10 +67,12 @@ public class RedisKeyTest {
     // 测试了set get delete
     @Test
     public void testGetSet() throws Exception {
+
         redisKey.set(key,"gg");
         String result = redisKey.get(key);
-        Assert.assertEquals("gg", result);
         testDeleteKey();
+        Assert.assertEquals("gg", result);
+
     }
     public void testDeleteKey() throws Exception {
         long result = redisKey.deleteKey(key);

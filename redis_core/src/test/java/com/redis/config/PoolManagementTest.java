@@ -1,13 +1,10 @@
 package com.redis.config;
 
-import com.redis.SpringInit;
 import com.redis.common.exception.ReadConfigException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -28,8 +25,7 @@ public class PoolManagementTest {
     public void setUp() throws ReadConfigException {
         MockitoAnnotations.initMocks(this);
         // 初始化Spring环境
-        ApplicationContext context = new AnnotationConfigApplicationContext(SpringInit.class);
-        poolManagement = (PoolManagement) context.getBean("poolManagement");
+        poolManagement = PoolManagement.getInstance();
         poolManagement.setCurrentPoolId(PropertyFile.getMaxId()+"");
 
         property = new RedisPoolProperty();
@@ -95,7 +91,7 @@ public class PoolManagementTest {
         property.setTimeout(600);//读取超时时间
         boolean result = poolManagement.checkConnection(property);
         System.out.println(result);
-        assert result;
+        Assert.assertEquals(true, result);
 
     }
     // 进行切换连接池,测试是通过了，测试结果是内存中的会复用的，但是连接池共存数要设置，不能在MAP里共存太多了

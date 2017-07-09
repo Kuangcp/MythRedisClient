@@ -3,7 +3,6 @@ package redis.manager.controller;
 import com.redis.assemble.key.RedisKey;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.springframework.stereotype.Component;
 import redis.manager.Main;
 import redis.manager.controller.operation.*;
 import redis.manager.controller.operation.panel.ShowPanel;
@@ -14,7 +13,6 @@ import redis.manager.entity.TableEntity;
  * User: huang
  * Date: 17-6-9
  */
-@Component
 public class TabPaneController {
 
     private RedisKey redisKey = Main.getRedisKey();
@@ -208,7 +206,7 @@ public class TabPaneController {
      * 装载面板数据.
      */
     private void setValue() {
-        redisKey.getManagement().switchPool(poolId);
+        redisKey.management.switchPool(poolId);
         redisKey.setDb(dbId);
         String type = redisKey.type(key);
         typeText.setText(type);
