@@ -17,7 +17,6 @@ public class MythReflect {
     private static Class target;
 
     /**
-     *
      * @param object 根据对象来得到class再获取属性集合
      * @return list 属性集合
      * @throws IllegalAccessException 没有权限访问
@@ -28,15 +27,14 @@ public class MythReflect {
     }
 
     /**
-     *
      * @param targets 根据class直接获取属性集合
      * @return list属性集合
      */
-    public static List<String> getFieldByClass(Class targets){
+    public static List<String> getFieldByClass(Class targets) {
         target = targets;
-        List< String> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         Field[] fields = target.getDeclaredFields();
-        for(Field field:fields){
+        for (Field field : fields) {
             field.setAccessible(true);//设置属性可访问
 //            String type = field.getType().toString();
             String name = field.getName();
@@ -46,37 +44,35 @@ public class MythReflect {
     }
 
     /**
-     *
      * @param object 对象
      * @return 返回 对象的所有 属性-值 map
      * @throws IllegalAccessException 没有权限访问
      */
-    public static Map<String,Object> getFieldsValue(Object object) throws IllegalAccessException {
-        Map<String,Object> map = new HashMap<>();
+    public static Map<String, Object> getFieldsValue(Object object) throws IllegalAccessException {
+        Map<String, Object> map = new HashMap<>();
         target = object.getClass();
-        for(Field field:target.getDeclaredFields()){
+        for (Field field : target.getDeclaredFields()) {
             field.setAccessible(true);//设置属性可访问
             Object value = field.get(object);
             String name = field.getName();
-            map.put(name,value);
+            map.put(name, value);
         }
         return map;
     }
 
     /**
-     *
      * @param object 要赋值的对象
-     * @param maps 属性名-属性值 映射
-     * @throws IllegalAccessException 可能没有权限
+     * @param maps   属性名-属性值 映射
      * @return Object 返回赋值后的对象
+     * @throws IllegalAccessException 可能没有权限
      */
-    public static Object setFieldsValue(Object object,Map<String,Object> maps) throws Exception {
+    public static Object setFieldsValue(Object object, Map<String, Object> maps) throws Exception {
         target = object.getClass();
-        for(Field field:target.getDeclaredFields()){
-            field.setAccessible(true);
-            String type = field.getType().getName();
-//            System.out.println("type:"+type);
-            try {
+        try {
+            for (Field field : target.getDeclaredFields()) {
+                field.setAccessible(true);
+                String type = field.getType().getName();
+//            System.out.println(type+" : "+field.getName());
                 switch (type) {
                     case "java.lang.Integer":
                         field.set(object,
@@ -91,9 +87,9 @@ public class MythReflect {
                                 "true".equals(maps.get(field.getName()).toString()));
                         break;
                 }
-            }catch (Exception e){
-                throw new TypeErrorException(ExceptionInfo.TYPE_ERROR,e,MythReflect.class);
             }
+        } catch (Exception e) {
+            throw new TypeErrorException(ExceptionInfo.TYPE_ERROR, e, MythReflect.class);
         }
         return object;
     }

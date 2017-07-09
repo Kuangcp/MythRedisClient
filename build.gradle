@@ -5,7 +5,7 @@ apply from: 'dependencys.gradle'
 allprojects {
     apply plugin: 'java'
     group 'com.github.kuangcp'
-    version = '1.0'
+    version = '1.0.0'
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 }

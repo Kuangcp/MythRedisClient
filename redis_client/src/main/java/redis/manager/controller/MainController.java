@@ -188,7 +188,7 @@ public class MainController {
             num= poolManagement.getRedisPool().getDatabaseNum();
             // 清除所有的孩子节点
             int childNum = treeItem.getChildren().size();
-            System.out.println(childNum);
+//            System.out.println(childNum);
             treeItem.getChildren().remove(0, childNum);
             for (int i = 0; i < num; i++) {
                 Label secondLable = new Label("数据库 " + i);

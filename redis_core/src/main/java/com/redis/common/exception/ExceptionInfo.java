@@ -25,6 +25,7 @@ public interface ExceptionInfo {
 
     String KEY_NOT_EXIST = "Key 不存在";
     String TYPE_ERROR = "类型错误";
+    String INPUT_CONFIG_ERROR = "面板中输入的信息有错误";
 
 
 }

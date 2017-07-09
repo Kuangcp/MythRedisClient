@@ -18,5 +18,6 @@ public class TypeErrorException extends MythException{
 
     public TypeErrorException(String message, Throwable cause, Class location) {
         super(message, cause, location);
+
     }
 }

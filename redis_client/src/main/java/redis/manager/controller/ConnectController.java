@@ -1,5 +1,7 @@
 package redis.manager.controller;
 
+import com.redis.common.exception.ExceptionInfo;
+import com.redis.common.exception.NoticeInfo;
 import com.redis.common.exception.ReadConfigException;
 import com.redis.config.*;
 import com.redis.utils.MythReflect;
@@ -10,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.manager.Main;
 
 import java.util.HashMap;
@@ -22,6 +26,7 @@ import java.util.Map;
  */
 public class ConnectController {
 
+    private static Logger logger = LoggerFactory.getLogger(ConnectController.class);
     private PoolManagement poolManagement = Main.getManagement();
     private Stage dialogStage;
     private boolean okChecked = false;
@@ -142,10 +147,10 @@ public class ConnectController {
             } else {
 
                 // 修改连接
-                System.out.println("修改: " + portText.getText());
+//                System.out.println("修改: " + portText.getText());
                 RedisPoolProperty property = getProperty();
                 property.setPoolId(poolId);
-                System.out.println("uiuiuiuiuiiiui"+property.toString());
+//                System.out.println("uiuiuiuiuiiiui"+property.toString());
                 RedisPoolProperty.updateConfigFile(property);
                 okChecked = true;
                 dialogStage.close();
@@ -171,13 +176,14 @@ public class ConnectController {
         maps.put(Configs.PORT, portText.getText());
         maps.put(Configs.TEST_ON_BORROW,false);
         maps.put(Configs.TIMEOUT,6000);
-        for(String key:maps.keySet()){
-            System.out.println(key+"-----"+maps.get(key));
-        }
+//        for(String key:maps.keySet()){
+//            System.out.println(key+"-----"+maps.get(key));
+//        }
         try {
             property = (RedisPoolProperty) MythReflect.setFieldsValue(property,maps);
         } catch (Exception e) {
-            //e.printStackTrace();
+            logger.error(ExceptionInfo.INPUT_CONFIG_ERROR,ConnectController.class);
+            logger.debug(NoticeInfo.ERROR_INFO, e);
         }
         return property;
     }

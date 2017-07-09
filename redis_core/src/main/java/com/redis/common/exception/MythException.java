@@ -24,5 +24,6 @@ public class MythException extends Exception{
         super(message,cause);
         logger = LoggerFactory.getLogger(location);
         logger.error(" "+this.getClass().getSimpleName()+" :"+message);
+        logger.debug(NoticeInfo.ERROR_INFO,cause);
     }
 }
