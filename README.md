@@ -13,7 +13,7 @@
 *****
 
 
-[API Doc](https://kuangcp.github.io/Docs/MythRedisClient/javadoc/) | [How to Install](https://github.com/Kuangcp/MythRedisClient/wiki)
+[API Doc](https://kuangcp.github.io/Docs/MythRedisClient/javadoc/index.html) | [How to Install](https://github.com/Kuangcp/MythRedisClient/wiki)
 
 
 ### Members:
