@@ -5,7 +5,7 @@
 [![Versuib](https://img.shields.io/github/tag/Kuangcp/MythRedisClient.svg)](https://github.com/Kuangcp/MythRedisClient/releases)
 
 ### Introduction
-- 使用JavaFx和Spring技术做的redis客户端，具有常见的CRUD操作
+- 使用JavaFx技术做的redis客户端，具有常见的CRUD操作
 - 后续功能完善ing
 
 
