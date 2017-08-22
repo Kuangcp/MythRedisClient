@@ -24,9 +24,9 @@
 ******
 
 `主界面`
-![main](https://gitlab.com/Kuangcp/ImageRepo/raw/master/Image/MythRedis/main.png)
+![main](https://raw.githubusercontent.com/Kuangcp/ImageRepos/master/Image/MythRedis/main.png)
 
 `新建连接界面`
-![add](https://gitlab.com/Kuangcp/ImageRepo/raw/master/Image/MythRedis/add.png)
+![add](https://raw.githubusercontent.com/Kuangcp/ImageRepos/master/Image/MythRedis/add.png)
 
 
