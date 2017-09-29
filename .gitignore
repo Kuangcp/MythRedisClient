@@ -7,4 +7,5 @@ target/
 *.out
 buildgenerated-src/
 !build.gradle
+out/
 
