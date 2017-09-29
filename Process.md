@@ -1,12 +1,51 @@
-### 连接池的配置
-> 2017-06-09 22:47:31
-- 连接池 继承 JedisPool 
-- 配置文件，总的配置文件被小部分引用
-- Spring的使用是否必要，因为多个Pool 的被各个命令操作模块依赖关系
-- 如果使用Spring 多例模式 怎么处理切换Pool
+### 2017-07-09 10:10:51
+- 开始感觉到框架的双刃剑特性。。只有真正了解一个框架，才不会滥用
+
+### 2017-06-28 17:38:59
+- 学习有序 Set集合中接触到字典的概念，需要去学习一下 Lex 
+
+### 代码评分什么的不要太关心了，重要的是架构设计
+> 2017-06-21 18:28:38
+- 代码规范多注意，养成规范的习惯就不会有问题了
+- 这些平台的也只是参考，没必要花太多时间，代码覆盖率倒是应该好好关注和研究下了
+
+
+### Long 和 long 的区别，以及测试框架Jmockit的使用
+- Long 就是long 的包装类，所以在断言中会报错
+- 同样的，Float Char Byte Integer 也都是装箱后的类型
+
+
+### 日志问题
+> 2017-06-14 23:47:26
+- 相反的，引入commons-logging依赖，反而解决了问题，也是要醉
+
+## Spring 日志问题
+- java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory
+- 特别注意，如果使用了slf4j的另外实现方式，不是apche 那套的话，就要加入排除依赖
+```
+    <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-webmvc</artifactId>
+          <version>${spring.version}</version>
+          <exclusions>
+              <exclusion>
+              <groupId>commons-logging</groupId>
+              <artifactId>commons-logging</artifactId>
+              </exclusion>
+          </exclusions>
+    </dependency>
+```
+- gradle 排除依赖还是有问题，简直了，只好使用简单的静态类来处理，但是显然的，每次操作都在新建实例，所以，使用单例模式？
+
+
+## 错误编码，异常自定义
+> 2017-06-12 08:27:06
+
+- 枚举类是实例固定不可变，final修饰所以不可派生，默认继承 java.lang.enum类，不能显示继承别的类
 
 ### 大致完成了连接池，下一步做什么呢
 > 2017-06-11 20:14:24
+
 - 关于redis版本控制？ `cluster shared 集群分布式共享`
 - 类中很多方法，和类很多，方法少的选择
 - 是否日志先行，是否支持undo redo
@@ -22,43 +61,11 @@
 - 缺点是 命令多的时候就会导致太多的类，目前就是这种情况，命令本来就复用的少，精髓在于将简单的命令全部设成命令类，然后组合就能达到想要的功能
 - 所以经过考虑还是不采用命令模式，关于引入调用者、接收者两个角色感觉就会复杂化挺多代码的
 
-## 错误编码，异常自定义
-> 2017-06-12 08:27:06
-- 枚举类是实例固定不可变，final修饰所以不可派生，默认继承 java.lang.enum类，不能显示继承别的类
+### 连接池的配置
+> 2017-06-09 22:47:31
 
-## Spring 日志问题
-- java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory
-- 特别注意，如果使用了slf4j的另外实现方式，不是apche 那套的话，就要加入排除依赖
-```xml
-    <dependency>
-          <groupId>org.springframework</groupId>
-          <artifactId>spring-webmvc</artifactId>
-          <version>${spring.version}</version>
-          <exclusions>
-              <exclusion>
-              <groupId>commons-logging</groupId>
-              <artifactId>commons-logging</artifactId>
-              </exclusion>
-          </exclusions>
-    </dependency>
-```
-- gradle 排除依赖还是有问题，简直了，只好使用简单的静态类来处理，但是显然的，每次操作都在新建实例，所以，使用单例模式？
+- 连接池 继承 JedisPool 
+- 配置文件，总的配置文件被小部分引用
+- Spring的使用是否必要，因为多个Pool 的被各个命令操作模块依赖关系
+- 如果使用Spring 多例模式 怎么处理切换Pool
 
-### 日志问题
-> 2017-06-14 23:47:26
-- 相反的，引入commons-logging依赖，反而解决了问题，也是要醉
-
-### Long 和 long 的区别，以及测试框架Jmockit的使用
-- Long 就是long 的包装类，所以在断言中会报错
-- 同样的，Float Char Byte Integer 也都是装箱后的类型
-
-### 代码评分什么的不要太关心了，重要的是架构设计
-> 2017-06-21 18:28:38
-- 代码规范多注意，养成规范的习惯就不会有问题了
-- 这些平台的也只是参考，没必要花太多时间，代码覆盖率倒是应该好好关注和研究下了
-
-### 2017-06-28 17:38:59
-- 学习有序 Set集合中接触到字典的概念，需要去学习一下 Lex 
-
-### 2017-07-09 10:10:51
-- 开始感觉到框架的双刃剑特性。。只有真正了解一个框架，才不会滥用
