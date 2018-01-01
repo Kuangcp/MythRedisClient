@@ -112,4 +112,3 @@ project(':redis_client'){
 //    }
 //}
 
-// TODO 做到打包成两种文件，一个是FX的jar 一个是Springboot的war
