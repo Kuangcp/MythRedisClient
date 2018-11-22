@@ -1,114 +1,54 @@
-//group 'com.github.kuangcp'
+group 'com.github.kuangcp'
 //version '1.0-SNAPSHOT'
 apply from: 'dependencys.gradle'
 
 allprojects {
-    apply plugin: 'java'
-    group 'com.github.kuangcp'
-    version = '1.0.0'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+  apply plugin: 'java'
+  group 'com.github.kuangcp'
+  version = '1.0.0'
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
 }
 
 subprojects {
-    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
-    repositories {
-//        jcenter()
-        mavenCentral()
-    }
-    configurations {
-        //compile.exclude module: 'commons-logging'
-//        all*.exclude module: 'commons-logging'
-    }
-    // 所有的依赖放在这里
-    dependencies {
-        compile(
-//                libraries.'common-logging',
-                libraries.'slf4j-api',
-                libraries.'logback-classic',
-//                libraries.'spring-core',
-//                libraries.'spring-context',
-//                libraries.'spring-beans',
-        )
-        testCompile(
-//                libraries.'spring-test',
-                libraries.'junit',
+  [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+  repositories {
+    mavenCentral()
+  }
+  configurations {
+  }
+  // 所有的依赖放在这里
+  dependencies {
+    compile(
+        libraries.'slf4j-api',
+        libraries.'logback-classic',
+    )
+    testCompile(
+        libraries['junit'],
 
-        )
-    }
+    )
+  }
 }
 project(':redis_core') {
-    dependencies {
-        compile(
-                libraries.'jedis',
-//                libraries.'common-logging'
-        )
-        testCompile(
-                libraries.'mockito-core',
-                libraries.'junit'
-        )
-    }
+  dependencies {
+    compile(
+        libraries['jedis'],
+    )
+    testCompile(
+        libraries.'mockito-core',
+        libraries.'junit'
+    )
+  }
 }
-project(':redis_client'){
-    dependencies{
-        compile project(":redis_core")
-        compile(
-                libraries.'openjfx-dialogs'
-        )
-        testCompile(
-                libraries.'junit',
-//                libraries.'spring-test'
-        )
-    }
-}
-//project(':redis_web') {
-//    apply plugin: "war"
-//    configurations {
-////        compile.exclude module: 'commons-logging'
-//        all*.exclude module: 'commons-logging'
-//    }
-//    dependencies {
-//        compile project(":redis_core")
-////        compile(
-////                'org.springframework.boot:spring-boot-starter-thymeleaf',
-////                'org.springframework.boot:spring-boot-starter-web',
-////
-////        )
-////
-////        testCompile(
-////                'org.springframework.boot:spring-boot-starter-test'
-////        )
-//
-//    }
-//    processResources{
-//        /* 从'$projectDir/src/main/java'目录下复制文件到'WEB-INF/classes'目录下覆盖原有同名文件*/
-//        from("$projectDir/src/main/java")
-//    }
-//
-//    /*自定义任务用于将当前子项目的java类打成jar包,此jar包不包含resources下的文件*/
-//    def jarArchiveName="${project.name}-${version}.jar"
-//    task jarWithoutResources(type: Jar) {
-//        from sourceSets.main.output.classesDir
-//        archiveName jarArchiveName
-//    }
-//
-//    /*重写war任务:*/
-//    war {
-//        dependsOn jarWithoutResources
-//        /* classpath排除sourceSets.main.output.classesDir目录,加入jarWithoutResources打出来的jar包 */
-//        classpath = classpath.minus(files(sourceSets.main.output.classesDir)).plus(files("$buildDir/$libsDirName/$jarArchiveName"))
-//    }
-//    /*打印编译运行类路径*/
-////    task jarPath << {
-////        println configurations.compile.asPath
-////    }
-//}
-//
-///*从子项目拷贝War任务生成的压缩包到根项目的build/explodedDist目录*/
-//task explodedDist(type: Copy) {
-//    into "$buildDir/explodedDist"
-//    subprojects {
-//        from tasks.withType(War)
-//    }
-//}
 
+project(':redis_client') {
+  dependencies {
+    compile project(":redis_core")
+    compile(
+        libraries['openjfx-dialogs']
+    )
+    testCompile(
+        libraries['junit'],
+    )
+  }
+}
