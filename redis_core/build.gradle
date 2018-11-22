@@ -1,7 +1,6 @@
 apply plugin: 'java'
 apply plugin: "info.robotbrain.lombok"
 
-
 javadoc {
     options {
         encoding "UTF-8"
@@ -12,7 +11,6 @@ javadoc {
     }
 }
 configurations {
-//    all*.exclude module: 'commons-logging'
 }
 sourceCompatibility = 1.8
 buildscript {
