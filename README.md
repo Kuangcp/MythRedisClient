@@ -5,8 +5,8 @@
 [![Versuib](https://img.shields.io/github/tag/Kuangcp/MythRedisClient.svg)](https://github.com/Kuangcp/MythRedisClient/releases)
 
 ### Introduction
-- 使用JavaFx技术做的redis客户端，具有常见的CRUD操作
-- 后续功能完善ing
+- 使用JavaFx技术做的redis客户端，具有常见的CRUD操作 已废弃
+- [Kuangcp/DB-K: Database client via Kotlin Compose Desktop](https://github.com/Kuangcp/DB-K) Kotlin Compose Desktop开发的更通用的多数据源客户端  
 
 
 
